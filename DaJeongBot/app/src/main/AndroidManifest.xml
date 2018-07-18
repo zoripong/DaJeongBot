@@ -21,7 +21,9 @@
         <activity android:name=".Activity.InputInfoActivity" />
         <activity android:name=".Activity.CalendarActivity" />
         <activity android:name=".Activity.SettingActivity" />
-        <activity android:name=".Activity.TutorialActivity"></activity>
+        <activity android:name=".Activity.TutorialActivity" />
+        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.SigninActivity"></activity>
     </application>
 
 </manifest>

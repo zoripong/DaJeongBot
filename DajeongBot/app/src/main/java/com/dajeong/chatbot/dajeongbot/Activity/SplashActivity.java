@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // 처음일 경우 tutorial, 이미 회원일 경우 main
+                // 처음일 경우 tutorial, 아닐 경우 LoginActivity
                 Intent intent = new Intent(SplashActivity.this, TutorialActivity.class);
                 startActivity(intent);
                 finish();
