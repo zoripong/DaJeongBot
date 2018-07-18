@@ -3,6 +3,7 @@ package com.dajeong.chatbot.dajeongbot.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,12 @@ import android.widget.TextView;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
 import com.dajeong.chatbot.dajeongbot.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Vector;
 
 public class ChatAdapter extends RecyclerView.Adapter {
-
+    private final String TAG = "ChatAdapter";
     private Vector<Chat> mChats;
     private Context mContext;
 
@@ -36,13 +39,20 @@ public class ChatAdapter extends RecyclerView.Adapter {
         ChatHolder chatHolder = (ChatHolder)holder;
         Chat chat = mChats.get(position);
         if(chat.getSender() != null){
-            // 사용자
+            // 챗봇
+            //Log.e(TAG, "bot: "+position);
+            chatHolder.mTvSenderName.setVisibility(View.VISIBLE);
+            chatHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
             chatHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
             chatHolder.mTvSenderName.setText(chat.getSender().getName());
+        }else{
+            //Log.e(TAG, "user: "+position);
+            chatHolder.mIvSenderProfile.setVisibility(View.GONE);
+            chatHolder.mTvSenderName.setVisibility(View.GONE);
         }
         chatHolder.mTvContent.setText(chat.getContent());
-        chatHolder.mTvTime.setText(chat.getTime().toString());
 
+        chatHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(chat.getTime()));
     }
 
     @Override

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_vertical"
+    android:background="@color/colorPrimaryDark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivCalendar"
+        android:layout_alignParentLeft="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="10dp"
+        android:background="@drawable/ic_calendar"/>
+
+    <TextView
+        android:text="타이틀"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="17dp"
+        android:layout_toRightOf="@id/ivCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
+
+    <ImageView
+        android:id="@+id/ivSetting"
+        android:layout_alignParentRight="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_setting"/>
+</RelativeLayout>
+
