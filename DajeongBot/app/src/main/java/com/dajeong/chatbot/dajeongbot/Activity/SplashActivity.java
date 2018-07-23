@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // 처음일 경우 tutorial, 아닐 경우 LoginActivity
-                Intent intent = new Intent(SplashActivity.this, TutorialActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
