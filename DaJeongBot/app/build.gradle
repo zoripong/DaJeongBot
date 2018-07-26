@@ -51,4 +51,6 @@ dependencies {
     compile 'com.applozic.communication.uiwidget:mobicomkitui:5.8.4'
 
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 }

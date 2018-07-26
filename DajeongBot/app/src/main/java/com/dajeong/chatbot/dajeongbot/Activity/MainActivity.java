@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar.setCustomView(viewActionBar);
 
+        // 액션바에 백그라운드 이미지를 아래처럼 입힐 수 있습니다.
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_top_backround));
+
         // 이벤트 달기
         viewActionBar.findViewById(R.id.ivCalendar).setOnClickListener(new View.OnClickListener() {
             @Override
