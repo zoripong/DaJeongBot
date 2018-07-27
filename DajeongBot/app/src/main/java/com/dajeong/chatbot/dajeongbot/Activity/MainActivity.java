@@ -87,11 +87,13 @@ public class MainActivity extends AppCompatActivity {
     // TODO : 서버에서 메세지 가져오기
     private void forDebugging(){
 
-        Character character = new Character("다정이", R.drawable.character_profile_01);
+        Character character = new Character("다정이", R.drawable.ic_char1);
 
         mChats.add(new Chat(character, "1번째 메세지랍니다.", new Date()));
         mChats.add(new Chat(null, "2번째 메세지랍니다.", new Date()));
+        mChats.add(new Chat(null, "22번째 메세지랍니다.", new Date()));
         mChats.add(new Chat(character, "3번째 메세지랍니다.", new Date()));
+        mChats.add(new Chat(character, "33번째 메세지랍니다.", new Date()));
         mChats.add(new Chat(null, "4번째 메세지랍니다.", new Date()));
         mChats.add(new Chat(character, "5번째 메세지랍니다.", new Date()));
 
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setCustomView(viewActionBar);
 
         // 액션바에 백그라운드 이미지를 아래처럼 입힐 수 있습니다.
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.main_top_backround));
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_main_top_background));
 
         // 이벤트 달기
         viewActionBar.findViewById(R.id.ivCalendar).setOnClickListener(new View.OnClickListener() {
