@@ -4,13 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/chat_">
+    android:id="@+id/chat_"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <ImageView
         android:id="@+id/ivSenderProfile"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="TODO" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="TODO"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="5dp" />
 
     <TextView
         android:id="@+id/tvContent"
@@ -19,10 +26,10 @@
         android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:background="@drawable/chatbot_tv_custom"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="7dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7dp"
         android:text="여기는 내용이 들어갈거에요"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -35,12 +42,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_weight="1"
         android:text="10:10"
+        android:textSize="11sp"
         app:layout_constraintStart_toEndOf="@+id/tvContent"
         tools:layout_editor_absoluteY="41dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:paddingBottom="8dp"/>
 
 </android.support.constraint.ConstraintLayout>

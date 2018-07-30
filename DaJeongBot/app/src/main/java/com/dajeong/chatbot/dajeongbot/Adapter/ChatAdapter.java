@@ -21,7 +21,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
     private Vector<Chat> mChats;
     private Context mContext;
-    View v;
+    View vBot;
+    View vUser;
     public ChatAdapter(Vector<Chat> chats, Context context){
         this.mChats = chats;
         this.mContext = context;
@@ -29,10 +30,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot, parent, false);
+        vBot = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot, parent, false);
+        vUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_user, parent, false);
          switch(viewType){
-             case 0: return new ChatBotHolder(v);
-             case 1: return new ChatUserHolder(v);
+             case 0: return new ChatBotHolder(vBot);
+             case 1: return new ChatUserHolder(vUser);
             default: return null;
          }
     }
@@ -96,8 +98,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public ChatUserHolder(View itemView) {
             super(itemView);
-            mTvContent = itemView.findViewById(R.id.tvContent);
-            mTvTime = itemView.findViewById(R.id.tvTime);
+            mTvContent = itemView.findViewById(R.id.tvContentUser);
+            mTvTime = itemView.findViewById(R.id.tvTimeUser);
         }
     }
 }
