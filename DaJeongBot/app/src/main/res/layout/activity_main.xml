@@ -10,13 +10,13 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:textAlignment="center"
         android:background="@drawable/text_edge"
-        android:padding="15dp"
         android:textSize="17sp"
         android:textStyle="bold"
         android:text="@string/chat_name"
+        android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
