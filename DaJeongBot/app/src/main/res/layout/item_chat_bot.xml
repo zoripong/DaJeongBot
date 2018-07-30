@@ -11,10 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:contentDescription="TODO" />
-    <!--<TextView-->
-    <!--android:id="@+id/tvSenderName"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
+
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="wrap_content"

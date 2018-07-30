@@ -2,15 +2,12 @@ package com.dajeong.chatbot.dajeongbot.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
@@ -20,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Vector;
 
-public class ChatAdapter extends RecyclerView.Adapter {
+public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
     private Vector<Chat> mChats;
     private Context mContext;
@@ -32,36 +29,46 @@ public class ChatAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat, parent, false);
-        return new ChatHolder(v);
+         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot, parent, false);
+         switch(viewType){
+             case 0: return new ChatBotHolder(v);
+             case 1: return new ChatUserHolder(v);
+            default: return null;
+         }
     }
 
     @Override
     public void onBindViewHolder( RecyclerView.ViewHolder holder, int position) {
-        ChatHolder chatHolder = (ChatHolder)holder;
         Chat chat = mChats.get(position);
-        if(chat.getSender() != null){
-            // 챗봇
-            //Log.e(TAG, "bot: "+position);
-            //chatHolder.mTvSenderName.setVisibility(View.VISIBLE);
-            chatHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
-            chatHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
-            //chatHolder.mTvSenderName.setText(chat.getSender().getName());
-        }else{
-            //Log.e(TAG, "user: "+position);
-            chatHolder.mIvSenderProfile.setVisibility(View.GONE);
-            //chatHolder.mTvSenderName.setVisibility(View.GONE);
-            //나중에 시간을 서버에서 가져와서 분이 똑같으면 프로필 이미지랑 시간을 안보여주는게 레이아웃이 훨씬 깔끔할듯
-            chatHolder.mTvContent.setBackgroundResource(R.drawable.chatbot_tv_me_custom);
-
-            //오른쪽 정렬 왜 안될까,,
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.connect(R.id.tvContent,ConstraintSet.END,ConstraintSet.PARENT_ID,ConstraintSet.END,0);
-            constraintSet.connect(R.id.tvTime,ConstraintSet.END,R.id.tvContent, ConstraintSet.START,0);
+        switch (holder.getItemViewType()){
+            case 0:
+                ChatBotHolder chatBotHolder = (ChatBotHolder)holder;
+                chatBotHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
+                chatBotHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
+                chatBotHolder.mTvContent.setText(chat.getContent());
+                chatBotHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(chat.getTime()));
+                break;
+            case 1:
+                ChatUserHolder chatUserHolder = (ChatUserHolder)holder;
+                chatUserHolder.mTvContent.setText(chat.getContent());
+                chatUserHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(chat.getTime()));
+                break;
+            default:
+                return;
         }
-        chatHolder.mTvContent.setText(chat.getContent());
 
-        chatHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(chat.getTime()));
+
+        }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(mChats.get(position).getSender()!=null){
+            return 0;
+        }else{
+            return 1;
+        }
+
+
     }
 
     @Override
@@ -69,16 +76,26 @@ public class ChatAdapter extends RecyclerView.Adapter {
         return mChats.size();
     }
 
-    private class ChatHolder extends RecyclerView.ViewHolder{
+    private class ChatBotHolder extends RecyclerView.ViewHolder{
         ImageView mIvSenderProfile;
         //TextView mTvSenderName;
         TextView mTvContent;
         TextView mTvTime;
 
-        public ChatHolder(View itemView) {
+        public ChatBotHolder(View itemView) {
             super(itemView);
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             //mTvSenderName = itemView.findViewById(R.id.tvSenderName);
+            mTvContent = itemView.findViewById(R.id.tvContent);
+            mTvTime = itemView.findViewById(R.id.tvTime);
+        }
+    }
+    private class ChatUserHolder extends RecyclerView.ViewHolder{
+        TextView mTvContent;
+        TextView mTvTime;
+
+        public ChatUserHolder(View itemView) {
+            super(itemView);
             mTvContent = itemView.findViewById(R.id.tvContent);
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
