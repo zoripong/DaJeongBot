@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.Adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +24,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     private final String TAG = "ChatAdapter";
     private Vector<Chat> mChats;
     private Context mContext;
-
+    View v;
     public ChatAdapter(Vector<Chat> chats, Context context){
         this.mChats = chats;
         this.mContext = context;
@@ -31,7 +32,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat, parent, false);
+         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat, parent, false);
         return new ChatHolder(v);
     }
 
