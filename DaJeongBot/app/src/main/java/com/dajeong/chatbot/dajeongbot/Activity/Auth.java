@@ -8,4 +8,5 @@ public class Auth {
     //구글 API 키
     public static final String KEY = "AIzaSyDXHHOgQhUeZb1XfUtuFS-lPXb23FIM4CI";
     public static final String[] SCOPES = {Scopes.PROFILE, YouTubeScopes.YOUTUBE};
+    fjdaskhfkdhfkqhfskqh
 }
