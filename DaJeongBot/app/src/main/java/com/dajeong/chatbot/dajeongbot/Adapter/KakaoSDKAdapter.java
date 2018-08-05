@@ -1,7 +1,8 @@
-package com.dajeong.chatbot.dajeongbot.Activity;
+package com.dajeong.chatbot.dajeongbot.Adapter;
 
 import android.content.Context;
 
+import com.dajeong.chatbot.dajeongbot.Activity.GlobalApplication;
 import com.kakao.auth.ApprovalType;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.IApplicationConfig;

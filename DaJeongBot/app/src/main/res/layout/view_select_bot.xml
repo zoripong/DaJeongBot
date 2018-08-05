@@ -6,71 +6,134 @@
     android:orientation="vertical">
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TableRow>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/chatbot_1"
+        android:layout_height="wrap_content"
+        >
+        <TableRow
+            android:gravity="center">
+            <Button
+                android:id="@+id/img_chatbot_1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/chatbot_1"
                 android:layout_margin="10sp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/chatbot_2"
+            <Button
+                android:id="@+id/img_chatbot_2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/chatbot_2"
                 android:layout_margin="10sp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/chatbot_3"
+            <Button
+                android:id="@+id/img_chatbot_3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/chatbot_3"
                 android:layout_margin="10sp"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/chatbot_4"
+            <Button
+                android:id="@+id/img_chatbot_4"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/chatbot_4"
                 android:layout_margin="10sp"/>
         </TableRow>
-        <TableRow>
+        <TableRow
+            android:gravity="center"
+            android:id="@+id/tab_layout">
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/select_dot"/>
+                android:id="@+id/img_select_dot_1"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/select_dot"
+                android:visibility="visible"/>
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/img_select_dot_2"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:src="@drawable/select_dot"
                 android:visibility="invisible"/>
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/img_select_dot_3"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:src="@drawable/select_dot"
                 android:visibility="invisible"/>
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/img_select_dot_4"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:src="@drawable/select_dot"
                 android:visibility="invisible"/>
         </TableRow>
     </TableLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_introduce"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/chatbot_introduce_1"/>
+            android:orientation="vertical"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/img_head"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/chatbot_head_1"/>
+                <ImageView
+                    android:id="@+id/img_title"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/chatbot_text_1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp">
+                <TextView
+                    android:id="@+id/text_string"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:text="@string/dajeong_1_info"/>
 
-    </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+                <Button
+                    android:id="@+id/btn_select_previous"
+                    android:layout_width="15dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_previous"
+                    android:visibility="invisible"/>
+                <ImageView
+                    android:id="@+id/img_introduce"
+                    android:layout_width="300dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/chatbot_introduce_1"/>
+                <Button
+                    android:id="@+id/btn_select_next"
+                    android:layout_width="15dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_next"/>
+            </LinearLayout>
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="23dp">
         <Button
             android:id="@+id/btn_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#8c00ff"
+            android:background="@drawable/input_btn_custom"
             android:text="선택하기"
             android:textStyle="bold"
             android:textSize="7pt"

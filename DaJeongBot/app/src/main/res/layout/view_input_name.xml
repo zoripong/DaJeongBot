@@ -38,17 +38,24 @@
             android:id="@+id/edit_input_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30sp"
-            android:layout_marginLeft="30sp"/>
+            android:layout_marginRight="80sp"
+            android:layout_marginLeft="80sp"
+            android:layout_marginTop="20sp"
+            android:hint="이름을 입력해 주세요"
+            android:padding="10sp"
+            android:textSize="6pt"
+            android:background="@drawable/input_edit_custom"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center">
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="50dp"
-            android:src="@drawable/chatbot_image"/>
+            android:layout_width="300dp"
+            android:layout_height="130dp"
+            android:src="@drawable/input_name_image"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,10 +64,10 @@
         android:gravity="center"
         android:layout_marginTop="50sp">
         <Button
-            android:id="@+id/btn_next"
+            android:id="@+id/btn_input_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#8c00ff"
+            android:background="@drawable/input_btn_custom"
             android:text="다음으로"
             android:textSize="7pt"
             android:textStyle="bold"

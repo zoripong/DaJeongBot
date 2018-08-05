@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.Activity;
 
 import android.app.Application;
 
+import com.dajeong.chatbot.dajeongbot.Adapter.KakaoSDKAdapter;
 import com.kakao.auth.KakaoSDK;
 
 
