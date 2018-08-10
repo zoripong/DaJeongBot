@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".Activity.GlobalApplication">
+        android:name=".Auth.GlobalApplication">
 
         <!-- 카카오톡 메타데이터 -->
 
@@ -29,22 +29,21 @@
 
         <activity android:name=".Activity.MainActivity" />
         <activity android:name=".Activity.SplashActivity">
-        </activity>
-        <activity android:name=".Activity.SelectBotActivity" >
-
-        </activity>
-        <activity android:name=".Activity.InputInfoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.SelectBotActivity" />
+
+        <activity android:name=".Activity.InputInfoActivity"/>
+
         <activity android:name=".Activity.CalendarActivity" />
         <activity android:name=".Activity.SettingActivity" />
         <activity android:name=".Activity.TutorialActivity" />
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.SigninActivity"></activity>
+        <activity android:name=".Activity.SigninActivity"/>
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"

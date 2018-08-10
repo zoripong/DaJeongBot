@@ -37,7 +37,7 @@
             android:layout_marginTop="36dp">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/etUserId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -52,7 +52,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/etUserPw"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -66,10 +66,10 @@
                 android:paddingRight="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
+                app:layout_constraintTop_toBottomOf="@+id/etUserId" />
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/btnLogin"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -81,13 +81,13 @@
                 android:text="로그인"
                 android:textColor="#a239bc"
                 android:textSize="16.5sp"
-                app:layout_constraintBottom_toTopOf="@+id/button2"
+                app:layout_constraintBottom_toTopOf="@+id/btnSignin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintTop_toBottomOf="@+id/etUserPw" />
 
             <TextView
-                android:id="@+id/button2"
+                android:id="@+id/btnSignin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="27dp"
@@ -124,7 +124,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_kakao_login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button2" />
+                app:layout_constraintTop_toBottomOf="@+id/btnSignin" />
 
             <View
                 android:id="@+id/view7"

@@ -20,7 +20,6 @@ public class SelectBotActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_bot);
-
 //        btn_select_bot_1 = findViewById(R.id.btn_chatbot_1);
 //        btn_select_bot_2 = findViewById(R.id.btn_chatbot_2);
 //        btn_select_bot_3 = findViewById(R.id.btn_chatbot_3);
@@ -35,7 +34,6 @@ public class SelectBotActivity extends AppCompatActivity  {
 //        btn_select_bot_2.setOnClickListener(this);
 //        btn_select_bot_3.setOnClickListener(this);
 //        btn_select_bot_4.setOnClickListener(this);
-
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override

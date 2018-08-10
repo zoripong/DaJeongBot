@@ -14,7 +14,7 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SigninActivity.this, LoginActivity.class);
@@ -23,7 +23,7 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnSignin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SigninActivity.this, InputInfoActivity.class);
