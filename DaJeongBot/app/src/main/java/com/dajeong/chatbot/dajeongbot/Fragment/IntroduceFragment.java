@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.dajeong.chatbot.dajeongbot.Activity.InputInfoActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.R;
 
 /**
@@ -30,7 +30,7 @@ public class IntroduceFragment extends Fragment {
         btn_introduce_previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((InputInfoActivity)getActivity()).setCurrentItem(0,true);
+                ((SignupActivity)getActivity()).setCurrentItem(((SignupActivity)getActivity()).getCurrentItem()-1,true);
                 new InputNameFragment();
             }
         });
@@ -38,7 +38,7 @@ public class IntroduceFragment extends Fragment {
         btn_introduce_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((InputInfoActivity)getActivity()).setCurrentItem(2,true);
+                ((SignupActivity)getActivity()).setCurrentItem(((SignupActivity)getActivity()).getCurrentItem()+1,true);
                 new SelectCharacterFragment();
             }
         });
@@ -51,10 +51,10 @@ public class IntroduceFragment extends Fragment {
 //        public void onClick(View v) {
 //            switch (v.getId()) {
 //                case R.id.btn_introduce_previous:
-//                    ((InputInfoActivity) getActivity()).setCurrentItem(0, true);
+//                    ((SignupActivity) getActivity()).setCurrentItem(0, true);
 //                    new InputNameFragment();
 //                case R.id.btn_introduce_next:
-//                    ((InputInfoActivity) getActivity()).setCurrentItem(1, true);
+//                    ((SignupActivity) getActivity()).setCurrentItem(1, true);
 //                    new SelectCharacterFragment();
 //            }
 //        }

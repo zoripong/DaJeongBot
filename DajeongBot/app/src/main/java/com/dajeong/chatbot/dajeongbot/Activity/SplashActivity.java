@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.dajeong.chatbot.dajeongbot.Control.UserSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 
 // intro activity
@@ -19,10 +20,17 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(!UserSharedPreference.getInstance(getApplicationContext(), "user_info").getPreferences("id").equals("")){
+                    // 로그인 내역이 남아있다면
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
                 // 처음일 경우 tutorial, 아닐 경우 LoginActivity
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+                }
             }
         }, 2000);
     }

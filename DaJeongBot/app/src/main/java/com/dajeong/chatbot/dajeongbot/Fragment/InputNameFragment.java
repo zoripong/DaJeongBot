@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.dajeong.chatbot.dajeongbot.Activity.InputInfoActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.R;
 
 /**
@@ -18,12 +18,12 @@ import com.dajeong.chatbot.dajeongbot.R;
  */
 
 public class InputNameFragment extends Fragment{
-        private EditText inputName;
-        private Button btn_input_next;
+    private EditText inputName;
+    private Button btn_input_next;
 
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_input_name, container, false);
         LinearLayout ll = (LinearLayout)inflater.inflate(R.layout.view_input_name, container, false);
 
@@ -34,7 +34,7 @@ public class InputNameFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Log.e("username",inputName.getText().toString());
-                ((InputInfoActivity)getActivity()).setCurrentItem(1,true);
+                ((SignupActivity)getActivity()).setCurrentItem(((SignupActivity)getActivity()).getCurrentItem()+1,true);
                 new IntroduceFragment();
             }
         });
@@ -54,7 +54,7 @@ public class InputNameFragment extends Fragment{
 //            @Override
 //            public void onClick(View v){
 //                int username = Log.e("username", inputName.getText().toString());
-//                ((InputInfoActivity)getActivity()).setCurrentItem(1,true);
+//                ((SignupActivity)getActivity()).setCurrentItem(1,true);
 //                new IntroduceFragment();
 //            }
 //

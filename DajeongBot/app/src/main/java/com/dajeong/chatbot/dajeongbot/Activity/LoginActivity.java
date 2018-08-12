@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.Activity;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dajeong.chatbot.dajeongbot.Control.UserSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.facebook.CallbackManager;
@@ -34,14 +36,16 @@ import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -115,31 +119,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 서버와 통신
                 String id = String.valueOf(mEtUserId.getText());
                 String pw = String.valueOf(mEtUserPw.getText());
-                id = "zoripong";
+                // TODO: Remove the test code
+                id = "test";
+                pw = "test";
                 if((!id.isEmpty())&&(!pw.isEmpty())){
-                    Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getListRepos(id);
-                    res.enqueue(new Callback<ArrayList<JsonObject>>() {
-                        @Override
-                        public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
-                            Log.i("Retrofit", response.toString());
-                            if (response.body() != null){
-                                Log.e(TAG, response.body().toString());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
-                            Log.e("Err", t.getMessage());
-                        }
-                    });
-
+                    findViewById(R.id.pgb).setVisibility(View.VISIBLE);
+                    Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getUserInfo(id, pw);
+                        new NetworkCall().execute(res);
+                }else{
+                    Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -148,7 +138,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         findViewById(R.id.btnSignin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SigninActivity.class);
+                /*
+                * 0 : basic
+                * 1 : facebook
+                * 2 : kakao
+                * 3 : google
+                * */
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                intent.putExtra("account_type", 0);
                 startActivity(intent);
                 finish();
             }
@@ -171,6 +168,51 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void init() {
         mEtUserId = findViewById(R.id.etUserId);
         mEtUserPw = findViewById(R.id.etUserPw);
+    }
+
+    private class NetworkCall extends AsyncTask<Call, Void, String> {
+        @Override
+        protected String doInBackground(Call... calls) {
+            try {
+                Call<List<JsonObject>> call = calls[0];
+                Response<List<JsonObject>> response = call.execute();
+                return response.body().toString();
+            } catch (IOException e) {
+                Log.e(TAG, e.toString());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
+
+            if(result != null)
+                Log.e(TAG, result);
+
+            try {
+                JSONObject response = new JSONArray(result).getJSONObject(0);
+                if(response.getString("status").equals("OK")){
+                    JSONObject userJson = response.getJSONObject("user_info");
+
+                    Log.e(TAG, userJson.getInt("id")+"/"+userJson.getString("chat_session"));
+
+                    // 로그인 정보 저장
+                    UserSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "회원정보를 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     //facebook start

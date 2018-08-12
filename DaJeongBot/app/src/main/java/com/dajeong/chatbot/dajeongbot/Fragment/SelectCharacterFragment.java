@@ -1,7 +1,10 @@
 package com.dajeong.chatbot.dajeongbot.Fragment;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +13,35 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dajeong.chatbot.dajeongbot.Activity.LoginActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.MainActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
+import com.dajeong.chatbot.dajeongbot.Control.UserSharedPreference;
+import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.facebook.login.LoginResult;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by s2017 on 2018-08-03.
  */
 
 public class SelectCharacterFragment extends Fragment implements View.OnClickListener {
+    private final String TAG = "SelectCharacterFragment";
     private Button btn_select_done;
     private Button btn_select_next, btn_select_previous;
 
@@ -40,7 +64,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 //    private ImageView chatbotIntroduce_1,chatbotIntroduce_2,chatbotIntroduce_3,chatbotIntroduce_4;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_select_bot, container, false);
         LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.view_select_bot, container, false);
 
@@ -94,6 +118,69 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 //        chatbotIntroduce_4 = rootView.findViewById(introduceImage[3]);
 
         btn_select_done = rootView.findViewById(R.id.btn_select);
+        btn_select_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 필요한 데이터 ( user_id, name, birthday, account_type, bot_type )
+                //TODO : 앞의 프래그먼트에서 전부 가져오기
+                //TODO : API 로 로그인시 첫 유저이면 SIGN ACTIVITY 로
+                    // 첫 유저일 경우 http://172.30.1.35/apis/users/{user_id}/{password}로 쿼리시 [{"status": "Failed"}] 반환
+                //TODO : TOKEN 저장
+                String userId = "test";
+                String name = "한콩";
+                String birthday = "2018.05.08";
+                int botType = 1;
+                int accountType = ((SignupActivity)getActivity()).getAccountType();
+                String password = "";
+                String token = "";
+
+                // 추가 데이터 ( basic account : password / api account : token )
+                switch (accountType){
+                    case AccountType.BASIC_ACCOUNT:
+                        password = "test";
+                        break;
+                    case AccountType.FACEBOOK_ACCOUNT:
+                    case AccountType.KAKAO_ACCOUNT:
+                    case AccountType.GOOGLE_ACCOUNT:
+                        Toast.makeText(getActivity().getApplicationContext(), "준비주ㅇ", Toast.LENGTH_LONG).show();
+                        break;
+
+                }
+
+                // prepare call in Retrofit 2.0
+                try {
+                    JSONObject paramObject = new JSONObject();
+                    paramObject.put("user_id", userId);
+                    paramObject.put("name", name);
+                    paramObject.put("birthday", birthday);
+                    paramObject.put("bot_type", botType);
+                    paramObject.put("account_type", accountType);
+                    paramObject.put("password", password);
+                    paramObject.put("token", token);
+
+                    Call<JsonObject> res = NetRetrofit.getInstance().getService().addUserInfo(paramObject.toString());
+                    res.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Log.e(TAG, String.valueOf(response.body()));
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            if (t!=null)
+                            Log.e(TAG, t.getMessage());
+                        }
+                    });
+
+//                    userCall.enqueue(this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        // End
+
 
         btn_select_previous = rootView.findViewById(R.id.btn_select_previous);
         btn_select_next = rootView.findViewById(R.id.btn_select_next);
@@ -270,4 +357,27 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                         break;
                 }
         }
+
+    // 서버와 통신하기 위한 내부 클래스 ( 건들이지말아주렴.. ! )
+    private class NetworkCall extends AsyncTask<Call, Void, String> {
+        @Override
+        protected String doInBackground(Call... calls) {
+            try {
+                Call<JsonObject> call = calls[0];
+                Response<JsonObject> response = call.execute();
+                return response.body().toString();
+            } catch (IOException e) {
+                Log.e(TAG, e.toString());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result != null)
+                Log.e(TAG, result);
+        }
+    }
+
 }
