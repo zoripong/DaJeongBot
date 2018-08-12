@@ -1,6 +1,5 @@
 package com.dajeong.chatbot.dajeongbot.Fragment;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,26 +10,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Activity.LoginActivity;
-import com.dajeong.chatbot.dajeongbot.Activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
-import com.dajeong.chatbot.dajeongbot.Control.UserSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
-import com.facebook.login.LoginResult;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -142,6 +134,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                     case AccountType.FACEBOOK_ACCOUNT:
                     case AccountType.KAKAO_ACCOUNT:
                     case AccountType.GOOGLE_ACCOUNT:
+                        token = "token"; //TODO
                         Toast.makeText(getActivity().getApplicationContext(), "준비주ㅇ", Toast.LENGTH_LONG).show();
                         break;
 

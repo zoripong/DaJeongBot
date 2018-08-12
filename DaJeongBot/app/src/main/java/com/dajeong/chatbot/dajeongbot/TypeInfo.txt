@@ -1,0 +1,12 @@
+AccountType
+    0 : 커스텀 회원
+    1 : 페이스북
+    2 : 카카오
+    3 : 구글
+
+MessageType
+    0 : 기본 대화
+
+SenderType
+    0 : 회원
+    1 : 챗봇

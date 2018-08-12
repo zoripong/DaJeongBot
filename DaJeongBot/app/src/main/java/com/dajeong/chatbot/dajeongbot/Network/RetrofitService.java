@@ -20,4 +20,17 @@ public interface RetrofitService {
     @POST("signup")
     Call<JsonObject> addUserInfo(@Body String body);
 
+    @GET("messages/{account_id}")
+    Call<ArrayList<JsonObject>> getMessages(@Path("account_id") int accountId);
+
+    @GET("messages/{account_id}/{last_index}")
+    Call<ArrayList<JsonObject>> getMessages(@Path("account_id") int accountId, @Path("last_index") int lastIndex);
+
+
+    @Headers("Content-Type: application/json")
+    @POST("messages")
+    Call<JsonObject> sendMessage(@Body String body);
+
+
+
 }

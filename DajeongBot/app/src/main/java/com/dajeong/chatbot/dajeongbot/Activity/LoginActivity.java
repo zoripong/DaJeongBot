@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Control.UserSharedPreference;
+import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.facebook.CallbackManager;
@@ -199,7 +199,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.e(TAG, userJson.getInt("id")+"/"+userJson.getString("chat_session"));
 
                     // 로그인 정보 저장
-                    UserSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
+                    CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
+                    CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", userJson.getInt("bot_type"));
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);

@@ -12,17 +12,21 @@ import android.widget.TextView;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
 import com.dajeong.chatbot.dajeongbot.R;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Vector;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
-    private Vector<Chat> mChats;
+    private LinkedList<Chat> mChats;
     private Context mContext;
     View vBot;
     View vUser;
-    public ChatAdapter(Vector<Chat> chats, Context context){
+    public ChatAdapter(LinkedList<Chat> chats, Context context){
         this.mChats = chats;
         this.mContext = context;
     }
@@ -47,12 +51,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotHolder.mTvContent.setText(chat.getContent());
-                chatBotHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(chat.getTime()));
+//                chatBotHolder.mTvTime.setText(chat.getTime());
+                chatBotHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(new Date(Long.parseLong(chat.getTime()))));
                 break;
             case 1:
                 ChatUserHolder chatUserHolder = (ChatUserHolder)holder;
                 chatUserHolder.mTvContent.setText(chat.getContent());
-                chatUserHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(chat.getTime()));
+//                chatUserHolder.mTvTime.setText(chat.getTime());
+                chatUserHolder.mTvTime.setText(new SimpleDateFormat( "a HH:mm", Locale.KOREA ).format(new Date(Long.parseLong(chat.getTime()))));
                 break;
             default:
                 return;

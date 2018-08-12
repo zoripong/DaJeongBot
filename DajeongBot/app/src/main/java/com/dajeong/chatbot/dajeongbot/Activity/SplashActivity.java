@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.dajeong.chatbot.dajeongbot.Control.UserSharedPreference;
+import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 
 // intro activity
@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(!UserSharedPreference.getInstance(getApplicationContext(), "user_info").getPreferences("id").equals("")){
+                if(!CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id").equals("")){
                     // 로그인 내역이 남아있다면
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);

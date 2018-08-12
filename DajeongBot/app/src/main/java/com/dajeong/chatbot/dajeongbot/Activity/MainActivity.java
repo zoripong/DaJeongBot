@@ -2,11 +2,13 @@ package com.dajeong.chatbot.dajeongbot.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -14,51 +16,91 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.Adapter.ChatAdapter;
+import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Model.Character;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
+import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.google.gson.JsonObject;
 
-import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Vector;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "MainActivity";
     //component
-    private EditText etMessage;
+    private EditText mEtMessage;
     // recycler view
-    private Vector<Chat> mChats;
+    private LinkedList<Chat> mChats;
     private RecyclerView mRvChatList;
     private ChatAdapter mChatAdapter;
 
+    private Character mBotChar;
+
+    private int mAccountId;
+    private boolean mIsLoad;
+    private boolean mMoreChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        mChats = new Vector<>();
-        forDebugging();
-        mRvChatList = findViewById(R.id.rvChatList);
+        getMessage();
+
+        showProgressBar();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvChatList.setHasFixedSize(true);
         mRvChatList.setLayoutManager(layoutManager);
 
-        mChatAdapter = new ChatAdapter(mChats, MainActivity.this);
         mRvChatList.setAdapter(mChatAdapter);
+
+        mRvChatList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(!mRvChatList.canScrollVertically(-1)){
+                    Log.e(TAG, "OnScrolled : TOP");
+                    if(mIsLoad && mMoreChat){
+                        showProgressBar();
+                        getMoreMessage();
+                    }
+                }
+            }
+        });
 
         findViewById(R.id.btnSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etMessage.getText() != null && etMessage.getText().toString() != ""){
+                if(mEtMessage.getText() != null && !mEtMessage.getText().toString().replace(" ", "").equals("")){
                     // TODO : 추가 할 때 애니메이션
-                    // TODO : 서버에 메세지 전송
-                    mChats.add(new Chat(null, etMessage.getText().toString() ,new Date()));
+                    int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
+                    String content = String.valueOf(mEtMessage.getText());
+                    int chatType = 0;
+                    long time = System.currentTimeMillis();
+                    int isBot = 0;
+
+                    sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
+
+                    mChats.add(new Chat(0,null, mEtMessage.getText().toString() ,String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
-                    etMessage.setText("");
+                    mEtMessage.setText("");
                 }
+
             }
+
+
         });
 
         findViewById(R.id.ivAddChat).setOnClickListener(new View.OnClickListener() {
@@ -77,27 +119,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void init() {
-        etMessage = findViewById(R.id.etMessage);
-    }
-
-    //FIXME : REMOVE this Method
-    // TODO : 서버에서 메세지 가져오기
-    private void forDebugging(){
-
-        Character character = new Character("다정이", R.drawable.ic_char1);
-
-        mChats.add(new Chat(character, "1번째 메세지랍니다.", new Date()));
-        mChats.add(new Chat(null, "2번째 메세지랍니다.", new Date()));
-        mChats.add(new Chat(null, "22번째 메세지랍니다.", new Date()));
-        mChats.add(new Chat(character, "3번째 메세지랍니다.", new Date()));
-        mChats.add(new Chat(character, "33번째 메세지랍니다.", new Date()));
-        mChats.add(new Chat(null, "4번째 메세지랍니다.", new Date()));
-        mChats.add(new Chat(character, "5번째 메세지랍니다.", new Date()));
-
-
     }
 
     @Override
@@ -146,4 +167,136 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void init() {
+        mEtMessage = findViewById(R.id.etMessage);
+        mChats = new LinkedList<>();
+        mRvChatList = findViewById(R.id.rvChatList);
+        mChatAdapter = new ChatAdapter(mChats, MainActivity.this);
+
+        mBotChar = setBot();
+        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
+        mIsLoad = false;
+        mMoreChat = true;
+    }
+
+    @NonNull
+    private Character setBot(){
+        int charImage = R.drawable.ic_char1;
+        String charNames[] = {"다정군", "다정냥", "다정곰", "다정몽"};
+        int charType = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type") ;
+
+        return new Character(charNames[charType], charImage+charType);
+    }
+
+
+    // TODO : 서버에서 메세지 가져오기
+    private void getMessage(){
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId);
+        res.enqueue(new Callback<ArrayList<JsonObject>>() {
+            @Override
+            public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
+                controlJsonObj(response);
+                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                mIsLoad = true;
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
+                if(t!=null){
+                    Log.e(TAG, t.toString());
+                }
+            }
+        });
+    }
+
+    private void getMoreMessage(){
+        int lastIndex = CustomSharedPreference.getInstance(getApplicationContext(), "chat").getIntPreferences("last_index");
+
+        Log.e(TAG, "Last Index is "+ lastIndex);
+
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId, lastIndex);
+        res.enqueue(new Callback<ArrayList<JsonObject>>() {
+            @Override
+            public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
+                controlJsonObj(response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
+                if(t!=null){
+                    Log.e(TAG, t.toString());
+                }
+            }
+        });
+
+
+    }
+
+    private void controlJsonObj(Response<ArrayList<JsonObject>> response){
+        ArrayList<JsonObject> body = response.body();
+        Log.e(TAG, body.toString());
+        // 서버에서 올 때 최근 것이 가장 먼저 날라옴
+//        for(int i = body.size()-1; i>=0; i--){
+//            // 예전에 보낸 메세지일 수록 mChats의 index는 작음
+//            JsonObject json = body.get(i);
+//
+//
+//        }
+        for(JsonObject json : body){
+            if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0)
+                mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+            else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1)
+                mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), mBotChar,json.get("content").getAsString(), json.get("time").getAsString()));
+
+            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
+
+        }
+        if(body.size() == 0 ){
+            // 더이상의 대화 내역이 없음
+            mMoreChat = false;
+        }else{
+            // 마지막 인덱스 저장
+            CustomSharedPreference.getInstance(getApplicationContext(), "chat").savePreferences("last_index", (body.get(body.size()-1)).get("id").getAsInt());
+            mChatAdapter.notifyDataSetChanged();
+        }
+        hideProgressBar();
+
+    }
+
+    private void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
+        try {
+            JSONObject paramObject = new JSONObject();
+            paramObject.put("account_id", accountId);
+            paramObject.put("content", content);
+            paramObject.put("chat_type", chatType);
+            paramObject.put("time", time);
+            paramObject.put("isBot", isBot);
+
+            Log.e(TAG, "Send : "+ paramObject.toString());
+
+            Call<JsonObject> res = NetRetrofit.getInstance().getService().sendMessage(paramObject.toString());
+            res.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.e(TAG, String.valueOf(response.body()));
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    if (t!=null)
+                        Log.e(TAG, t.getMessage());
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showProgressBar(){
+        findViewById(R.id.pgb).setVisibility(View.VISIBLE);
+    }
+    private void hideProgressBar(){
+        findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
+    }
 }
