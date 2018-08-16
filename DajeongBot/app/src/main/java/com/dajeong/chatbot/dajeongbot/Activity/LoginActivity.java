@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -20,6 +21,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -97,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 //    Log.d("Success", String.valueOf(Profile.getCurrentProfile().getName()));
                                 //   Log.d("Success", String.valueOf(Profile.getCurrentProfile().getProfilePictureUri(200, 200)));
                                 requestUserProfile(loginResult);
-                                redirectSignupActivity();  // 세션 연결성공 시 redirectSignupActivity() 호출
+                                redirectSignUpActivity(Profile.getCurrentProfile().getId(), "", AccountType.FACEBOOK_ACCOUNT);  // 세션 연결성공 시 redirectSignUpActivity() 호출
                             }
 
                             @Override
@@ -126,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 pw = "test";
                 if((!id.isEmpty())&&(!pw.isEmpty())){
                     findViewById(R.id.pgb).setVisibility(View.VISIBLE);
-                    Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getUserInfo(id, pw);
+                    Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getUserInfo(AccountType.BASIC_ACCOUNT, id, pw);
                         new NetworkCall().execute(res);
                 }else{
                     Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
@@ -205,10 +207,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+                }else if(response.getString("status").equals("NEW_API_USER")){
+
+                    Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                    intent.putExtra("account_type", response.getInt("account_type"));
+                    intent.putExtra("token", response.getString("token"));
+                    startActivity(intent);
+                    finish();
+
                 }else{
                     Toast.makeText(getApplicationContext(), "회원정보를 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -292,7 +301,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                String GoogleEmail = Plus.AccountApi.getAccountName(mGoogleApiClient); //이메일만 오류남
 //                Log.d(TAG, "구글 사용자 이메일 : " + GoogleEmail);
             }
-            redirectSignupActivity();  // 세션 연결성공 시 redirectSignupActivity() 호출
+            redirectSignUpActivity(currentPerson.getId(), "", AccountType.GOOGLE_ACCOUNT);  // 세션 연결성공 시 redirectSignUpActivity() 호출
         }
     }
 
@@ -368,17 +377,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     String nickname = userProfile.getNickname();
                     String email = userProfile.getEmail();
                     String profileImagePath = userProfile.getProfileImagePath();
-                    String thumnailPath = userProfile.getThumbnailImagePath();
+                    String thumbnailImage = userProfile.getThumbnailImagePath();
                     String UUID = userProfile.getUUID();
                     long id = userProfile.getId();
 
                     Log.e(KAKAO_TAG, "카카오톡 사용자 이름 : "+nickname);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 이메일 : "+email);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 profileImagePath : "+profileImagePath);
-                    Log.e(KAKAO_TAG, "카카오톡 사용자 thumnailPath : "+thumnailPath);
+                    Log.e(KAKAO_TAG, "카카오톡 사용자 thumbnailPath : "+thumbnailImage);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 UUID : "+UUID);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 아이디 : "+id);
-                    redirectSignupActivity();
+                    redirectSignUpActivity(email, "token", AccountType.KAKAO_ACCOUNT);
                 }
 
 
@@ -391,14 +400,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             });
         }
     }
+    //kakao LogIn end
 
-    protected void redirectSignupActivity() {       //세션 연결 성공 시 SignupActivity로 넘김
+    protected void redirectSignUpActivity(String id, String token, int accountType) {       //세션 연결 성공 시 SignupActivity로 넘김
+        id = "test";
+        token = "test";
+
+        if((!id.isEmpty())&&(!token.isEmpty())){
+            findViewById(R.id.pgb).setVisibility(View.VISIBLE);
+            Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getUserInfo(accountType, id, token);
+            new NetworkCall().execute(res);
+        }else{
+            Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
+        }
+
+        /*
         final Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
+        * */
     }
-    //kakao LogIn end
 }
 
 

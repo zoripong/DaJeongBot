@@ -124,21 +124,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 int botType = 1;
                 int accountType = ((SignupActivity)getActivity()).getAccountType();
                 String password = "";
-                String token = "";
-
-                // 추가 데이터 ( basic account : password / api account : token )
-                switch (accountType){
-                    case AccountType.BASIC_ACCOUNT:
-                        password = "test";
-                        break;
-                    case AccountType.FACEBOOK_ACCOUNT:
-                    case AccountType.KAKAO_ACCOUNT:
-                    case AccountType.GOOGLE_ACCOUNT:
-                        token = "token"; //TODO
-                        Toast.makeText(getActivity().getApplicationContext(), "준비주ㅇ", Toast.LENGTH_LONG).show();
-                        break;
-
-                }
+                String token = ((SignupActivity)getActivity()).getToken();
 
                 // prepare call in Retrofit 2.0
                 try {
