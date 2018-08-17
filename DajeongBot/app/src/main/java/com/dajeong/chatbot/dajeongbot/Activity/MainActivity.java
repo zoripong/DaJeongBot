@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // TODO : 서버에서 메세지 가져오기
+    // TODO : 이율앙 onResponse 만 캘린더에 맞춰서 하면 됩니당 아래 아래 줄에서 메소드 호출하는거 바꾸고~~
     private void getMessage(){
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
