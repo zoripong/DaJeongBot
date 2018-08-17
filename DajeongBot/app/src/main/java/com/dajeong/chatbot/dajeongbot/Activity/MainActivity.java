@@ -16,19 +16,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.Adapter.ChatAdapter;
+import com.dajeong.chatbot.dajeongbot.Alias.MessageType;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Model.Character;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Vector;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        checkNewUser();
         getMessage();
 
         showProgressBar();
@@ -69,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(!mRvChatList.canScrollVertically(-1)){
+                if (!mRvChatList.canScrollVertically(-1)) {
                     Log.e(TAG, "OnScrolled : TOP");
-                    if(mIsLoad && mMoreChat){
+                    if (mIsLoad && mMoreChat) {
                         showProgressBar();
                         getMoreMessage();
                     }
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mEtMessage.getText() != null && !mEtMessage.getText().toString().replace(" ", "").equals("")){
+                if (mEtMessage.getText() != null && !mEtMessage.getText().toString().replace(" ", "").equals("")) {
                     // TODO : 추가 할 때 애니메이션
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
                     String content = String.valueOf(mEtMessage.getText());
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(0,null, mEtMessage.getText().toString() ,String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(0, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -298,5 +301,36 @@ public class MainActivity extends AppCompatActivity {
     }
     private void hideProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
+    }
+
+    // TODO: RETROFIT HEADER 고치면 TEST 해보기~~
+    public void checkNewUser() {
+        Intent intent = getIntent();
+        if(intent.getBooleanExtra("NEW_USER", false)){
+            // default 대화 시작
+            Call<JsonObject> res = NetRetrofit.getInstance().getService().getMessagesForNewUser(mAccountId);
+            res.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    JsonObject result = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
+                    String sessionId = result.get("session_id").getAsString();
+
+                    JsonObject resultDetail = result.getAsJsonArray("result").get(0).getAsJsonObject();
+
+                    resultDetail.get("message").getAsString();
+                    mChats.addFirst(new Chat(MessageType.BASIC_MSG, mBotChar, resultDetail.get("message").getAsString(), String.valueOf(System.currentTimeMillis())));
+
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    if(t!=null){
+                        Log.e(TAG, t.toString());
+                    }
+                }
+            });
+        }
+
     }
 }

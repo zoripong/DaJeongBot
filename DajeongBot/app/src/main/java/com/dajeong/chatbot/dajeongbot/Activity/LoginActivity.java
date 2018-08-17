@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 String id = String.valueOf(mEtUserId.getText());
                 String pw = String.valueOf(mEtUserPw.getText());
                 // TODO: Remove the test code
-                id = "test";
+//                id = "test";
                 pw = "test";
                 if((!id.isEmpty())&&(!pw.isEmpty())){
                     findViewById(R.id.pgb).setVisibility(View.VISIBLE);

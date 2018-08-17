@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.Fragment;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dajeong.chatbot.dajeongbot.Activity.LoginActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
@@ -142,6 +145,17 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             Log.e(TAG, String.valueOf(response.body()));
+                            Intent intent = null;
+                            if(response.body().get("status").getAsString().equals("Success")){
+                                // 회원가입 성공
+                                intent = new Intent(getActivity(), MainActivity.class);
+                                intent.putExtra("NEW_USER", true);
+                            }else{
+                                // 회원가입 실패
+                                intent = new Intent(getActivity(), LoginActivity.class);
+                            }
+                            startActivity(intent);
+                            getActivity().finish();
                         }
 
                         @Override
