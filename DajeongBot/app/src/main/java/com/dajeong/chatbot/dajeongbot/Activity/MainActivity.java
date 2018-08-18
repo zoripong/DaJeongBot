@@ -22,13 +22,11 @@ import com.dajeong.chatbot.dajeongbot.Model.Character;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -314,13 +312,10 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     JsonObject result = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
                     String sessionId = result.get("session_id").getAsString();
-
                     JsonObject resultDetail = result.getAsJsonArray("result").get(0).getAsJsonObject();
-
-                    resultDetail.get("message").getAsString();
-                    mChats.addFirst(new Chat(MessageType.BASIC_MSG, mBotChar, resultDetail.get("message").getAsString(), String.valueOf(System.currentTimeMillis())));
-
-
+                    String message = resultDetail.get("message").getAsString();
+                    mChats.addFirst(new Chat(MessageType.SPEAK_NODE, mBotChar, resultDetail.get("message").getAsString(), String.valueOf(System.currentTimeMillis())));
+                    mChatAdapter.notifyDataSetChanged();
                 }
 
                 @Override
