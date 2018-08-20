@@ -22,12 +22,14 @@ import com.dajeong.chatbot.dajeongbot.Model.Character;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import retrofit2.Call;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private int mAccountId;
     private boolean mIsLoad;
     private boolean mMoreChat;
+
+    private JsonObject mJsonResponse;
+    private HashMap<String, Integer> mStringNodeTypeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     long time = System.currentTimeMillis();
                     int isBot = 0;
 
-                    sendMessage(accountId, content, chatType, String.valueOf(time), isBot, new JsonObject());
+                    sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
                     mChats.add(new Chat(0, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
@@ -178,6 +183,12 @@ public class MainActivity extends AppCompatActivity {
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         mIsLoad = false;
         mMoreChat = true;
+
+        mJsonResponse = new JsonObject();
+        mStringNodeTypeMap = new HashMap<>();
+        mStringNodeTypeMap.put("speak", MessageType.SPEAK_NODE);
+        mStringNodeTypeMap.put("slot", MessageType.SLOT_NODE);
+        mStringNodeTypeMap.put("carousel", MessageType.CAROUSEL_NODE);
     }
 
     @NonNull
@@ -265,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(int accountId, String content, int chatType, String time, int isBot, JsonObject response) {
+    private void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
         try {
             JSONObject paramObject = new JSONObject();
             paramObject.put("account_id", accountId);
@@ -273,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
             paramObject.put("chat_type", chatType);
             paramObject.put("time", time);
             paramObject.put("isBot", isBot);
-            paramObject.put("response", response);
+            paramObject.put("response", mJsonResponse);
 
 
             Log.e(TAG, "Send : "+ paramObject.toString());
@@ -284,6 +295,18 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     Log.e(TAG, String.valueOf(response.body()));
                     // TODO : 서버로부터 날라온 response 저장 및 메세지 추가
+                    Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
+                    mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
+                    JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
+                    for( int i = 0; i<jsonArray.size(); i++ ){
+                        String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
+                        String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
+                        String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
+
+                        mChats.addFirst(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
+                    }
+                    mChatAdapter.notifyDataSetChanged();
+
                 }
 
                 @Override
