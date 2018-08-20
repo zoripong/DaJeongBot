@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     long time = System.currentTimeMillis();
                     int isBot = 0;
 
-                    sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
+                    sendMessage(accountId, content, chatType, String.valueOf(time), isBot, new JsonObject());
 
                     mChats.add(new Chat(0, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
+    private void sendMessage(int accountId, String content, int chatType, String time, int isBot, JsonObject response) {
         try {
             JSONObject paramObject = new JSONObject();
             paramObject.put("account_id", accountId);
@@ -273,6 +273,8 @@ public class MainActivity extends AppCompatActivity {
             paramObject.put("chat_type", chatType);
             paramObject.put("time", time);
             paramObject.put("isBot", isBot);
+            paramObject.put("response", response);
+
 
             Log.e(TAG, "Send : "+ paramObject.toString());
 
@@ -281,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     Log.e(TAG, String.valueOf(response.body()));
+                    // TODO : 서버로부터 날라온 response 저장 및 메세지 추가
                 }
 
                 @Override
