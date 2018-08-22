@@ -17,13 +17,11 @@ import android.widget.Toast;
 import com.dajeong.chatbot.dajeongbot.Activity.LoginActivity;
 import com.dajeong.chatbot.dajeongbot.Activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
-import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
+import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSignUp;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -121,7 +119,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 //TODO : API 로 로그인시 첫 유저이면 SIGN ACTIVITY 로
                     // 첫 유저일 경우 http://172.30.1.35/apis/users/{user_id}/{password}로 쿼리시 [{"status": "Failed"}] 반환
                 //TODO : TOKEN 저장
-                String userId = "test";
+                final String userId = "test24";
                 String name = "한콩";
                 String birthday = "2018.05.08";
                 int botType = 1;
@@ -130,45 +128,43 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 String token = ((SignupActivity)getActivity()).getToken();
 
                 // prepare call in Retrofit 2.0
-                try {
-                    JSONObject paramObject = new JSONObject();
-                    paramObject.put("user_id", userId);
-                    paramObject.put("name", name);
-                    paramObject.put("birthday", birthday);
-                    paramObject.put("bot_type", botType);
-                    paramObject.put("account_type", accountType);
-                    paramObject.put("password", password);
-                    paramObject.put("token", token);
 
-                    Call<JsonObject> res = NetRetrofit.getInstance().getService().addUserInfo(paramObject.toString());
-                    res.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            Log.e(TAG, String.valueOf(response.body()));
-                            Intent intent = null;
-                            if(response.body().get("status").getAsString().equals("Success")){
-                                // 회원가입 성공
-                                intent = new Intent(getActivity(), MainActivity.class);
-                                intent.putExtra("NEW_USER", true);
-                            }else{
-                                // 회원가입 실패
-                                intent = new Intent(getActivity(), LoginActivity.class);
-                            }
-                            startActivity(intent);
-                            getActivity().finish();
-                        }
+                Call<JsonObject> res = NetRetrofit.getInstance().getService().addUserInfo(new RequestSignUp(userId, name, birthday, botType, accountType, password, token));
+                res.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e(TAG, String.valueOf(response.body()));
+                        Intent intent = null;
+                        if(response.body().get("status").getAsString().equals("Success")){
+                            // 회원가입 성공
+                            intent = new Intent(getActivity(), MainActivity.class);
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            if (t!=null)
-                            Log.e(TAG, t.getMessage());
+                            CustomSharedPreference.getInstance(getContext(), "user_info")
+                                    .savePreferences("id", response.body().getAsJsonObject("user_info").get("id").getAsString() );
+                            CustomSharedPreference.getInstance(getContext(), "user_info")
+                                    .savePreferences("bot_type", response.body().getAsJsonObject("user_info").get("bot_type").getAsInt() );
+
+                        }else if(response.body().get("status").getAsString().equals("ExistUser")){
+                            // 존재하는 회원
+                            Toast.makeText(getContext(), "이미 존재하는 회원입니다.", Toast.LENGTH_LONG).show();
+                            intent = new Intent(getActivity(), LoginActivity.class);
+                        }else{
+                            // 회원가입 실패
+                            Toast.makeText(getContext(), "이미 등록된 회원입니다.", Toast.LENGTH_LONG).show();
+                            intent = new Intent(getActivity(), LoginActivity.class);
                         }
-                    });
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        if (t!=null)
+                        Log.e(TAG, t.getMessage());
+                    }
+                });
 
 //                    userCall.enqueue(this);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
             }
         });
@@ -299,56 +295,56 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
     }
         @Override
         public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.img_chatbot_1:
-                        chatbotDot_1.setVisibility(View.VISIBLE);
-                        chatbotDot_2.setVisibility(View.INVISIBLE);
-                        chatbotDot_3.setVisibility(View.INVISIBLE);
-                        chatbotDot_4.setVisibility(View.INVISIBLE);
-                        btn_select_previous.setVisibility(View.INVISIBLE);
-                        btn_select_next.setVisibility(View.VISIBLE);
-                        chatbotHead.setImageResource(R.drawable.chatbot_head_1);
-                        chatbotTitle.setImageResource(R.drawable.chatbot_text_1);
-                        chatbotString.setText(R.string.dajeong_1_info);
-                        chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_1);
-                        break;
-                    case R.id.img_chatbot_2:
-                        chatbotDot_1.setVisibility(View.INVISIBLE);
-                        chatbotDot_2.setVisibility(View.VISIBLE);
-                        chatbotDot_3.setVisibility(View.INVISIBLE);
-                        chatbotDot_4.setVisibility(View.INVISIBLE);
-                        btn_select_previous.setVisibility(View.VISIBLE);
-                        btn_select_next.setVisibility(View.VISIBLE);
-                        chatbotHead.setImageResource(R.drawable.chatbot_head_2);
-                        chatbotTitle.setImageResource(R.drawable.chatbot_text_2);
-                        chatbotString.setText(R.string.dajeong_2_info);
-                        chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_2);
-                        break;
-                    case R.id.img_chatbot_3:
-                        chatbotDot_1.setVisibility(View.INVISIBLE);
-                        chatbotDot_2.setVisibility(View.INVISIBLE);
-                        chatbotDot_3.setVisibility(View.VISIBLE);
-                        chatbotDot_4.setVisibility(View.INVISIBLE);
-                        btn_select_previous.setVisibility(View.VISIBLE);
-                        btn_select_next.setVisibility(View.VISIBLE);
-                        chatbotHead.setImageResource(R.drawable.chatbot_head_3);
-                        chatbotTitle.setImageResource(R.drawable.chatbot_text_3);
-                        chatbotString.setText(R.string.dajeong_3_info);
-                        chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_3);
-                        break;
-                    case R.id.img_chatbot_4:
-                        chatbotDot_1.setVisibility(View.INVISIBLE);
-                        chatbotDot_2.setVisibility(View.INVISIBLE);
-                        chatbotDot_3.setVisibility(View.INVISIBLE);
-                        chatbotDot_4.setVisibility(View.VISIBLE);
-                        btn_select_previous.setVisibility(View.VISIBLE);
-                        btn_select_next.setVisibility(View.INVISIBLE);
-                        chatbotHead.setImageResource(R.drawable.chatbot_head_4);
-                        chatbotTitle.setImageResource(R.drawable.chatbot_text_4);
-                        chatbotString.setText(R.string.dajeong_4_info);
-                        chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_4);
-                        break;
-                }
+            switch (v.getId()) {
+                case R.id.img_chatbot_1:
+                    chatbotDot_1.setVisibility(View.VISIBLE);
+                    chatbotDot_2.setVisibility(View.INVISIBLE);
+                    chatbotDot_3.setVisibility(View.INVISIBLE);
+                    chatbotDot_4.setVisibility(View.INVISIBLE);
+                    btn_select_previous.setVisibility(View.INVISIBLE);
+                    btn_select_next.setVisibility(View.VISIBLE);
+                    chatbotHead.setImageResource(R.drawable.chatbot_head_1);
+                    chatbotTitle.setImageResource(R.drawable.chatbot_text_1);
+                    chatbotString.setText(R.string.dajeong_1_info);
+                    chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_1);
+                    break;
+                case R.id.img_chatbot_2:
+                    chatbotDot_1.setVisibility(View.INVISIBLE);
+                    chatbotDot_2.setVisibility(View.VISIBLE);
+                    chatbotDot_3.setVisibility(View.INVISIBLE);
+                    chatbotDot_4.setVisibility(View.INVISIBLE);
+                    btn_select_previous.setVisibility(View.VISIBLE);
+                    btn_select_next.setVisibility(View.VISIBLE);
+                    chatbotHead.setImageResource(R.drawable.chatbot_head_2);
+                    chatbotTitle.setImageResource(R.drawable.chatbot_text_2);
+                    chatbotString.setText(R.string.dajeong_2_info);
+                    chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_2);
+                    break;
+                case R.id.img_chatbot_3:
+                    chatbotDot_1.setVisibility(View.INVISIBLE);
+                    chatbotDot_2.setVisibility(View.INVISIBLE);
+                    chatbotDot_3.setVisibility(View.VISIBLE);
+                    chatbotDot_4.setVisibility(View.INVISIBLE);
+                    btn_select_previous.setVisibility(View.VISIBLE);
+                    btn_select_next.setVisibility(View.VISIBLE);
+                    chatbotHead.setImageResource(R.drawable.chatbot_head_3);
+                    chatbotTitle.setImageResource(R.drawable.chatbot_text_3);
+                    chatbotString.setText(R.string.dajeong_3_info);
+                    chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_3);
+                    break;
+                case R.id.img_chatbot_4:
+                    chatbotDot_1.setVisibility(View.INVISIBLE);
+                    chatbotDot_2.setVisibility(View.INVISIBLE);
+                    chatbotDot_3.setVisibility(View.INVISIBLE);
+                    chatbotDot_4.setVisibility(View.VISIBLE);
+                    btn_select_previous.setVisibility(View.VISIBLE);
+                    btn_select_next.setVisibility(View.INVISIBLE);
+                    chatbotHead.setImageResource(R.drawable.chatbot_head_4);
+                    chatbotTitle.setImageResource(R.drawable.chatbot_text_4);
+                    chatbotString.setText(R.string.dajeong_4_info);
+                    chatbotIntroduce.setImageResource(R.drawable.chatbot_introduce_4);
+                    break;
+            }
         }
 
     // 서버와 통신하기 위한 내부 클래스 ( 건들이지말아주렴.. ! )

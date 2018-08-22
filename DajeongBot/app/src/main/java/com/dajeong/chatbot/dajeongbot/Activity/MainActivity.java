@@ -20,6 +20,7 @@ import com.dajeong.chatbot.dajeongbot.Alias.MessageType;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Model.Character;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
+import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSendMessage;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonArray;
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        checkNewUser();
         getMessage();
 
         showProgressBar();
@@ -246,8 +246,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void controlJsonObj(Response<ArrayList<JsonObject>> response){
+       ;
+        Log.e(TAG, "HERE"+String.valueOf(mAccountId));
+
         ArrayList<JsonObject> body = response.body();
-        Log.e(TAG, body.toString());
+//        Log.e(TAG, body.toString());
         // 서버에서 올 때 최근 것이 가장 먼저 날라옴
 //        for(int i = body.size()-1; i>=0; i--){
 //            // 예전에 보낸 메세지일 수록 mChats의 index는 작음
@@ -261,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1)
                 mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), mBotChar,json.get("content").getAsString(), json.get("time").getAsString()));
 
-            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
+//            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
 
         }
         if(body.size() == 0 ){
@@ -277,81 +280,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-        try {
-            JSONObject paramObject = new JSONObject();
-            paramObject.put("account_id", accountId);
-            paramObject.put("content", content);
-            paramObject.put("chat_type", chatType);
-            paramObject.put("time", time);
-            paramObject.put("isBot", isBot);
-            paramObject.put("response", mJsonResponse);
 
+        Call<JsonObject> res = NetRetrofit.getInstance().getService().sendMessage(new RequestSendMessage(accountId, content, chatType, time, isBot, mJsonResponse));
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.e(TAG, String.valueOf(response.body()));
+                //TODO : intent not found debug
+                Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
+                mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
+                JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
+                for( int i = 0; i<jsonArray.size(); i++ ){
+                    String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
+                    String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
+                    String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
 
-            Log.e(TAG, "Send : "+ paramObject.toString());
-
-            Call<JsonObject> res = NetRetrofit.getInstance().getService().sendMessage(paramObject.toString());
-            res.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.e(TAG, String.valueOf(response.body()));
-                    // TODO : 서버로부터 날라온 response 저장 및 메세지 추가
-                    Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
-                    mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
-                    JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
-                    for( int i = 0; i<jsonArray.size(); i++ ){
-                        String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
-                        String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
-                        String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
-
-                        mChats.addFirst(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
-                    }
-                    mChatAdapter.notifyDataSetChanged();
-
+                    mChats.addFirst(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
                 }
+                mChatAdapter.notifyDataSetChanged();
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    if (t!=null)
-                        Log.e(TAG, t.getMessage());
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                if (t!=null)
+                    Log.e(TAG, t.getMessage());
+            }
+        });
+
     }
 
     private void showProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.VISIBLE);
     }
+
     private void hideProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
     }
 
-    // TODO: RETROFIT HEADER 고치면 TEST 해보기~~
-    public void checkNewUser() {
-        Intent intent = getIntent();
-        if(intent.getBooleanExtra("NEW_USER", false)){
-            // default 대화 시작
-            Call<JsonObject> res = NetRetrofit.getInstance().getService().getMessagesForNewUser(mAccountId);
-            res.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    JsonObject result = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
-                    String sessionId = result.get("session_id").getAsString();
-                    JsonObject resultDetail = result.getAsJsonArray("result").get(0).getAsJsonObject();
-                    String message = resultDetail.get("message").getAsString();
-                    mChats.addFirst(new Chat(MessageType.SPEAK_NODE, mBotChar, resultDetail.get("message").getAsString(), String.valueOf(System.currentTimeMillis())));
-                    mChatAdapter.notifyDataSetChanged();
-                }
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    if(t!=null){
-                        Log.e(TAG, t.toString());
-                    }
-                }
-            });
-        }
 
-    }
+
 }
