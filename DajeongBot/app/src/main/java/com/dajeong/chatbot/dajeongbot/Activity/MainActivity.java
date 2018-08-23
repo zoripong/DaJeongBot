@@ -287,18 +287,24 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Log.e(TAG, String.valueOf(response.body()));
                 //TODO : intent not found debug
-                Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
-                mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
-                JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
-                for( int i = 0; i<jsonArray.size(); i++ ){
-                    String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
-                    String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
-                    String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
+                //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
+                if(response.body().has("reponseSet")){
+                    // 챗봇과 대화한 경우
+                    Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
+                    mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
+                    JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
+                    for( int i = 0; i<jsonArray.size(); i++ ){
+                        String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
+                        String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
+                        String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
 
-                    mChats.addFirst(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
+                        mChats.addLast(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
+                    }
+                    mChatAdapter.notifyDataSetChanged();
+                    mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                }else{
+                    Log.e(TAG, response.body().toString()); 
                 }
-                mChatAdapter.notifyDataSetChanged();
-
             }
 
             @Override

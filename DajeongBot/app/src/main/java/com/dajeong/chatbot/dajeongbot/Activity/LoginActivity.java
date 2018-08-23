@@ -207,6 +207,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+                }else if(response.getString("status").equals("NOT EXIST")){
+                    Toast.makeText(getApplicationContext(), "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
                 }else if(response.getString("status").equals("NEW_API_USER")){
 
                     Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
@@ -216,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     finish();
 
                 }else{
-                    Toast.makeText(getApplicationContext(), "회원정보를 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "오류가 발생하였습니다. 개발자에게 문의해주세요.", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
