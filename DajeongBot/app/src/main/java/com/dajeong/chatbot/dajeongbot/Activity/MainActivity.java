@@ -16,19 +16,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.Adapter.ChatAdapter;
+import com.dajeong.chatbot.dajeongbot.Alias.MessageType;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.Model.Character;
 import com.dajeong.chatbot.dajeongbot.Model.Chat;
+import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSendMessage;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Vector;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsLoad;
     private boolean mMoreChat;
 
+    private JsonObject mJsonResponse;
+    private HashMap<String, Integer> mStringNodeTypeMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(!mRvChatList.canScrollVertically(-1)){
+                if (!mRvChatList.canScrollVertically(-1)) {
                     Log.e(TAG, "OnScrolled : TOP");
-                    if(mIsLoad && mMoreChat){
+                    if (mIsLoad && mMoreChat) {
                         showProgressBar();
                         getMoreMessage();
                     }
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mEtMessage.getText() != null && !mEtMessage.getText().toString().replace(" ", "").equals("")){
+                if (mEtMessage.getText() != null && !mEtMessage.getText().toString().replace(" ", "").equals("")) {
                     // TODO : 추가 할 때 애니메이션
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
                     String content = String.valueOf(mEtMessage.getText());
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(0,null, mEtMessage.getText().toString() ,String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(0, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -177,6 +184,12 @@ public class MainActivity extends AppCompatActivity {
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         mIsLoad = false;
         mMoreChat = true;
+
+        mJsonResponse = new JsonObject();
+        mStringNodeTypeMap = new HashMap<>();
+        mStringNodeTypeMap.put("speak", MessageType.SPEAK_NODE);
+        mStringNodeTypeMap.put("slot", MessageType.SLOT_NODE);
+        mStringNodeTypeMap.put("carousel", MessageType.CAROUSEL_NODE);
     }
 
     @NonNull
@@ -190,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // TODO : 서버에서 메세지 가져오기
+    // TODO : 이율앙 onResponse 만 캘린더에 맞춰서 하면 됩니당 아래 아래 줄에서 메소드 호출하는거 바꾸고~~
     private void getMessage(){
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
@@ -203,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
-                if(t!=null){
+                if(t instanceof SocketTimeoutException){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+                }else{
                     Log.e(TAG, t.toString());
                 }
             }
@@ -224,7 +239,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
-                if(t!=null){
+                if(t instanceof SocketTimeoutException){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+                }else{
                     Log.e(TAG, t.toString());
                 }
             }
@@ -234,8 +251,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void controlJsonObj(Response<ArrayList<JsonObject>> response){
+       ;
+        Log.e(TAG, "HERE"+String.valueOf(mAccountId));
+
         ArrayList<JsonObject> body = response.body();
-        Log.e(TAG, body.toString());
+//        Log.e(TAG, body.toString());
         // 서버에서 올 때 최근 것이 가장 먼저 날라옴
 //        for(int i = body.size()-1; i>=0; i--){
 //            // 예전에 보낸 메세지일 수록 mChats의 index는 작음
@@ -249,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
             else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1)
                 mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), mBotChar,json.get("content").getAsString(), json.get("time").getAsString()));
 
-            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
+//            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
 
         }
         if(body.size() == 0 ){
@@ -265,38 +285,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-        try {
-            JSONObject paramObject = new JSONObject();
-            paramObject.put("account_id", accountId);
-            paramObject.put("content", content);
-            paramObject.put("chat_type", chatType);
-            paramObject.put("time", time);
-            paramObject.put("isBot", isBot);
 
-            Log.e(TAG, "Send : "+ paramObject.toString());
+        Call<JsonObject> res = NetRetrofit.getInstance().getService().sendMessage(new RequestSendMessage(accountId, content, chatType, time, isBot, mJsonResponse));
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.e(TAG, String.valueOf(response.body()));
+                //TODO : intent not found debug
+                //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
+                //TODO : slot 선택지
+                if(response.body().has("responseSet")){
+                    // 챗봇과 대화한 경우
+                    Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
+                        mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
+                    JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
+                    for( int i = 0; i<jsonArray.size(); i++ ){
+                        String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
+                        String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
+                        String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
 
-            Call<JsonObject> res = NetRetrofit.getInstance().getService().sendMessage(paramObject.toString());
-            res.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.e(TAG, String.valueOf(response.body()));
+                        mChats.addLast(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
+                    }
+                    mChatAdapter.notifyDataSetChanged();
+                    mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                }else{
+                    Log.e(TAG, response.body().toString());
                 }
+            }
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    if (t!=null)
-                        Log.e(TAG, t.getMessage());
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                if(t instanceof SocketTimeoutException){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+                }else{
+                    Log.e(TAG, t.toString());
                 }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            }
+        });
+
     }
 
     private void showProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.VISIBLE);
     }
+
     private void hideProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
     }
+
+
+
+
 }

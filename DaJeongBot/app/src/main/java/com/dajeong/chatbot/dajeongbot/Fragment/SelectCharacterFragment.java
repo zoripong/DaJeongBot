@@ -1,6 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,12 +20,14 @@ import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.Activity.LoginActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.MainActivity;
+import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSignUp;
 import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -144,7 +147,8 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 int botType = 1;
                 int accountType = ((SignupActivity) getActivity()).getAccountType();
                 String password = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_pw");
-                String token = "";
+                String token = ((SignupActivity)getActivity()).getToken();
+
 
                 // 추가 데이터 ( basic account : password / api account : token )
                 switch (accountType) {
@@ -159,36 +163,43 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                         break;
 
                 }
-
                 // prepare call in Retrofit 2.0
-                try {
-                    JSONObject paramObject = new JSONObject();
-                    paramObject.put("user_id", userId);
-                    paramObject.put("name", name);
-                    paramObject.put("birthday", birthday);
-                    paramObject.put("bot_type", botType);
-                    paramObject.put("account_type", accountType);
-                    paramObject.put("password", password);
-                    paramObject.put("token", token);
+                Call<JsonObject> res = NetRetrofit.getInstance().getService().addUserInfo(new RequestSignUp(userId, name, birthday, botType, accountType, password, token));
+                res.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e(TAG, String.valueOf(response.body()));
+                        Intent intent = null;
+                        if(response.body().get("status").getAsString().equals("Success")){
+                            // 회원가입 성공
+                            intent = new Intent(getActivity(), MainActivity.class);
 
-                    Call<JsonObject> res = NetRetrofit.getInstance().getService().addUserInfo(paramObject.toString());
-                    res.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            Log.e(TAG, String.valueOf(response.body()));
-                        }
+                            CustomSharedPreference.getInstance(getContext(), "user_info")
+                                    .savePreferences("id", response.body().getAsJsonObject("user_info").get("id").getAsString() );
+                            CustomSharedPreference.getInstance(getContext(), "user_info")
+                                    .savePreferences("bot_type", response.body().getAsJsonObject("user_info").get("bot_type").getAsInt() );
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            if (t != null)
-                                Log.e(TAG, t.getMessage());
+                        }else if(response.body().get("status").getAsString().equals("ExistUser")){
+                            // 존재하는 회원
+                            Toast.makeText(getContext(), "이미 존재하는 회원입니다.", Toast.LENGTH_LONG).show();
+                            intent = new Intent(getActivity(), LoginActivity.class);
+                        }else{
+                            // 회원가입 실패
+                            Toast.makeText(getContext(), "이미 등록된 회원입니다.", Toast.LENGTH_LONG).show();
+                            intent = new Intent(getActivity(), LoginActivity.class);
                         }
-                    });
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        if (t!=null)
+                        Log.e(TAG, t.getMessage());
+                    }
+                });
 
 //                    userCall.enqueue(this);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
             }
         });

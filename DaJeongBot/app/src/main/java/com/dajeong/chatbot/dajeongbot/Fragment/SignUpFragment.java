@@ -69,7 +69,7 @@ public class SignUpFragment extends Fragment {
         yearAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, yearList);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         yearSpinner.setAdapter(yearAdapter);
-        for (int i=1900;i<=2018;i++){
+        for (int i = 1900; i <= 2018; i++) {
             yearList.add(Integer.toString(i));
             yearAdapter.notifyDataSetChanged();
         }
@@ -88,7 +88,7 @@ public class SignUpFragment extends Fragment {
         daySpinner = (Spinner) getView().findViewById(R.id.spinner_day);
         day = new String[]{};
         dayList = new ArrayList<>(Arrays.asList(day));
-        dayAdapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_item,dayList);
+        dayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, dayList);
         dayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         daySpinner.setAdapter(dayAdapter);
 
@@ -201,7 +201,9 @@ public class SignUpFragment extends Fragment {
             inputPw.setText("");
             inputPw.requestFocus();
             return false;
-        } else
+        } else if (!(isMonthSelect && isYearSelect))
+            return false;
+        else
             return true;
     }
 

@@ -31,6 +31,7 @@ public class SignupActivity extends AppCompatActivity{
     private final int NUM_PAGES = 5;
 
     private int mAccountType = -1;
+    private String mToken = "";
 
     private ViewPager mPager;
     protected ViewPagerAdapter mPagerAdapter;
@@ -42,6 +43,8 @@ public class SignupActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         mAccountType = intent.getIntExtra("account_type", -1);
+        mToken = intent.getStringExtra("token");
+
         Log.e(TAG, String.valueOf(mAccountType));
         if(mAccountType > AccountType.BASIC_ACCOUNT){
             setCurrentItem(2, true);
@@ -86,6 +89,12 @@ public class SignupActivity extends AppCompatActivity{
 
     public int getAccountType(){
         return mAccountType;
+    }
+
+    public String getToken() {
+        if(mToken != null)
+           return mToken;
+        else return "";
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter{
