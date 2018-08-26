@@ -15,7 +15,7 @@ import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.fragment.InputNameFragment;
 import com.dajeong.chatbot.dajeongbot.fragment.IntroduceFragment;
 import com.dajeong.chatbot.dajeongbot.fragment.SelectCharacterFragment;
-import com.dajeong.chatbot.dajeongbot.fragment.SignUpFragment;
+import com.dajeong.chatbot.dajeongbot.fragment.SignupFragment;
 import com.dajeong.chatbot.dajeongbot.R;
 
 // 사용자 정보 입력 activity
@@ -105,7 +105,7 @@ public class SignupActivity extends AppCompatActivity{
             Fragment fragment = null;
             switch (position){
                 case 0:
-                    fragment = new SignUpFragment();
+                    fragment = new SignupFragment();
                     break;
                 case 1:
                     fragment = new InputNameFragment();

@@ -32,10 +32,10 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:multidex:1.0.3'
+
     //캘린터 API
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
 
-    testImplementation 'junit:junit:4.12'
     // 카카오톡 SDK 추가
     compile group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
     compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
@@ -47,6 +47,7 @@ dependencies {
     //noinspection GradleCompatible
     compile 'com.google.android.gms:play-services-auth:15.0.1'
 
+    // google
     compile 'com.google.android.gms:play-services-plus:15.0.1'
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
     compile 'com.google.http-client:google-http-client-android:+'
@@ -54,21 +55,26 @@ dependencies {
     compile 'com.google.api-client:google-api-client-gson:+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.mcxiaoke.volley:library:1.0.18'
-    compile 'com.github.bumptech.glide:glide:3.6.0'
     compile 'com.applozic.communication.uiwidget:mobicomkitui:5.8.4'
 
+    // google oauth
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 
+    // constraing layout
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 
 
-    //for retrofit
+    // retrofit
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 
     // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // fcm
+    compile 'com.google.firebase:firebase-messaging:12.0.1'
+
+    testImplementation 'junit:junit:4.12'
 
 }

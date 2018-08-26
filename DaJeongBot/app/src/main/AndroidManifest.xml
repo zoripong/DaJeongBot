@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +21,37 @@
         android:theme="@style/AppTheme"
         android:name=".auth.GlobalApplication">
 
+        <!--fcm -->
+        <service
+            android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <meta-data
+
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_add" />
+
+        <!--<meta-data-->
+        <!--android:name="com.google.firebase.messaging.default_notification_channel_id"-->
+        <!--android:value="@string/default_notification_channel_id"/>-->
+
+        <!--end of fcm-->
+
         <!-- 카카오톡 메타데이터 -->
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
