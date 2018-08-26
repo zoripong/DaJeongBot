@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Activity;
+package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,19 +15,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Adapter.ChatAdapter;
-import com.dajeong.chatbot.dajeongbot.Alias.MessageType;
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.Model.Character;
-import com.dajeong.chatbot.dajeongbot.Model.Chat;
-import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSendMessage;
-import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
+import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
+import com.dajeong.chatbot.dajeongbot.alias.ChatType;
+import com.dajeong.chatbot.dajeongbot.alias.NodeType;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.model.Character;
+import com.dajeong.chatbot.dajeongbot.model.Chat;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -53,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private int mAccountId;
     private boolean mIsLoad;
     private boolean mMoreChat;
+    private int mChatType;
 
     private JsonObject mJsonResponse;
     private HashMap<String, Integer> mStringNodeTypeMap;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     // TODO : 추가 할 때 애니메이션
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
                     String content = String.valueOf(mEtMessage.getText());
-                    int chatType = 0;
+                    int chatType = ChatType.BASIC_CHAT;
                     long time = System.currentTimeMillis();
                     int isBot = 0;
 
@@ -184,12 +183,13 @@ public class MainActivity extends AppCompatActivity {
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         mIsLoad = false;
         mMoreChat = true;
+        mChatType = ChatType.BASIC_CHAT;
 
         mJsonResponse = new JsonObject();
         mStringNodeTypeMap = new HashMap<>();
-        mStringNodeTypeMap.put("speak", MessageType.SPEAK_NODE);
-        mStringNodeTypeMap.put("slot", MessageType.SLOT_NODE);
-        mStringNodeTypeMap.put("carousel", MessageType.CAROUSEL_NODE);
+        mStringNodeTypeMap.put("speak", NodeType.SPEAK_NODE);
+        mStringNodeTypeMap.put("slot", NodeType.SLOT_NODE);
+        mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
     }
 
     @NonNull
@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 //TODO : slot 선택지
                 if(response.body().has("responseSet")){
+                    mChatType = ChatType.BASIC_CHAT;
                     // 챗봇과 대화한 경우
                     Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
                         mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
@@ -308,6 +309,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                }else if(response.body().has("events")){
+                        // 추억 리스트 보여주기
+//                    TODO : SU HYEON
+                    //TODO: 버튼 클릭할 때 request 정보
                 }else{
                     Log.e(TAG, response.body().toString());
                 }

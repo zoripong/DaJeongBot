@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Fragment;
+package com.dajeong.chatbot.dajeongbot.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.R;
 
 /**

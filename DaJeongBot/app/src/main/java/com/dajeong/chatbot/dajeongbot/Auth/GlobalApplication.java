@@ -1,8 +1,8 @@
-package com.dajeong.chatbot.dajeongbot.Auth;
+package com.dajeong.chatbot.dajeongbot.auth;
 
 import android.app.Application;
 
-import com.dajeong.chatbot.dajeongbot.Adapter.KakaoSDKAdapter;
+import com.dajeong.chatbot.dajeongbot.adapter.KakaoSDKAdapter;
 import com.kakao.auth.KakaoSDK;
 
 

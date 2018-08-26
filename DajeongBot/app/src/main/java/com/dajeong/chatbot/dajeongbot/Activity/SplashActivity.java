@@ -1,11 +1,11 @@
-package com.dajeong.chatbot.dajeongbot.Activity;
+package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 
 // intro activity

@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Adapter;
+package com.dajeong.chatbot.dajeongbot.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,16 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dajeong.chatbot.dajeongbot.Model.Chat;
+import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.R;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Vector;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";

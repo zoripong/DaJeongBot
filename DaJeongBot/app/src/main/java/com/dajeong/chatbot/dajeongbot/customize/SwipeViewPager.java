@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Model;
+package com.dajeong.chatbot.dajeongbot.customize;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

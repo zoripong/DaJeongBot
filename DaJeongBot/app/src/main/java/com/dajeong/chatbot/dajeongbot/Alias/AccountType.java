@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Alias;
+package com.dajeong.chatbot.dajeongbot.alias;
 
 public interface AccountType {
     int BASIC_ACCOUNT = 0;

@@ -37,18 +37,13 @@
 
         <activity android:name=".Activity.SignupActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".Activity.CalendarActivity" />
         <activity android:name=".Activity.SettingActivity" />
         <activity android:name=".Activity.TutorialActivity" />
-        <activity android:name=".Activity.LoginActivity" >
-
-        </activity>
+        <activity android:name=".Activity.LoginActivity" />
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"

@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Auth;
+package com.dajeong.chatbot.dajeongbot.auth;
 
 import com.google.android.gms.common.Scopes;
 import com.google.api.services.youtube.YouTubeScopes;

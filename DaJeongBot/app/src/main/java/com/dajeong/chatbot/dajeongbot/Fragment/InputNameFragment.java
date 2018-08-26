@@ -1,7 +1,5 @@
-package com.dajeong.chatbot.dajeongbot.Fragment;
+package com.dajeong.chatbot.dajeongbot.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,8 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 
 /**

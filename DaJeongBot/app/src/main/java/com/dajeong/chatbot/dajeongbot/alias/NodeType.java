@@ -1,8 +1,6 @@
-package com.dajeong.chatbot.dajeongbot.Alias;
+package com.dajeong.chatbot.dajeongbot.alias;
 
-import java.util.ArrayList;
-
-public interface MessageType {
+public interface NodeType {
     int SPEAK_NODE = 0;
     int SLOT_NODE = 1;
     int CAROUSEL_NODE = 2;

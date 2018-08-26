@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Activity;
+package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
-import com.dajeong.chatbot.dajeongbot.Fragment.InputNameFragment;
-import com.dajeong.chatbot.dajeongbot.Fragment.IntroduceFragment;
-import com.dajeong.chatbot.dajeongbot.Fragment.SelectCharacterFragment;
-import com.dajeong.chatbot.dajeongbot.Fragment.SignUpFragment;
+import com.dajeong.chatbot.dajeongbot.alias.AccountType;
+import com.dajeong.chatbot.dajeongbot.fragment.InputNameFragment;
+import com.dajeong.chatbot.dajeongbot.fragment.IntroduceFragment;
+import com.dajeong.chatbot.dajeongbot.fragment.SelectCharacterFragment;
+import com.dajeong.chatbot.dajeongbot.fragment.SignUpFragment;
 import com.dajeong.chatbot.dajeongbot.R;
 
 // 사용자 정보 입력 activity

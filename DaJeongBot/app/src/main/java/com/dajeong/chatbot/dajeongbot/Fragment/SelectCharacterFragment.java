@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Fragment;
+package com.dajeong.chatbot.dajeongbot.fragment;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,21 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
-import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.Activity.LoginActivity;
-import com.dajeong.chatbot.dajeongbot.Activity.MainActivity;
-import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSignUp;
-import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
+import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.alias.AccountType;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.activity.LoginActivity;
+import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestSignUp;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
 
@@ -137,9 +134,11 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 //TODO : TOKEN 저장
                 String userId = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_email");
                 String name = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_name");
-                String birthday = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_year")
-                        .concat(CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_month"))
-                        .concat(CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_day"));
+
+                String birthday = concatDate(CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_year"),
+                        CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_month"),
+                        CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_day"));
+
                 int botType = 1;
                 int accountType = ((SignupActivity) getActivity()).getAccountType();
                 String password = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_pw");
@@ -316,7 +315,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         mIvBotIntroduce.setImageResource(introduceImage[index]);
     }
 
-    // 서버와 통신하기 위한 내부 클래스 ( 건들이지말아주렴.. ! )
+    // 서버와 통신하기 위한 내부 클래스
     private class NetworkCall extends AsyncTask<Call, Void, String> {
         @Override
         protected String doInBackground(Call... calls) {
@@ -336,6 +335,16 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
             if (result != null)
                 Log.e(TAG, result);
         }
+    }
+
+    private String concatDate(String year, String month, String date){
+        if(month.length() < 2){
+            month = "0"+month;
+        }
+        if(date.length() < 2){
+            date = "0"+date;
+        }
+        return year+"-"+month+"-"+date;
     }
 
 }

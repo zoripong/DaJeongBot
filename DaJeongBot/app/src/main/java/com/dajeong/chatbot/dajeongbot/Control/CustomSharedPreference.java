@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Control;
+package com.dajeong.chatbot.dajeongbot.control;
 
 import android.content.Context;
 import android.content.SharedPreferences;

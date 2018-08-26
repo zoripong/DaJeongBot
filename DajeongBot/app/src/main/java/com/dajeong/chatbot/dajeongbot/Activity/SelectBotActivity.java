@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Activity;
+package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

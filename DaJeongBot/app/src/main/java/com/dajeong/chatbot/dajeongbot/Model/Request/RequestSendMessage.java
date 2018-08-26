@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Model.Request;
+package com.dajeong.chatbot.dajeongbot.model.request;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
