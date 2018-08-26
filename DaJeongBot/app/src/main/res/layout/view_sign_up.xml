@@ -47,7 +47,7 @@
                 android:paddingRight="10dp"
                 android:text="E-mail"
                 android:textColor="#8c00ff"
-                android:textSize="16dp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +55,7 @@
             <EditText
                 android:id="@+id/etUserEmail"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/input_edit_custom"
@@ -64,6 +64,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textSize="15sp"
+                android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/teEmail" />
@@ -80,7 +81,7 @@
                 android:paddingRight="10dp"
                 android:text="Password"
                 android:textColor="#8c00ff"
-                android:textSize="16dp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +90,7 @@
             <EditText
                 android:id="@+id/etUserPw"
                 android:layout_width="0dp"
-                android:layout_height="41dp"
+                android:layout_height="35dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/input_edit_custom"
@@ -98,6 +99,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textSize="15sp"
+                android:singleLine="true"
+                android:inputType="textPassword"
                 app:layout_constraintBottom_toTopOf="@+id/btnSignin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,16 +112,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:fontFamily="@font/notosans_regular"
                 android:maxLines="1"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="Birthday"
                 android:textColor="#8c00ff"
-                android:textSize="16dp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etUserPw" />
 
@@ -137,7 +138,7 @@
                 <Spinner
                     android:id="@+id/spinner_year"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="2"
                     android:background="@drawable/input_edit_custom"
@@ -150,12 +151,12 @@
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/notosans_regular"
                     android:text="년"
-                    android:textSize="17dp" />
+                    android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spinner_month"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/input_edit_custom"
@@ -168,12 +169,12 @@
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/notosans_regular"
                     android:text="월"
-                    android:textSize="17dp" />
+                    android:textSize="15sp" />
 
                 <Spinner
                     android:id="@+id/spinner_day"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/input_edit_custom"
@@ -186,7 +187,7 @@
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/notosans_regular"
                     android:text="일"
-                    android:textSize="17dp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -203,14 +204,6 @@
                 android:textColor="#ffffff"
                 android:textSize="16.5sp"
                 app:layout_constraintTop_toBottomOf="@+id/llBirth" />
-
-            <ProgressBar
-                android:id="@+id/pgb"
-                android:visibility="invisible"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 

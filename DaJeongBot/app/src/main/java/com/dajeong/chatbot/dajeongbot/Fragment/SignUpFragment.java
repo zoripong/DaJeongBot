@@ -39,7 +39,7 @@ public class SignUpFragment extends Fragment {
 
     private EditText inputEmail, inputPw;
     private String Year, Month, Day;
-    private boolean isYearSelect = false, isMonthSelect = false;
+    private boolean isMonthSelect = false;
     private Spinner yearSpinner, monthSpinner, daySpinner;
     private String[] year, month, day;
     private List<String> yearList, monthList, dayList;
@@ -94,14 +94,10 @@ public class SignUpFragment extends Fragment {
 
 
         yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean isFirstSelect = true;
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Year = yearSpinner.getSelectedItem().toString();
-                isYearSelect = !isFirstSelect;
-                isFirstSelect = false;
-                checkIsEnabled(daySpinner);
                 Log.e("UserYear", Year);
             }
 
@@ -201,7 +197,7 @@ public class SignUpFragment extends Fragment {
             inputPw.setText("");
             inputPw.requestFocus();
             return false;
-        } else if (!(isMonthSelect && isYearSelect)){
+        } else if (!(isMonthSelect)){
             Toast.makeText(getActivity(),"Birthday를 확인해주세요",Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -217,7 +213,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void checkIsEnabled(Spinner daySpinner) {
-        daySpinner.setEnabled(isYearSelect && isMonthSelect);
+        daySpinner.setEnabled(isMonthSelect);
     }
 
     private boolean isLeapYear(String year) { // 윤달 체크
