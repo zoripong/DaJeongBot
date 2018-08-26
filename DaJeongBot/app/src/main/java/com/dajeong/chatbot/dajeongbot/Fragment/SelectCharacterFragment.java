@@ -1,6 +1,5 @@
 package com.dajeong.chatbot.dajeongbot.Fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
@@ -30,7 +28,6 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -62,7 +59,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 //    private ImageView mIvBotDot01, mIvBotDot02, mIvBotDot03, mIvBotDot04;
 
 
-    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_select_bot, container, false);
@@ -309,7 +305,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
     private void changeVisibleImage(int index) {
         for (int i = 0; i < 4; i++) {
             getView().findViewById(selectDot[i]).setVisibility(View.INVISIBLE);
-        }
+            }
         getView().findViewById(selectDot[index]).setVisibility(View.VISIBLE);
     }
 
