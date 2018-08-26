@@ -201,8 +201,10 @@ public class SignUpFragment extends Fragment {
             inputPw.setText("");
             inputPw.requestFocus();
             return false;
-        } else if (!(isMonthSelect && isYearSelect))
+        } else if (!(isMonthSelect && isYearSelect)){
+            Toast.makeText(getActivity(),"Birthday를 확인해주세요",Toast.LENGTH_SHORT).show();
             return false;
+        }
         else
             return true;
     }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
@@ -38,12 +39,17 @@ public class InputNameFragment extends Fragment {
         btn_input_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("username", inputName.getText().toString());
-                CustomSharedPreference
-                        .getInstance(getContext(), "data")
-                        .savePreferences("user_name", inputName.getText().toString());
-                ((SignupActivity) getActivity()).setCurrentItem(((SignupActivity) getActivity()).getCurrentItem() + 1, true);
-                new IntroduceFragment();
+                if (inputName.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(),"이름을 입력해주세요",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Log.e("username", inputName.getText().toString());
+                    CustomSharedPreference
+                            .getInstance(getContext(), "data")
+                            .savePreferences("user_name", inputName.getText().toString());
+                    ((SignupActivity) getActivity()).setCurrentItem(((SignupActivity) getActivity()).getCurrentItem() + 1, true);
+                    new IntroduceFragment();
+                }
             }
         });
 
