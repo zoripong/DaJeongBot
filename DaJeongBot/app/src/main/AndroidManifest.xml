@@ -61,14 +61,13 @@
 
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+            <!--원래자리-->
         </activity>
         <activity android:name=".activity.SelectBotActivity" />
 
         <activity android:name=".activity.SignupActivity">
+
 
         </activity>
 
