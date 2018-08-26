@@ -29,6 +29,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -215,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
-                if(t!=null){
+                if(t instanceof SocketTimeoutException){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+                }else{
                     Log.e(TAG, t.toString());
                 }
             }
@@ -236,7 +239,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<JsonObject>> call, Throwable t) {
-                if(t!=null){
+                if(t instanceof SocketTimeoutException){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+                }else{
                     Log.e(TAG, t.toString());
                 }
             }
@@ -288,10 +293,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, String.valueOf(response.body()));
                 //TODO : intent not found debug
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
-                if(response.body().has("reponseSet")){
+                //TODO : slot 선택지
+                if(response.body().has("responseSet")){
                     // 챗봇과 대화한 경우
                     Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
-                    mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
+                        mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
                     JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
                     for( int i = 0; i<jsonArray.size(); i++ ){
                         String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
@@ -303,14 +309,17 @@ public class MainActivity extends AppCompatActivity {
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                 }else{
-                    Log.e(TAG, response.body().toString()); 
+                    Log.e(TAG, response.body().toString());
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                if (t!=null)
-                    Log.e(TAG, t.getMessage());
+                if(t instanceof SocketTimeoutException){
+                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+                }else{
+                    Log.e(TAG, t.toString());
+                }
             }
         });
 
