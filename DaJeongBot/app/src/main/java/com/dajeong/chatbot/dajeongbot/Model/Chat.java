@@ -1,6 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Model;
-
-import java.util.Date;
+package com.dajeong.chatbot.dajeongbot.model;
 
 public class Chat {
     private int ChatType;

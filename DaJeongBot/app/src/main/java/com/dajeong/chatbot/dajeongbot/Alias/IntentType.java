@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Alias;
+package com.dajeong.chatbot.dajeongbot.alias;
 
 public interface IntentType {
     int REGISTRATION_01 = 0;

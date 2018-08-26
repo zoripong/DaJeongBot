@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Model;
+package com.dajeong.chatbot.dajeongbot.model;
 
 
 public class Event {

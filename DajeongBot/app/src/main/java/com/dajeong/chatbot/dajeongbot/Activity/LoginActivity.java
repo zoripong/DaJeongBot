@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Activity;
+package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.Network.NetRetrofit;
+import com.dajeong.chatbot.dajeongbot.alias.AccountType;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide(); //<< this
+//        getSupportActionBar().hide(); //<< this
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행
         setContentView(R.layout.activity_login);
         init();

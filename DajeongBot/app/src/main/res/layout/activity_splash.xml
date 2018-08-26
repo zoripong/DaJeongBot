@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dajeong.chatbot.dajeongbot.Activity.SplashActivity">
+    tools:context="com.dajeong.chatbot.dajeongbot.activity.SplashActivity">
 <TextView
     android:text="나는 곧 사라질겨.."
     android:layout_width="wrap_content"

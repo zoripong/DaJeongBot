@@ -1,33 +1,27 @@
-package com.dajeong.chatbot.dajeongbot.Fragment;
+package com.dajeong.chatbot.dajeongbot.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.Activity.SignupActivity;
-import com.dajeong.chatbot.dajeongbot.Control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 

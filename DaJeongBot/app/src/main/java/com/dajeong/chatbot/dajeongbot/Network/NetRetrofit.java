@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Network;
+package com.dajeong.chatbot.dajeongbot.network;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -60,7 +60,7 @@ public class NetRetrofit {
 
     Retrofit retrofit = new Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
-            .baseUrl("http://192.168.200.195:80/apis/")
+            .baseUrl("http://172.30.1.44:80/")
             .client(builder.build())
             .build();
 

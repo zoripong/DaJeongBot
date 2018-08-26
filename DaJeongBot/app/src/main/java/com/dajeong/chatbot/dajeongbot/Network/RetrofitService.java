@@ -1,7 +1,7 @@
-package com.dajeong.chatbot.dajeongbot.Network;
+package com.dajeong.chatbot.dajeongbot.network;
 
-import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSendMessage;
-import com.dajeong.chatbot.dajeongbot.Model.Request.RequestSignUp;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestSignUp;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public interface RetrofitService {
     Call<ArrayList<JsonObject>> getUserInfo(@Path("account_type")int accountType, @Path("user_id") String userId, @Path("password") String password);
 
     @Headers("Content-Type: application/json")
-    @POST("signup")
+    @POST("users/signup")
     Call<JsonObject> addUserInfo(@Body RequestSignUp params);
 
     // 채팅

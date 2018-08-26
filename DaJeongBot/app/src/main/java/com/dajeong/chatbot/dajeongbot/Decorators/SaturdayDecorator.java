@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Decorators;
+package com.dajeong.chatbot.dajeongbot.decorators;
 
 import android.graphics.Color;
 import android.text.style.ForegroundColorSpan;
