@@ -1,143 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/background"></LinearLayout>
+
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <TableRow
-            android:gravity="center">
+        android:layout_height="wrap_content">
+
+        <TableRow android:gravity="center">
+
             <Button
                 android:id="@+id/img_chatbot_1"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:background="@drawable/chatbot_1"
-                android:layout_margin="10sp"/>
+                android:layout_margin="10sp"
+                android:background="@drawable/chatbot_1" />
+
             <Button
                 android:id="@+id/img_chatbot_2"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:background="@drawable/chatbot_2"
-                android:layout_margin="10sp"/>
+                android:layout_margin="10sp"
+                android:background="@drawable/chatbot_2" />
+
             <Button
                 android:id="@+id/img_chatbot_3"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:background="@drawable/chatbot_3"
-                android:layout_margin="10sp"/>
+                android:layout_margin="10sp"
+                android:background="@drawable/chatbot_3" />
+
             <Button
                 android:id="@+id/img_chatbot_4"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:background="@drawable/chatbot_4"
-                android:layout_margin="10sp"/>
+                android:layout_margin="10sp"
+                android:background="@drawable/chatbot_4" />
         </TableRow>
+
         <TableRow
-            android:gravity="center"
-            android:id="@+id/tab_layout">
+            android:id="@+id/tab_layout"
+            android:gravity="center">
+
             <ImageView
                 android:id="@+id/img_select_dot_1"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/select_dot"
-                android:visibility="visible"/>
+                android:visibility="visible" />
+
             <ImageView
                 android:id="@+id/img_select_dot_2"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/select_dot"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
+
             <ImageView
                 android:id="@+id/img_select_dot_3"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/select_dot"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
+
             <ImageView
                 android:id="@+id/img_select_dot_4"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/select_dot"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
         </TableRow>
     </TableLayout>
-        <LinearLayout
-            android:id="@+id/linear_introduce"
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/img_head"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/chatbot_head_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_title"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/chatbot_text_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_head" />
+
+        <TextView
+            android:id="@+id/text_string"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/img_head"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/chatbot_head_1"/>
-                <ImageView
-                    android:id="@+id/img_title"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/chatbot_text_1"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="12dp">
-                <TextView
-                    android:id="@+id/text_string"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    android:text="@string/dajeong_1_info"/>
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/notosans_demilight"
+            android:gravity="center"
+            android:text="@string/dajeong_1_info"
+            app:layout_constraintTop_toBottomOf="@+id/img_title" />
 
-            </LinearLayout>
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/crlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/text_string"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp">
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="20dp">
+                android:id="@+id/layout_btn_previous"
+                android:layout_width="56dp"
+                android:layout_height="150dp"
+                android:gravity="center_horizontal|center_vertical">
+
                 <Button
                     android:id="@+id/btn_select_previous"
                     android:layout_width="15dp"
                     android:layout_height="40dp"
                     android:background="@drawable/btn_previous"
-                    android:visibility="invisible"/>
-                <ImageView
-                    android:id="@+id/img_introduce"
-                    android:layout_width="300dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/chatbot_introduce_1"/>
+                    android:clickable="false"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_introduce"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:clickable="false"
+                android:src="@drawable/chatbot_introduce_1"
+                app:layout_constraintLeft_toRightOf="@id/layout_btn_previous"
+                app:layout_constraintRight_toLeftOf="@id/layout_btn_next" />
+
+            <LinearLayout
+                android:id="@+id/layout_btn_next"
+                android:layout_width="57dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal|center_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
                 <Button
                     android:id="@+id/btn_select_next"
                     android:layout_width="15dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/btn_next"/>
+                    android:background="@drawable/btn_next"
+                    android:clickable="false"
+                    tools:layout_editor_absoluteX="395dp"
+                    tools:layout_editor_absoluteY="48dp" />
             </LinearLayout>
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btn_select"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/input_btn_custom"
+            android:fontFamily="@font/notosans_demilight"
+            android:text="@string/btnCheck"
+            android:textColor="#ffffff"
+            android:textSize="16.5sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/crlayout" />
+    </android.support.constraint.ConstraintLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="23dp">
-        <Button
-            android:id="@+id/btn_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/input_btn_custom"
-            android:text="선택하기"
-            android:textStyle="bold"
-            android:textSize="7pt"
-            android:textColor="#ffffff"/>
-    </LinearLayout>
-
+        android:layout_weight="5"></LinearLayout>
 </LinearLayout>

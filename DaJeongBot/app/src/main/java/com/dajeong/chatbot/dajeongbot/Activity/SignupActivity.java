@@ -12,11 +12,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.dajeong.chatbot.dajeongbot.Alias.AccountType;
-import com.dajeong.chatbot.dajeongbot.Fragment.AccountInfoFragment;
-import com.dajeong.chatbot.dajeongbot.Fragment.BirthInfoFragment;
 import com.dajeong.chatbot.dajeongbot.Fragment.InputNameFragment;
 import com.dajeong.chatbot.dajeongbot.Fragment.IntroduceFragment;
 import com.dajeong.chatbot.dajeongbot.Fragment.SelectCharacterFragment;
+import com.dajeong.chatbot.dajeongbot.Fragment.SignUpFragment;
 import com.dajeong.chatbot.dajeongbot.R;
 
 // 사용자 정보 입력 activity
@@ -97,18 +96,15 @@ public class SignupActivity extends AppCompatActivity{
             Fragment fragment = null;
             switch (position){
                 case 0:
-                    fragment = new AccountInfoFragment();
+                    fragment = new SignUpFragment();
                     break;
                 case 1:
-                    fragment = new BirthInfoFragment();
-                    break;
-                case 2:
                     fragment = new InputNameFragment();
                     break;
-                case 3:
+                case 2:
                     fragment = new IntroduceFragment();
                     break;
-                case 4:
+                case 3:
                     fragment = new SelectCharacterFragment();
                     break;
                 default:
