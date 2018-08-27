@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,7 +47,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="E-mail"
-                android:textColor="#8c00ff"
+                android:textColor="#a239bc"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +81,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="Password"
-                android:textColor="#8c00ff"
+                android:textColor="#a239bc"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -117,7 +118,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="Birthday"
-                android:textColor="#8c00ff"
+                android:textColor="#a239bc"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
