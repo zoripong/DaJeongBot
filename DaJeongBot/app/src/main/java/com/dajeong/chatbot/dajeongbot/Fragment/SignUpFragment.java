@@ -146,7 +146,6 @@ public class SignUpFragment extends Fragment {
                 effectivenessCheck();
 
                 if (effectivenessCheck() == true) {
-                    Toast.makeText(getActivity(), "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show();
 
                     Log.e("UserEmail", inputEmail.getText().toString());
                     Log.e("UserPw", inputPw.getText().toString());
@@ -181,7 +180,7 @@ public class SignUpFragment extends Fragment {
     private boolean effectivenessCheck() { // 유효성 검사
         if (inputEmail.getText().toString().compareToIgnoreCase("") == 0 ||
                 !Patterns.EMAIL_ADDRESS.matcher(inputEmail.getText().toString()).matches()) {
-            Toast.makeText(getActivity(), "Email을 확인해주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Email형식을 맞추어주세요.", Toast.LENGTH_SHORT).show();
             inputEmail.setText("");
             inputEmail.requestFocus();
             return false;

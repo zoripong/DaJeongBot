@@ -180,7 +180,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                             intent = new Intent(getActivity(), LoginActivity.class);
                         }else{
                             // 회원가입 실패
-                            Toast.makeText(getContext(), "이미 등록된 회원입니다.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "회원가입에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
                             intent = new Intent(getActivity(), LoginActivity.class);
                         }
                         startActivity(intent);
