@@ -3,7 +3,7 @@ REQUEST
 {
     "account_id": 32,
     "content" : "홍대에서 치킨 먹기",
-    "chatType" : ChatType.MEMORY_CHAT,
+    "nodeType" : ChatType.MEMORY_CHAT,
     "time" : System.current(),
     "isBot" : 0,
     "response":{
@@ -156,7 +156,7 @@ REQUEST
 {
     "account_id": 32,
     "content" : "홍대에서 치킨 먹기",
-    "chatType" : ChatType.MEMORY_CHAT,
+    "nodeType" : ChatType.MEMORY_CHAT,
     "time" : System.current(),
     "isBot" : 0,
     "response":{
@@ -175,30 +175,44 @@ REQUEST
     }
 }
 
+
+
 # 추억회상
 RESPONSE
  {
      "status": "Success",
-     "node_type" : 2,
-     "img_url": [],
-     "message" : ["너는 그날 강변역에서 피크닉 햇구나. 너가 즐거웠다고 말했어.", "또 궁금한 일정이 있니?"],
-     "events": [
-         {
-             "assign_time": "1534096877292",
-             "detail": null,
-             "id": 1,
-             "review": "야호, 성래는 잘 생겼다..!",
-             "schedule_what": "피크닉",
-             "schedule_when": "2018-08-17",
-             "schedule_where": "강변역"
-         }
-     ]
+     "result" : {
+          "node_type" : 2,
+          "id": 0,
+          "chat_type" : 1,
+          "time" : 123456,
+          "img_url": [],
+          "content" : ["너는 그날 강변역에서 피크닉 햇구나. 너가 즐거웠다고 말했어.", "또 궁금한 일정이 있니?"],
+          "events": [
+              {
+                  "assign_time": "1534096877292",
+                  "detail": null,
+                  "id": 1,
+                  "review": "야호, 성래는 잘 생겼다..!",
+                  "schedule_what": "피크닉",
+                  "schedule_when": "2018-08-17",
+                  "schedule_where": "강변역"
+              }
+          ]
+     }
+
  }
 
- {
+{
      "status": "Success",
-     "node_type" : 0,
-     "img_url": [],
-     "message" : ["그래 또 궁금한 거 있으면 언제든지 물어봐!"],
-     "events": []
- }
+     "result" : {
+          "node_type" : 0,
+          "id": 0,
+          "chat_type" : 1,
+          "time" : 123456,
+          "img_url": [],
+          "content" : ["그래 또 궁금한 거 있으면 언제든지 물어봐!"],
+          "events": []
+     }
+
+}

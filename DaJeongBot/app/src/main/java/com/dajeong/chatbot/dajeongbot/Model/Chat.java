@@ -1,20 +1,20 @@
 package com.dajeong.chatbot.dajeongbot.model;
 
 public class Chat {
-    private int ChatType;
+    private int nodeType;
     private Character sender; // null 일 경우 User
     private String content;
     private String time;
 
-    public Chat(int chatType, Character sender, String content, String time) {
-        ChatType = chatType;
+    public Chat(int nodeType, Character sender, String content, String time) {
+        this.nodeType = nodeType;
         this.sender = sender;
         this.content = content;
         this.time = time;
     }
 
-    public int getChatType() {
-        return ChatType;
+    public int getNodeType() {
+        return nodeType;
     }
 
     public Character getSender() {
@@ -32,7 +32,7 @@ public class Chat {
     @Override
     public String toString() {
         return "Chat{" +
-                "ChatType=" + ChatType +
+                "nodeType=" + nodeType +
                 ", sender=" + sender +
                 ", content='" + content + '\'' +
                 ", time='" + time + '\'' +

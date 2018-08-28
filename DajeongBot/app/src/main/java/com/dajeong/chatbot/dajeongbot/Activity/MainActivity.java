@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(0, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -202,9 +202,7 @@ public class MainActivity extends AppCompatActivity {
         return new Character(charNames[charType], charImage+charType);
     }
 
-
-    // TODO : 이율앙 onResponse 만 캘린더에 맞춰서 하면 됩니당 아래 아래 줄에서 메소드 호출하는거 바꾸고~~
-    private void getMessage(){
+     private void getMessage(){
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
@@ -255,14 +253,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "HERE"+String.valueOf(mAccountId));
 
         ArrayList<JsonObject> body = response.body();
-//        Log.e(TAG, body.toString());
-        // 서버에서 올 때 최근 것이 가장 먼저 날라옴
-//        for(int i = body.size()-1; i>=0; i--){
-//            // 예전에 보낸 메세지일 수록 mChats의 index는 작음
-//            JsonObject json = body.get(i);
-//
-//
-//        }
+
         for(JsonObject json : body){
             if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0)
                 mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
@@ -309,10 +300,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
-                }else if(response.body().has("events")){
+                }else if(response.body().getAsJsonObject("result").has("events")){
                         // 추억 리스트 보여주기
 //                    TODO : SU HYEON
                     //TODO: 버튼 클릭할 때 request 정보
+                    JsonObject result = response.body().getAsJsonObject("result");
+
+                    String timestamp = String.valueOf(result.get("time").getAsLong());
+
+                    JsonArray messages = result.getAsJsonArray("content");
+                    for(int i = 0; i<messages.size(); i++){
+                        mChats.addFirst(new Chat(0, mBotChar, messages.get(i).getAsString(), timestamp));
+                    }
+
+                    JsonArray events = result.getAsJsonArray("events");
+                    for(int i = 0; i<events.size(); i++){
+
+                    }
+
+
+
+//                    mChats.addLast(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
                 }else{
                     Log.e(TAG, response.body().toString());
                 }

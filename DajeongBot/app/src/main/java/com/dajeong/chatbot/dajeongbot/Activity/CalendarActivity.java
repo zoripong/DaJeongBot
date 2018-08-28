@@ -113,9 +113,9 @@ public class CalendarActivity extends AppCompatActivity {
     private void forDebuggingEvent(){
 
 
-        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",R.drawable.applozic_audio_delete));
-        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",-1)); //이미지가 없는 경우 -1로 처리
-        mEvents.add(new Event("수학숙제 끝내기",null,-1));
+//        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",R.drawable.applozic_audio_delete));
+//        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",-1)); //이미지가 없는 경우 -1로 처리
+//        mEvents.add(new Event("수학숙제 끝내기",null,-1));
 
 
 

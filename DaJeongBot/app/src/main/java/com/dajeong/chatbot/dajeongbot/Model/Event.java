@@ -7,7 +7,7 @@ public class Event {
     public String eventCotent;
     public int drawableId;
 
-    public Event(String eventTitle, String eventCotent, int drawableId) {
+    public Event(String eventCotent, int drawableId) {
         this.eventTitle = eventTitle;
         this.eventCotent = eventCotent;
         this.drawableId = drawableId;
