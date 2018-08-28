@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.Adapter;
+package com.dajeong.chatbot.dajeongbot.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.Event;
 import com.dajeong.chatbot.dajeongbot.R;
 
