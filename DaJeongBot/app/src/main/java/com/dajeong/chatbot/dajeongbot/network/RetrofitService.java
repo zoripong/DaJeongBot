@@ -38,7 +38,10 @@ public interface RetrofitService {
 
     // 일정
     // TODO : 이율앙 이 메소드를 활용..!
-    @GET("messages/{account_id}/{year}/{month}/{date}")
+    @GET("events/{account_id}/{year}/{month}/{date}")
     Call<ArrayList<JsonObject>> getEvent(@Path("account_id") int accountId, @Path("year") String year, @Path("month") String month, @Path("date") String date);
+
+    @GET("events/dates/{account_id}")
+    Call<ArrayList<String>> getDatesHavingEvent(@Path("account_id") int accountId);
 
 }

@@ -15,12 +15,12 @@ import java.util.HashSet;
  */
 public class EventDecorator implements DayViewDecorator {
 
-   // private final Drawable drawable;
+    //private final Drawable drawable;
     private int color;
     private HashSet<CalendarDay> dates;
 
     public EventDecorator(int color, Collection<CalendarDay> dates, Activity context) {
-       // drawable = context.getResources().getDrawable(R.drawable.more);
+        // drawable = context.getResources().getDrawable(R.drawable.custom_selection);
         this.color = color;
         this.dates = new HashSet<>(dates);
     }
@@ -33,6 +33,6 @@ public class EventDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
         //view.setSelectionDrawable(drawable);
-        view.addSpan(new DotSpan(8, color)); // 날자밑에 점
+        view.addSpan(new DotSpan(20, color)); // 날자밑에 점
     }
 }

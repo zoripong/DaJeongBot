@@ -18,7 +18,7 @@ public class NetRetrofit {
         // private 으로 선언된 static 변수와 생성자를 통해
         // public static 으로 선언된 get 함수에서만 접근할 수 있도록 제한
 
-        // lazy initialization을 통해 인스턴스가 사용되는 시점에 생성할 수 있도록
+        // lazy initialization 을 통해 인스턴스가 사용되는 시점에 생성할 수 있도록
         // https://blog.seotory.com/post/2016/03/java-singleton-pattern
     private static NetRetrofit instance;
     public static NetRetrofit getInstance() {
