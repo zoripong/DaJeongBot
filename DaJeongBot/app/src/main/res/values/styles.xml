@@ -10,4 +10,16 @@
         <item name="actionBarSize">55dp</item>
     </style>
 
+    <style name="CalendarHeaderAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#3c3c3c</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="CalendarWeekDayAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">#ff6464</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+    </style>
 </resources>

@@ -113,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO : 메세지 선택
-                Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 액션바에 백그라운드 이미지를 아래처럼 입힐 수 있습니다.
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_main_top_background));
+
 
         // 이벤트 달기
         viewActionBar.findViewById(R.id.ivCalendar).setOnClickListener(new View.OnClickListener() {
