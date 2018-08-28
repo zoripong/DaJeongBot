@@ -216,18 +216,14 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getEvent(mAccountId,mYear,mMonth,mDate);
 
-<<<<<<< HEAD
 //        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",R.drawable.applozic_audio_delete));
 //        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",-1)); //이미지가 없는 경우 -1로 처리
 //        mEvents.add(new Event("수학숙제 끝내기",null,-1));
-=======
         if(res==null)
             Log.i("null값", "res값이 null");
         else{
             Log.i("null값", "res값이 null 아님ㅁ");
         }
->>>>>>> 00e7754b4cecd3d513e16146e8e81f2393f47a79
-
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
@@ -314,11 +310,9 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         @Override
         protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
             super.onPostExecute(calendarDays);
-
             if (isFinishing()) {
                 return;
             }
-
 
             widget.addDecorator(new EventDecorator(R.color.colorAccent, calendarDays,CalendarActivity.this));
         }
