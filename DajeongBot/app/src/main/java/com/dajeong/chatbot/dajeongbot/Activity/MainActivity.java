@@ -37,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 // 메인 채팅 화면 activity
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     private final String TAG = "MainActivity";
     //component
     private EditText mEtMessage;

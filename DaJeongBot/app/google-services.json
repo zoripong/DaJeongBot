@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "271464838760",
-    "firebase_url": "https://dajeongbot-a13fa.firebaseio.com",
-    "project_id": "dajeongbot-a13fa",
-    "storage_bucket": "dajeongbot-a13fa.appspot.com"
+    "project_number": "148617345232",
+    "firebase_url": "https://dajeongbot-e3bda.firebaseio.com",
+    "project_id": "dajeongbot-e3bda",
+    "storage_bucket": "dajeongbot-e3bda.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:271464838760:android:c6bea1b0d849e06a",
+        "mobilesdk_app_id": "1:148617345232:android:c6bea1b0d849e06a",
         "android_client_info": {
           "package_name": "com.dajeong.chatbot.dajeongbot"
         }
       },
       "oauth_client": [
         {
-          "client_id": "271464838760-kj2q6km8itvluc3cci1teev7j6id64md.apps.googleusercontent.com",
+          "client_id": "148617345232-kfii3ma05jg24ggkr5op4h4rddm0uavg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC9Q4mH9hCj_ZOuOIgwBnd3cmC37eLk0dI"
+          "current_key": "AIzaSyBhScgvktJATi4bN6mQvEK8cuyg1iz0rMU"
         }
       ],
       "services": {
