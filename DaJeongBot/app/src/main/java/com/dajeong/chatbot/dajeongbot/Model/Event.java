@@ -3,27 +3,35 @@ package com.dajeong.chatbot.dajeongbot.model;
 
 public class Event {
 
+    public int EventId;
     public String eventTitle;
-    public String eventCotent;
+    public String scheduleWhat;
+    public String scheduleWhen;
+    public String scheduleWhere;
     public int drawableId;
 
-    public Event(String eventTitle, String eventCotent, int drawableId) {
+    public Event(int EventId, String eventTitle, String scheduleWhat, String scheduleWhen, String scheduleWhere, int drawableId) {
         this.eventTitle = eventTitle;
-        this.eventCotent = eventCotent;
+        this.scheduleWhat = scheduleWhat;
+        this.scheduleWhen = scheduleWhen;
+        this.scheduleWhere = scheduleWhere;
+        this.EventId = EventId;
         this.drawableId = drawableId;
     }
 
-    public String getContentSender() {
-        return eventCotent;
-    }
     public int getDrawableSender() {
         return drawableId;
     }
+
     @Override
     public String toString() {
         return "Event{" +
-                "eventTitle=" + eventTitle +
-                ", eventCotent='" + eventCotent + '\'' +
+                "id=" + EventId + '\'' +
+                "review=" + eventTitle + '\'' +
+                ", schedule_what='" + scheduleWhat + '\'' +
+                ", schedule_when='" + scheduleWhen + '\'' +
+                ", schedule_where='" + scheduleWhere + '\'' +
+                ", detail='" + scheduleWhere + '\'' +
                 ", drawableId=" + drawableId +
                 '}';
     }
