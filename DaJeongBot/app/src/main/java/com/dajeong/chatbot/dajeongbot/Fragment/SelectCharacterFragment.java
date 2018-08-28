@@ -266,7 +266,14 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
             }
         });
-
+        btnSelectDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),MainActivity.class);
+//                intent.putExtra("사용자가 선택한 챗봇",);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
