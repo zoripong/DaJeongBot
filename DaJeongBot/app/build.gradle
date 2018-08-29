@@ -37,6 +37,8 @@ dependencies {
 
     //firebase
     implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.google.firebase:firebase-messaging:17.3.0'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
     //캘린터 API
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
