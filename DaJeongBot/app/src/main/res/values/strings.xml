@@ -26,4 +26,8 @@
         <item>FRI</item>
         <item>SAT</item>
     </string-array>
+
+    <string name="default_notification_channel_id">default channel id</string>
+    <string name="default_notification_channel_name">default channel name</string>
+
 </resources>

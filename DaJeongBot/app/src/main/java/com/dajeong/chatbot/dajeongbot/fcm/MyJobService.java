@@ -7,18 +7,18 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MyJobService extends JobService {
+public class MyJobService extends com.firebase.jobdispatcher.JobService {
     private static final String TAG = "MyJobService";
 
     @Override
-    public boolean onStartJob(JobParameters jobParameters) {
+    public boolean onStartJob(com.firebase.jobdispatcher.JobParameters job) {
         Log.d(TAG, "Performing long running task in scheduled job");
         // TODO(developer): add long running task here.
         return false;
     }
 
     @Override
-    public boolean onStopJob(JobParameters jobParameters) {
+    public boolean onStopJob(com.firebase.jobdispatcher.JobParameters job) {
         return false;
     }
 }
