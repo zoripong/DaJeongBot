@@ -200,9 +200,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 JSONObject response = new JSONArray(result).getJSONObject(0);
                 if(response.getString("status").equals("OK")){
                     saveUserInfo(response.getJSONObject("user_info"));
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+
                 }else if(response.getString("status").equals("NOT EXIST")){
                     Toast.makeText(getApplicationContext(), "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
                 }else if(response.getString("status").equals("NEW_API_USER")){
@@ -420,9 +418,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         * */
     }
 
-    private void saveUserInfo(JSONObject userJson) throws JSONException {
+    private void saveUserInfo(final JSONObject userJson) throws JSONException {
+        //Todo : test
+
         // 로그인 정보 저장
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         final RequestRegisterToken param = new RequestRegisterToken(Integer.parseInt(userJson.getString("id")), refreshedToken);
         Call<JsonObject> res = NetRetrofit.getInstance().getService().registerFcmToken(param);
@@ -432,6 +432,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if(response.body().has("status")){
                     if(response.body().get("status").getAsString().equals("Success")){
                         Log.i(TAG, "새로운 토큰 등록에 성공하였습니다.\n"+ param.toString());
+                        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("fcm_token", refreshedToken);
+                        try {
+                            CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
+                            CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", userJson.getInt("bot_type"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }else{
                         Log.e(TAG, "서버의 문제로 토큰 등록에 실패하였습니다.");
                     }
@@ -446,11 +456,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("fcm_token", refreshedToken);
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", userJson.getInt("bot_type"));
+
 
     }
+
+
 }
 
 

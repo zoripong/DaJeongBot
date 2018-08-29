@@ -49,7 +49,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(final String token) {
-        // TODO: Implement this method to send token to your app server.
+//Todo : test
         Log.e(TAG, "token updating ...  : "+token);
         String accountId = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")
@@ -57,8 +57,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String fcmToken = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("fcm_token");
-        //TODO 로그아웃 할 때에 등록된 토큰 삭제해야함..
-        // TODO 로그아웃 하고 다른 아이디로 로그인 할 경우는.. ?
 
         // 회원정보가 있을 경우
         if(accountId != null){
