@@ -13,13 +13,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:icon="@drawable/icon"
+        android:label="다정봇"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:largeHeap="true"
         android:theme="@style/AppTheme"
-        android:name=".auth.GlobalApplication">
+        android:name=".auth.GlobalApplication"
+        >
 
         <!--fcm -->
 
@@ -63,7 +64,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.SplashActivity">
             <!--원래자리-->
             <intent-filter>

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        getMessage();
+//        getMessage();
 
         showProgressBar();
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity  {
                     Log.e(TAG, "OnScrolled : TOP");
                     if (mIsLoad && mMoreChat) {
                         showProgressBar();
-                        getMoreMessage();
+//                        getMoreMessage();
                     }
                 }
             }
@@ -200,10 +200,9 @@ public class MainActivity extends AppCompatActivity  {
     private Character setBot(){
         int charImage = R.drawable.ic_char1;
         String charNames[] = {"다정군", "다정냥", "다정곰", "다정몽"};
-        int charType = CustomSharedPreference
-                .getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type") ;
+        int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type") ;
 
-        return new Character(charNames[charType], charImage+charType);
+        return new Character(charNames[charType=1], charImage+charType);
     }
 
      private void getMessage(){
@@ -227,6 +226,7 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
+    // 테스트할려면 getMoreMessage 주석처리, getMessage 주석처리 해서 테스트
     private void getMoreMessage(){
         int lastIndex = CustomSharedPreference.getInstance(getApplicationContext(), "chat").getIntPreferences("last_index");
 
@@ -248,12 +248,10 @@ public class MainActivity extends AppCompatActivity  {
                 }
             }
         });
-
-
     }
 
     private void controlJsonObj(Response<ArrayList<JsonObject>> response){
-       ;
+
         Log.e(TAG, "HERE"+String.valueOf(mAccountId));
 
         ArrayList<JsonObject> body = response.body();

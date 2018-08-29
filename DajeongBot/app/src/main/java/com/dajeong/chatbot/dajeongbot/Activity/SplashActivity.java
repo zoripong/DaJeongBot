@@ -16,6 +16,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        test();
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -33,5 +35,10 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         }, 2000);
+    }
+
+    public void test(){
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
     }
 }

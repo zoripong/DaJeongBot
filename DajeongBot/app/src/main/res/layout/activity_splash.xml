@@ -1,12 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="horizontal"
     tools:context="com.dajeong.chatbot.dajeongbot.activity.SplashActivity">
-<TextView
-    android:text="나는 곧 사라질겨.."
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-</android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal">
+
+        <ImageView
+            android:id="@+id/ivSymbolMark"
+            android:layout_width="140dp"
+            android:layout_height="100dp"
+            android:src="@drawable/symbol_mark"
+            app:layout_constraintBottom_toTopOf="@+id/ivLogoType"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivLogoType"
+            android:layout_width="110dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/logo_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toBottomOf="@+id/ivSymbolMark" />
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

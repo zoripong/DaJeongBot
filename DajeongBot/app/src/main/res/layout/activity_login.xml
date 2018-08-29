@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="@color/white"
     >
 
     <LinearLayout
@@ -13,25 +14,29 @@
         android:layout_weight="5"></LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="1"
         android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:src="@drawable/symbol_mark" />
 
-            <ImageView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:background="@drawable/ic_logo" />
-        </LinearLayout>
-
-        <android.support.constraint.ConstraintLayout
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:src="@drawable/logo_type" />
+            </LinearLayout>
+            <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp">

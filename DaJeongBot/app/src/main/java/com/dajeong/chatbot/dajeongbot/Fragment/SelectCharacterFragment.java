@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
@@ -61,7 +62,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_select_bot, container, false);
         LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.view_select_bot, container, false);
         selectImage = new int[]{R.id.img_chatbot_1, R.id.img_chatbot_2, R.id.img_chatbot_3, R.id.img_chatbot_4};
-        selectDot = new int[]{R.id.img_select_dot_1, R.id.img_select_dot_2, R.id.img_select_dot_3, R.id.img_select_dot_4};
+        selectDot = new int[]{R.raw.chatbot_move_image_1,R.raw.chatbot_move_image_2, R.raw.chatbot_move_image_3, R.raw.chatbot_move_image_4};
 
         introduceHead = new int[]{R.drawable.chatbot_head_1, R.drawable.chatbot_head_2, R.drawable.chatbot_head_3, R.drawable.chatbot_head_4};
         introduceTitle = new int[]{R.drawable.chatbot_text_1, R.drawable.chatbot_text_2, R.drawable.chatbot_text_3, R.drawable.chatbot_text_4};
@@ -75,7 +76,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         mLiBtnPrevious = rootView.findViewById(R.id.layout_btn_previous);
         mLiBtnNext = rootView.findViewById(R.id.layout_btn_next);
 
-//        Glide.with(this).load(R.raw.chatbot_move_image_4).into(mIvBotIntroduce);
 
         btnSelectPrevious = rootView.findViewById(R.id.btn_select_previous);
         btnSelectNext = rootView.findViewById(R.id.btn_select_next);
@@ -266,7 +266,14 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
             }
         });
-
+        btnSelectDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),MainActivity.class);
+//                intent.putExtra("사용자가 선택한 챗봇",);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -312,7 +319,9 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         mIvBotHead.setImageResource(introduceHead[index]);
         mIvBotTitle.setImageResource(introduceTitle[index]);
         mTvBotString.setText(introduceString[index]);
-        mIvBotIntroduce.setImageResource(introduceImage[index]);
+//        mIvBotIntroduce.setImageResource(introduceImage[index]);
+        Glide.with(this).load(R.raw.chatbot_move_image_1+index).into(mIvBotIntroduce);
+
     }
 
     // 서버와 통신하기 위한 내부 클래스
