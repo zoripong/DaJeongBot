@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.facebook.CallbackManager;
@@ -28,6 +29,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
@@ -48,6 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -196,14 +199,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             try {
                 JSONObject response = new JSONArray(result).getJSONObject(0);
                 if(response.getString("status").equals("OK")){
-                    JSONObject userJson = response.getJSONObject("user_info");
-
-                    Log.e(TAG, userJson.getInt("id")+"/"+userJson.getString("chat_session"));
-
-                    // 로그인 정보 저장
-                    CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
-                    CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", userJson.getInt("bot_type"));
-
+                    saveUserInfo(response.getJSONObject("user_info"));
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -422,6 +418,38 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         startActivity(intent);
         finish();
         * */
+    }
+
+    private void saveUserInfo(JSONObject userJson) throws JSONException {
+        // 로그인 정보 저장
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        final RequestRegisterToken param = new RequestRegisterToken(Integer.parseInt(userJson.getString("id")), refreshedToken);
+        Call<JsonObject> res = NetRetrofit.getInstance().getService().registerFcmToken(param);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.body().has("status")){
+                    if(response.body().get("status").getAsString().equals("Success")){
+                        Log.i(TAG, "새로운 토큰 등록에 성공하였습니다.\n"+ param.toString());
+                    }else{
+                        Log.e(TAG, "서버의 문제로 토큰 등록에 실패하였습니다.");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                if(t!=null){
+                    Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 해당 기기 토큰을 저장하지 못하였습니다.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("fcm_token", refreshedToken);
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", userJson.getString("id"));
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", userJson.getInt("bot_type"));
+
     }
 }
 
