@@ -107,6 +107,9 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         //가장 처음 현재 날짜를 기본으로 선택
         Calendar instance = Calendar.getInstance();
         widget.setSelectedDate(instance);
+        //오늘 날짜로 변경
+        TextView selectDay = (TextView) findViewById(R.id.select_day_tv);
+        selectDay.setText(instance.get(Calendar.YEAR)+"."+(instance.get(Calendar.MONTH) + 1)+"."+instance.get(Calendar.DAY_OF_MONTH));
         //캘린더 header format 변경하기
         widget.setTitleFormatter(new DateFormatTitleFormatter(YYYYM_FORMAT));
 

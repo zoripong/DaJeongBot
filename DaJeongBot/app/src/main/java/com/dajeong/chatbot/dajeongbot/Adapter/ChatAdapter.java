@@ -91,7 +91,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         if(mChats.get(position).getSender()!=null){
             return 0;
-        } else if(mChats.get(position).getChatType() == 1){
+        } else if(mChats.get(position).getNodeType() == 1){
           return 2;
         } else{
             return 1;
