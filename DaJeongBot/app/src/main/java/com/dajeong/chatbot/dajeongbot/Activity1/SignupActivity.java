@@ -25,7 +25,7 @@ public class SignupActivity extends AppCompatActivity{
      * 0 : basic
      * 1 : facebook
      * 2 : kakao
-     * 3 : google
+     * 3 : google 
      * */
     private final String TAG = "SignupActivity";
     private final int NUM_PAGES = 5;
