@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseInstanceIDService;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 // intro activity
 public class SplashActivity extends AppCompatActivity {
+    private final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,5 +44,8 @@ public class SplashActivity extends AppCompatActivity {
     public void test(){
         CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
         CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
+
+        Log.e(TAG, "firebase device token is :" + FirebaseInstanceId.getInstance().getToken());
+
     }
 }

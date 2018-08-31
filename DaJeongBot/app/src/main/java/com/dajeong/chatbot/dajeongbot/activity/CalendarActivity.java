@@ -2,28 +2,22 @@ package com.dajeong.chatbot.dajeongbot.activity;
 
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
 import com.dajeong.chatbot.dajeongbot.adapter.EventAdapter;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.decorators.EventDecorator;
@@ -31,40 +25,24 @@ import com.dajeong.chatbot.dajeongbot.decorators.MySelectorDecorator;
 import com.dajeong.chatbot.dajeongbot.decorators.OneDayDecorator;
 import com.dajeong.chatbot.dajeongbot.decorators.SaturdayDecorator;
 import com.dajeong.chatbot.dajeongbot.decorators.SundayDecorator;
-import com.dajeong.chatbot.dajeongbot.model.Character;
-import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.Event;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
-import com.prolificinteractive.materialcalendarview.DayViewDecorator;
-import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter;
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
-import android.content.Context;
-import org.w3c.dom.Text;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HEAD;
-
-import static java.security.AccessController.getContext;
 
 // 캘린더 activity
 public class CalendarActivity extends AppCompatActivity implements OnDateSelectedListener{
@@ -75,7 +53,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
     private int mAccountId;
 
-    private static final SimpleDateFormat YYYYM_FORMAT = new SimpleDateFormat("yyyy.MM");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM");
 
     private ArrayList<Event> mEvents = new ArrayList<>();
 
@@ -111,7 +89,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         TextView selectDay = (TextView) findViewById(R.id.select_day_tv);
         selectDay.setText(instance.get(Calendar.YEAR)+"."+(instance.get(Calendar.MONTH) + 1)+"."+instance.get(Calendar.DAY_OF_MONTH));
         //캘린더 header format 변경하기
-        widget.setTitleFormatter(new DateFormatTitleFormatter(YYYYM_FORMAT));
+        widget.setTitleFormatter(new DateFormatTitleFormatter(DATE_FORMAT));
 
         widget.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
@@ -127,10 +105,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                 oneDayDecorator
         );
 
-
         getEventList();
-    //    result = {"2018,03,18","2018,04,18","2018,05,18","2018,06,18"}; //일정이 들어가는 배열
-
 
     }
 
@@ -225,15 +200,21 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         EventList.enqueue(new Callback<ArrayList<String>>() {
             @Override
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
-               // controlJsonObj(response);
-                //Log.i("EventList값", EventList.toString());
-                //result=(string[])EventList.ToArray(typeof(string));
-               // List<String> names = new ArrayList<String>();
-                //result = names.toArray(new String[names.size()]);
-                ArrayList<String> body = response.body();
-                result= body.toArray(new String[body.size()]);
-                Log.i("EventList값", body.toString());
-                new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+                ArrayList<String> dates = response.body();
+                /* 특정날짜 달력에 점표시해주는곳 */
+                /* 월은 0이 1월 년,일은 그대로 */
+                Calendar calendar = Calendar.getInstance();
+                List<CalendarDay> calendarDays = new ArrayList<>();
+
+                for(String date : dates){
+                    Log.e(TAG, date);
+                    String[] time = date.split("-");
+                    calendar.set(Integer.parseInt(time[0]),Integer.parseInt(time[1]) -1 ,Integer.parseInt(time[2]));
+                    calendarDays.add(CalendarDay.from(calendar));
+                }
+
+                widget.addDecorator(new EventDecorator(R.color.colorAccent, calendarDays,CalendarActivity.this));
+
             }
             @Override
             public void onFailure(Call<ArrayList<String>> call, Throwable t) {
@@ -244,32 +225,31 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         });
     }
     private void getSchedule(){
-    //    Log.i("mYear값", mYear);
-    //    Log.i("mMonth값", mMonth);
-    //    Log.i("mDate값", mDate);
-
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
-        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getEvent(mAccountId,mYear,mMonth,mDate);
 
-//        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",R.drawable.applozic_audio_delete));
-//        mEvents.add(new Event("수진이와 롯데월드", "교복을 입고 갔는데 너무 불편했어. 그래도 생각보다 사람이 적어서 다행이야!",-1)); //이미지가 없는 경우 -1로 처리
-//        mEvents.add(new Event("수학숙제 끝내기",null,-1));
-        if(res==null)
-            Log.i("null값", "res값이 null");
-        else{
-            Log.i("null값", "res값이 null 아님ㅁ");
-        }
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getEvent(mAccountId,mYear,mMonth,mDate);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
                 if(response==null)
-                    Log.i("null값", "response값이 null");
+                    Log.i(TAG, "response값이 null");
                 else{
-                    Log.i("null값", response.toString()+"response값이 null 아님ㅁ");
+                    Log.i(TAG, "response is not null :"+response.toString());
                 }
-                controlJsonObj(response);
+                ArrayList<JsonObject> body = response.body();
+
+                for(JsonObject json : body){
+                    //정보 가져오기
+                    mEvents.add(new Event(json.get("id").getAsInt(),json.get("review").getAsString(), json.get("schedule_what").getAsString(), json.get("schedule_when").getAsString(), json.get("schedule_where").getAsString(),-1)); //이미지 일단 넣어둠
+                }
+
+                if(body.size() == 0){
+                    Log.i(TAG, "event info is not exist");
+                }else{
+                    mEventAdapter.notifyDataSetChanged();
+                }
+
                 mRvEventList.scrollToPosition(mEventAdapter.getItemCount() - 1);
-                //mIsLoad = true;
             }
 
             @Override
@@ -279,77 +259,5 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                 }
             }
         });
-    }
-
-    private void controlJsonObj(Response<ArrayList<JsonObject>> response){
-
-        ArrayList<JsonObject> body = response.body();
-
-        for(JsonObject json : body){
-            //정보 가져오기
-            mEvents.add(new Event(json.get("id").getAsInt(),json.get("review").getAsString(), json.get("schedule_what").getAsString(), json.get("schedule_when").getAsString(), json.get("schedule_where").getAsString(),-1)); //이미지 일단 넣어둠
-        }
-        if(body.size() == 0 ){
-            // 더이상의 대화 내역이 없음
-            //mMoreChat = false;
-        }else{
-            // 마지막 인덱스 저장
-            // CustomSharedPreference.getInstance(getApplicationContext(), "chat").savePreferences("last_index", (body.get(body.size()-1)).get("id").getAsInt());
-            mEventAdapter.notifyDataSetChanged();
-        }
-        //hideProgressBar();
-
-    }
-
-    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
-
-        String[] Time_Result;
-
-        ApiSimulator(String[] Time_Result){
-            this.Time_Result = Time_Result;
-        }
-
-        @Override
-        protected List<CalendarDay> doInBackground(@NonNull Void... voids) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Calendar calendar = Calendar.getInstance();
-            ArrayList<CalendarDay> dates = new ArrayList<>();
-
-            /*특정날짜 달력에 점표시해주는곳*/
-            /*월은 0이 1월 년,일은 그대로*/
-            //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
-            for(int i = 0 ; i < Time_Result.length ; i ++){
-                CalendarDay day = CalendarDay.from(calendar);
-                String[] time = Time_Result[i].split("-");
-                int year = Integer.parseInt(time[0]);
-                int month = Integer.parseInt(time[1]);
-                int dayy = Integer.parseInt(time[2]);
-
-                dates.add(day);
-                calendar.set(year,month-1,dayy);
-            }
-
-            Log.i("dates값",dates.toString());
-            //widget.addDecorator(new EventDecorator(R.color.colorAccent, dates,CalendarActivity.this));
-            return dates;
-        }
-
-        @Override
-        protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
-            super.onPostExecute(calendarDays);
-            if (isFinishing()) {
-                return;
-            }
-
-            for(CalendarDay day : calendarDays){
-                Log.e(TAG, "HERE"+day);
-            }
-           widget.addDecorator(new EventDecorator(R.color.colorAccent, calendarDays,CalendarActivity.this));
-        }
     }
 }
