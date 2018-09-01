@@ -36,6 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+// TODO : 중간에 네트워크 연결되었을 경우
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity  {
     private final String TAG = "MainActivity";
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-//        getMessage();
+        getMessage();
 
         showProgressBar();
 
@@ -79,11 +80,13 @@ public class MainActivity extends AppCompatActivity  {
                     Log.e(TAG, "OnScrolled : TOP");
                     if (mIsLoad && mMoreChat) {
                         showProgressBar();
-//                        getMoreMessage();
+                        getMoreMessage();
                     }
                 }
             }
         });
+
+
 
         findViewById(R.id.btnSend).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +119,6 @@ public class MainActivity extends AppCompatActivity  {
                // Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -125,7 +127,8 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 // TODO : 갤러리 연결
                 Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
-
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -277,35 +280,56 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    private void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
+    public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
 
-        Call<JsonObject> res = NetRetrofit.getInstance().getService().sendMessage(new RequestSendMessage(accountId, content, chatType, time, isBot, mJsonResponse));
+        Call<JsonObject> res = NetRetrofit
+                .getInstance()
+                .getService()
+                .sendMessage(new RequestSendMessage(accountId, content,0, chatType, time, isBot, mJsonResponse));
+
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, String.valueOf(response.body()));
+                Log.e(TAG, String.valueOf(response));
                 //TODO : intent not found debug
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 //TODO : slot 선택지
-                if(response.body().has("responseSet")){
+                if(response.body() != null){
+                    Log.e(TAG, String.valueOf(response.body()
+                    ));
+                    if(response.body().has("status")){
+                        if(response.body().get("status").getAsString().equals("Failed")){
+                            Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                        }
+
+                    }else if(response.body().has("responseSet")){
                     mChatType = ChatType.BASIC_CHAT;
                     // 챗봇과 대화한 경우
                     Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
                         mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
-                    JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
+                    JsonArray jsonArray = mJsonResponse.getAsJsonArray( "result");
                     for( int i = 0; i<jsonArray.size(); i++ ){
+
                         String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
                         String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
                         String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
+                        Log.e(TAG, "node type is " + nodeType);
+                        JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
 
-                        mChats.addLast(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
+                        if(options.size() > 0){
+                            //TODO : EditText enable
+                                mChats.addLast(new Chat(NodeType.SLOT_NODE, mBotChar, message, timestamp, options));
+                        }else{
+                            mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
+                        }
+
                     }
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                 }else if(response.body().getAsJsonObject("result").has("events")){
                         // 추억 리스트 보여주기
-//                    TODO : SU HYEON
                     //TODO: 버튼 클릭할 때 request 정보
+                    // carousel item
                     JsonObject result = response.body().getAsJsonObject("result");
 
                     String timestamp = String.valueOf(result.get("time").getAsLong());
@@ -320,8 +344,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     }
 
-
-
+                }
 //                    mChats.addLast(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
                 }else{
                     Log.e(TAG, response.body().toString());
@@ -338,6 +361,10 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+    }
+
+    public void sendSlotMessage(){
+        Toast.makeText(getApplicationContext(), "slot", Toast.LENGTH_LONG).show();
     }
 
     private void showProgressBar(){

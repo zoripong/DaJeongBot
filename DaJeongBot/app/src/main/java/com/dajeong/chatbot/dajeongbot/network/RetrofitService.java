@@ -37,7 +37,7 @@ public interface RetrofitService {
     Call<ArrayList<JsonObject>> getMessages(@Path("account_id") int accountId, @Path("last_index") int lastIndex);
 
     @Headers("Content-Type: application/json")
-    @POST("messages")
+    @POST("messages/")
     Call<JsonObject> sendMessage(@Body RequestSendMessage params);
 
     // 일정
