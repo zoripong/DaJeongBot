@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 //        getMessage();
-
         showProgressBar();
+
+        test();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvChatList.setHasFixedSize(true);
@@ -181,10 +182,10 @@ public class MainActivity extends AppCompatActivity {
         mEtMessage = findViewById(R.id.etMessage);
         mChats = new LinkedList<>();
         mRvChatList = findViewById(R.id.rvChatList);
-        mChatAdapter = new ChatAdapter(mChats, MainActivity.this);
+        mChatAdapter = new ChatAdapter(getSupportFragmentManager(), mChats, MainActivity.this);
 
         mBotChar = setBot();
-        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
+//        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         mIsLoad = false;
         mMoreChat = true;
         mChatType = ChatType.BASIC_CHAT;
@@ -348,7 +349,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
     }
 
-
-
+    private void test(){
+        hideProgressBar();
+        mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
+    }
 
 }

@@ -144,9 +144,8 @@
             <ImageView
                 android:id="@+id/img_introduce"
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="170dp"
                 android:clickable="false"
-                android:src="@drawable/chatbot_introduce_1"
                 app:layout_constraintLeft_toRightOf="@id/layout_btn_previous"
                 app:layout_constraintRight_toLeftOf="@id/layout_btn_next" />
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/layout_btn_previous"
+            android:layout_width="56dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="left|center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:id="@+id/btn_carousel_previous"
+                android:layout_width="10dp"
+                android:layout_height="20dp"
+                android:background="@drawable/btn_previous"
+                android:clickable="false" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="0dp"
+            android:layout_height="170dp"
+            android:text=""
+            app:layout_constraintLeft_toRightOf="@id/layout_btn_previous"
+            app:layout_constraintRight_toLeftOf="@id/layout_btn_next" />
+
+        <LinearLayout
+            android:id="@+id/layout_btn_next"
+            android:layout_width="57dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="right|center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <Button
+                android:id="@+id/btn_carousel_next"
+                android:layout_width="10dp"
+                android:layout_height="20dp"
+                android:background="@drawable/btn_next"
+                android:clickable="false"
+                tools:layout_editor_absoluteX="395dp"
+                tools:layout_editor_absoluteY="48dp" />
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

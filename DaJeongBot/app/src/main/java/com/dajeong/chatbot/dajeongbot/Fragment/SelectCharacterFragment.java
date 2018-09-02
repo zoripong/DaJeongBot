@@ -62,12 +62,12 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_select_bot, container, false);
         LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.view_select_bot, container, false);
         selectImage = new int[]{R.id.img_chatbot_1, R.id.img_chatbot_2, R.id.img_chatbot_3, R.id.img_chatbot_4};
-        selectDot = new int[]{R.raw.chatbot_move_image_1,R.raw.chatbot_move_image_2, R.raw.chatbot_move_image_3, R.raw.chatbot_move_image_4};
+        selectDot = new int[]{R.id.img_select_dot_1, R.id.img_select_dot_2, R.id.img_select_dot_3, R.id.img_select_dot_4};
 
         introduceHead = new int[]{R.drawable.chatbot_head_1, R.drawable.chatbot_head_2, R.drawable.chatbot_head_3, R.drawable.chatbot_head_4};
         introduceTitle = new int[]{R.drawable.chatbot_text_1, R.drawable.chatbot_text_2, R.drawable.chatbot_text_3, R.drawable.chatbot_text_4};
         introduceString = new int[]{R.string.dajeong_1_info, R.string.dajeong_2_info, R.string.dajeong_3_info, R.string.dajeong_4_info};
-        introduceImage = new int[]{R.drawable.chatbot_introduce_1, R.drawable.chatbot_introduce_2, R.drawable.chatbot_introduce_3,R.drawable.chatbot_introduce_4};
+        introduceImage = new int[]{R.raw.chatbot_move_image_1, R.raw.chatbot_move_image_2, R.raw.chatbot_move_image_3, R.raw.chatbot_move_image_4};
 
         mIvBotHead = rootView.findViewById(R.id.img_head);
         mIvBotTitle = rootView.findViewById(R.id.img_title);
@@ -80,6 +80,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         btnSelectPrevious = rootView.findViewById(R.id.btn_select_previous);
         btnSelectNext = rootView.findViewById(R.id.btn_select_next);
 
+        Glide.with(this).load(R.raw.chatbot_move_image_1).into(mIvBotIntroduce);
         final ArrayList<Button> botHeads = new ArrayList<>();
         ArrayList<ImageView> botDots = new ArrayList<>();
         ArrayList<ImageView> botIntroduceHeads = new ArrayList<>();
@@ -93,7 +94,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
             botIntroduceHeads.add((ImageView) rootView.findViewById(R.drawable.chatbot_head_1 + i));
             botIntroduceTitles.add((ImageView) rootView.findViewById(R.drawable.chatbot_text_1 + i));
             botIntroduceStrings.add(String.valueOf(R.string.dajeong_1_info + i));
-            botIntroduceImages.add((ImageView) rootView.findViewById(R.drawable.chatbot_introduce_1 + i));
+            botIntroduceImages.add((ImageView) rootView.findViewById(R.raw.chatbot_move_image_1 + i));
         }
 
         for (int i = 0; i < 4; i++) {
@@ -107,13 +108,13 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                     Button clickButton = (Button) v;
                     int index = botHeads.indexOf(clickButton);
 
-                    if(index==0){
+                    if (index == 0) {
                         btnSelectPrevious.setVisibility(View.INVISIBLE);
                         btnSelectNext.setVisibility(View.VISIBLE);
-                    } else if(index == 1 || index == 2){
+                    } else if (index == 1 || index == 2) {
                         btnSelectPrevious.setVisibility(View.VISIBLE);
                         btnSelectNext.setVisibility(View.VISIBLE);
-                    } else if(index == 3){
+                    } else if (index == 3) {
                         btnSelectPrevious.setVisibility(View.VISIBLE);
                         btnSelectNext.setVisibility(View.INVISIBLE);
                     }
@@ -142,7 +143,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 int botType = 1;
                 int accountType = ((SignupActivity) getActivity()).getAccountType();
                 String password = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_pw");
-                String token = ((SignupActivity)getActivity()).getToken();
+                String token = ((SignupActivity) getActivity()).getToken();
 
 
                 // 추가 데이터 ( basic account : password / api account : token )
@@ -165,20 +166,20 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.e(TAG, String.valueOf(response.body()));
                         Intent intent = null;
-                        if(response.body().get("status").getAsString().equals("Success")){
+                        if (response.body().get("status").getAsString().equals("Success")) {
                             // 회원가입 성공
                             intent = new Intent(getActivity(), MainActivity.class);
 
                             CustomSharedPreference.getInstance(getContext(), "user_info")
-                                    .savePreferences("id", response.body().getAsJsonObject("user_info").get("id").getAsString() );
+                                    .savePreferences("id", response.body().getAsJsonObject("user_info").get("id").getAsString());
                             CustomSharedPreference.getInstance(getContext(), "user_info")
-                                    .savePreferences("bot_type", response.body().getAsJsonObject("user_info").get("bot_type").getAsInt() );
+                                    .savePreferences("bot_type", response.body().getAsJsonObject("user_info").get("bot_type").getAsInt());
 
-                        }else if(response.body().get("status").getAsString().equals("ExistUser")){
+                        } else if (response.body().get("status").getAsString().equals("ExistUser")) {
                             // 존재하는 회원
                             Toast.makeText(getContext(), "이미 존재하는 회원입니다.", Toast.LENGTH_LONG).show();
                             intent = new Intent(getActivity(), LoginActivity.class);
-                        }else{
+                        } else {
                             // 회원가입 실패
                             Toast.makeText(getContext(), "회원가입에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
                             intent = new Intent(getActivity(), LoginActivity.class);
@@ -189,12 +190,14 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        if (t!=null)
-                        Log.e(TAG, t.getMessage());
+                        if (t != null)
+                            Log.e(TAG, t.getMessage());
                     }
                 });
 
 //                    userCall.enqueue(this);
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -266,14 +269,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
             }
         });
-        btnSelectDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),MainActivity.class);
-//                intent.putExtra("사용자가 선택한 챗봇",);
-                startActivity(intent);
-            }
-        });
 
         return rootView;
     }
@@ -311,7 +306,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
     private void changeVisibleImage(int index) {
         for (int i = 0; i < 4; i++) {
             getView().findViewById(selectDot[i]).setVisibility(View.INVISIBLE);
-            }
+        }
         getView().findViewById(selectDot[index]).setVisibility(View.VISIBLE);
     }
 
@@ -319,7 +314,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         mIvBotHead.setImageResource(introduceHead[index]);
         mIvBotTitle.setImageResource(introduceTitle[index]);
         mTvBotString.setText(introduceString[index]);
-//        mIvBotIntroduce.setImageResource(introduceImage[index]);
+        mIvBotIntroduce.setImageResource(introduceImage[index]);
         Glide.with(this).load(R.raw.chatbot_move_image_1+index).into(mIvBotIntroduce);
 
     }
@@ -346,14 +341,14 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private String concatDate(String year, String month, String date){
-        if(month.length() < 2){
-            month = "0"+month;
+    private String concatDate(String year, String month, String date) {
+        if (month.length() < 2) {
+            month = "0" + month;
         }
-        if(date.length() < 2){
-            date = "0"+date;
+        if (date.length() < 2) {
+            date = "0" + date;
         }
-        return year+"-"+month+"-"+date;
+        return year + "-" + month + "-" + date;
     }
 
 }

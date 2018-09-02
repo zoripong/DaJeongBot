@@ -16,6 +16,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        /*testcode*/
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
+
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
