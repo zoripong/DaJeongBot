@@ -128,7 +128,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 // 필요한 데이터 ( user_id, name, birthday, account_type, bot_type )
-                //TODO : 앞의 프래그먼트에서 전부 가져오기
                 //TODO : API 로 로그인시 첫 유저이면 SIGN ACTIVITY 로
                 // 첫 유저일 경우 http://172.30.1.35/apis/users/{user_id}/{password}로 쿼리시 [{"status": "Failed"}] 반환
                 //TODO : TOKEN 저장

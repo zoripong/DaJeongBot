@@ -41,7 +41,6 @@ public interface RetrofitService {
     Call<JsonObject> sendMessage(@Body RequestSendMessage params);
 
     // 일정
-    // TODO : 이율앙 이 메소드를 활용..!
     @GET("events/{account_id}/{year}/{month}/{date}")
     Call<ArrayList<JsonObject>> getEvent(@Path("account_id") int accountId, @Path("year") String year, @Path("month") String month, @Path("date") String date);
 

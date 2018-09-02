@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity  {
         findViewById(R.id.ivAddChat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 메세지 선택
                // Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
                 startActivity(intent);
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity  {
         findViewById(R.id.ivAddImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 갤러리 연결
                 Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
@@ -291,9 +289,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Log.e(TAG, String.valueOf(response));
-                //TODO : intent not found debug
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
-                //TODO : slot 선택지
                 if(response.body() != null){
                     Log.e(TAG, String.valueOf(response.body()
                     ));

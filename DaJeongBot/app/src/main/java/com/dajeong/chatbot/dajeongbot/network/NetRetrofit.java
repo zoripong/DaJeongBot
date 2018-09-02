@@ -60,7 +60,7 @@ public class NetRetrofit {
 
     Retrofit retrofit = new Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
-            .baseUrl("http://172.30.1.44:80/")
+            .baseUrl("http://172.20.10.5:80/")
             .client(builder.build())
             .build();
 
