@@ -2,9 +2,13 @@ package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +20,7 @@ import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -25,7 +30,13 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -45,6 +56,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +65,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.app.usage.NetworkStats.Bucket.STATE_DEFAULT;
+import static com.kakao.usermgmt.StringSet.email;
 
 
 // 로그인
@@ -79,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행
         setContentView(R.layout.activity_login);
         init();
-
         //facebook start
         mFacebookCallbackManager = CallbackManager.Factory.create();  //로그인 응답을 처리할 콜백 관리자
 
@@ -96,6 +111,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         new FacebookCallback<LoginResult>() {
                             @Override
                             public void onSuccess(LoginResult loginResult) {
+                                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                                Log.d("TAG", "페이스북 토큰 -> " + loginResult.getAccessToken().getToken());
                                 Log.e("onSuccess", "onSuccess");
                                 Log.d("Success", String.valueOf(loginResult.getAccessToken()));
                                 //    Log.d("Success", String.valueOf(Profile.getCurrentProfile().getId()));
@@ -290,6 +308,41 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         .into(userphoto);*/
             }
             if (currentPerson.hasDisplayName()) {
+                Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+
+
+                AsyncTask<Void, Void, String > task = new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        String token = null;
+                        final String SCOPES = "https://www.googleapis.com/auth/plus.login ";
+
+                        try {
+                            token = GoogleAuthUtil.getToken(
+                                    getApplicationContext(),
+                                    Plus.AccountApi.getAccountName(mGoogleApiClient),
+                                    "oauth2:" + SCOPES);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (GoogleAuthException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        return token;
+
+                    }
+
+                    @Override
+                    protected void onPostExecute(String token) {
+                        Log.i(TAG, "Access token retrieved:" + token);
+                    }
+
+                };
+                task.execute();
+
+
+
                 Log.d(GOOGLE_TAG,"구글 사용자 이름 : "+ currentPerson.getDisplayName());
                 Log.d(GOOGLE_TAG, "구글 사용자 아이디 : " + currentPerson.getId());
                 Log.d(GOOGLE_TAG, "구글 사용자 성별 : " + currentPerson.getGender());
@@ -377,6 +430,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     String UUID = userProfile.getUUID();
                     long id = userProfile.getId();
 
+                    String accessToken = Session.getCurrentSession().getAccessToken();
+                    Log.e(KAKAO_TAG, "카카오톡 사용자 토큰 : "+accessToken);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 이름 : "+nickname);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 이메일 : "+email);
                     Log.e(KAKAO_TAG, "카카오톡 사용자 profileImagePath : "+profileImagePath);
