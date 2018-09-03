@@ -55,7 +55,7 @@ public class SettingActivity extends AppCompatActivity {
                 final String accountId = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id");
                 final String token = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("fcm_token");
                 if(accountId!=null){
-                    Call<JsonObject> res = NetRetrofit.getInstance().getService().releaseFcmToken(Integer.parseInt(accountId), token);
+                    Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().releaseFcmToken(Integer.parseInt(accountId), token);
                     res.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

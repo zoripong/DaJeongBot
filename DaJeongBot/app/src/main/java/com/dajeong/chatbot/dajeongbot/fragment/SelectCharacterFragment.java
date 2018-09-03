@@ -158,7 +158,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
                 }
                 // prepare call in Retrofit 2.0
-                Call<JsonObject> res = NetRetrofit.getInstance().getService().addUserInfo(new RequestSignUp(userId, name, birthday, botType, accountType, password, token));
+                Call<JsonObject> res = NetRetrofit.getInstance(getActivity().getApplicationContext()).getService().addUserInfo(new RequestSignUp(userId, name, birthday, botType, accountType, password, token));
                 res.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
