@@ -52,7 +52,7 @@
                 android:textColor="@color/black"
                 />
 
-            <com.dajeong.chatbot.dajeongbot.customize.SwipeViewPager
+            <android.support.v4.view.ViewPager
                 android:id="@+id/vp"
                 android:layout_width="260dp"
                 android:layout_height="200dp"

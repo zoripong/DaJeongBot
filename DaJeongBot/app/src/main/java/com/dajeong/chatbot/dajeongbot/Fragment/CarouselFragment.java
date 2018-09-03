@@ -23,15 +23,16 @@ import com.dajeong.chatbot.dajeongbot.model.Memory;
 
 public class CarouselFragment extends Fragment {
     private static final String APG_PARM1 = "parm1";
+    private static int mPosition;
     private TextView mTv;
 
     private String mParm1;
-    private int count;
     public CarouselFragment() {
 
     }
 
-    public static CarouselFragment newInstance(Memory memory) {
+    public static CarouselFragment newInstance(int position, Memory memory) {
+        mPosition = position;
         CarouselFragment fragment = new CarouselFragment();
         Bundle args = new Bundle();
         args.putString(APG_PARM1, memory.getContent());
@@ -47,8 +48,10 @@ public class CarouselFragment extends Fragment {
         }
     }
 
+
+    // 현재 viewpager 의 position
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         @SuppressLint("ResourceType") final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_test, container, false);
 
         Button btnNext = rootView.findViewById(R.id.btn_carousel_next);
@@ -62,13 +65,14 @@ public class CarouselFragment extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count++;
+
+
             }
         });
         btnPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count--;
+
             }
         });
 

@@ -1,9 +1,14 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 
@@ -11,6 +16,11 @@ import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseInstanceIDService;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import static com.kakao.util.helper.Utility.getPackageInfo;
 
 // intro activity
 public class SplashActivity extends AppCompatActivity {
@@ -26,6 +36,7 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
 
+        getHashKey();
         test();
 
         Handler handler = new Handler();
@@ -48,10 +59,33 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void test(){
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
+//        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
+//        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
+
 
         Log.e(TAG, "firebase device token is :" + FirebaseInstanceId.getInstance().getToken());
 
+    }
+
+    private void getHashKey(){
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
+        }
     }
 }

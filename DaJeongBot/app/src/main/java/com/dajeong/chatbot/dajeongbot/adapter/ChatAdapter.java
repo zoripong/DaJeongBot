@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -118,7 +119,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 // FIXME Test Code
 
-                ArrayList<Memory> memories = new ArrayList<>();
+                final ArrayList<Memory> memories = new ArrayList<>();
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..1"));
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..2"));
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..3"));
@@ -130,10 +131,29 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 //TODO: TextView 현재 인덱스 값으로 set, Button에 넣기
 
-                CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
+                final CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter); // viewpager 에 adapter 달아주기
                 chatBotCarouselHolder.mTvSchedule.setText(memories.indexOf(memories.get(1))+"번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
+
+                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
+                        if(viewPager.getCurrentItem() > 0)
+                            viewPager.setCurrentItem(viewPager.getCurrentItem()-1, true);
+                    }
+                });
+
+                chatBotCarouselHolder.mBtNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
+                        if(viewPager.getCurrentItem() < memories.size()-1)
+                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1, true);
+
+                    }
+                });
 
                 break;
 
@@ -297,6 +317,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBtPrevious = itemView.findViewById(R.id.btn_carousel_previous);
             mTvTime = itemView.findViewById(R.id.tvTime);
 
+
         }
     }
 
@@ -311,12 +332,20 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public Fragment getItem(final int position) {
-            return CarouselFragment.newInstance(memories.get(position));
+            return CarouselFragment.newInstance(position, memories.get(position));
         }
 
         @Override
         public int getCount() {
             return memories.size();
         }
+
+        public void setPosition(int i){
+
+        }
+
     }
+
+
+
 }
