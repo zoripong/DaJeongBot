@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DajeongBot</string>
+    <string name="app_name">다정봇</string>
     <string name="kakao_app_key">16b192cfc802ff2a6a95a911cd06e22c</string>
     <string name="server_client_id">711284121750-u97n9fcmcs7tr21pq53nb87jpjmellju.apps.googleusercontent.com</string>
     <string name="facebook_app_id">404952116693283</string>
@@ -26,4 +26,8 @@
         <item>FRI</item>
         <item>SAT</item>
     </string-array>
+
+    <string name="default_notification_channel_id">default channel id</string>
+    <string name="default_notification_channel_name">default channel name</string>
+
 </resources>

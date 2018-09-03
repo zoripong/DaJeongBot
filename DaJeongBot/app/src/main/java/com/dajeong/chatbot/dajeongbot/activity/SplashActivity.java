@@ -4,22 +4,29 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Window;
 
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseInstanceIDService;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 // intro activity
 public class SplashActivity extends AppCompatActivity {
+    private final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 액션바 없애기
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_splash);
 
-        /*testcode*/
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
-
+        test();
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -38,5 +45,13 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         }, 2000);
+    }
+
+    public void test(){
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
+
+        Log.e(TAG, "firebase device token is :" + FirebaseInstanceId.getInstance().getToken());
+
     }
 }

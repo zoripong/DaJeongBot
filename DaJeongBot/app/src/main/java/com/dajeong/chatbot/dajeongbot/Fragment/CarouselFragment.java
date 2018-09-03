@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
+import com.dajeong.chatbot.dajeongbot.customize.SwipeViewPager;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
 
 /**
@@ -21,6 +23,7 @@ import com.dajeong.chatbot.dajeongbot.model.Memory;
 
 public class CarouselFragment extends Fragment {
     private static final String APG_PARM1 = "parm1";
+    private TextView mTv;
 
     private String mParm1;
     private int count;
@@ -47,25 +50,27 @@ public class CarouselFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         @SuppressLint("ResourceType") final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_test, container, false);
+
         Button btnNext = rootView.findViewById(R.id.btn_carousel_next);
         Button btnPrevious = rootView.findViewById(R.id.btn_carousel_previous);
+        mTv = rootView.findViewById(R.id.textview);
 
-        final TextView tv = rootView.findViewById(R.id.textview);
-
-        tv.setText(mParm1);
+        mTv.setText(mParm1);
 
         //TODO: 버튼으로 fragment 넘기기
 
-        if (count == 0) {
-            btnPrevious.setVisibility(View.INVISIBLE);
-        }
-//        btnNext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                count++;
-//
-//            }
-//        });
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count++;
+            }
+        });
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count--;
+            }
+        });
 
         return rootView;
     }

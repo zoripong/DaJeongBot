@@ -216,3 +216,24 @@ RESPONSE
      }
 
 }
+
+
+# token 등록
+Request
+{
+    "account_id" : 32,
+    "fcm_token" : "asdf52xzcvv8e653z2x",
+}
+
+Response
+{
+    "status": "[success/failed]"
+}
+
+# 수정
+{
+	"account_id":32,
+	"fcm_token" : "Abcd",
+	"new_token" : "adsade"
+}
+

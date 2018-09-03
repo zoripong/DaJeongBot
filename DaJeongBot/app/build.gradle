@@ -1,3 +1,5 @@
+import com.google.gms.googleservices.GoogleServicesPlugin
+
 apply plugin: 'com.android.application'
 
 android {
@@ -34,55 +36,54 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     //firebase
-
+    //noinspection GradleCompatible
+    implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.google.firebase:firebase-messaging:17.3.0'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
     //캘린터 API
-    compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
 
     // 카카오톡 SDK 추가
-    compile group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
-    compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
 
-    compile 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
     //noinspection GradleCompatible
-    compile 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 
     // google
-    compile 'com.google.android.gms:play-services-plus:15.0.1'
-    compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
-    compile 'com.google.http-client:google-http-client-android:+'
-    compile 'com.google.api-client:google-api-client-android:+'
-    compile 'com.google.api-client:google-api-client-gson:+'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.mcxiaoke.volley:library:1.0.18'
-    compile 'com.applozic.communication.uiwidget:mobicomkitui:5.8.4'
+    implementation 'com.google.android.gms:play-services-plus:15.0.1'
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
+    implementation 'com.google.http-client:google-http-client-android:1.25.0'
+    implementation 'com.google.api-client:google-api-client-android:1.25.0'
+    implementation 'com.google.api-client:google-api-client-gson:1.25.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.mcxiaoke.volley:library:1.0.18'
+    implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.8.4'
 
     // google oauth
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
 
     // constraing layout
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha2'
 
 
     // retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 
     // Glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
 
-    // fcm
-//    compile 'com.google.firebase:firebase-messaging:12.0.1'
-
-    // firebase
-//    implementation 'com.google.firebase:firebase-core:16.0.1'
 
     testImplementation 'junit:junit:4.12'
 
 }
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
+GoogleServicesPlugin.config.disableVersionCheck = true

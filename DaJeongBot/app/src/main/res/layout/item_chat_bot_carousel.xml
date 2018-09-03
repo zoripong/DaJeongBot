@@ -52,12 +52,13 @@
                 android:textColor="@color/black"
                 />
 
-            <android.support.v4.view.ViewPager
+            <com.dajeong.chatbot.dajeongbot.customize.SwipeViewPager
                 android:id="@+id/vp"
                 android:layout_width="260dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 tools:ignore="InvalidId" />
+
             <Button
                 android:id="@+id/btText"
                 android:layout_width="match_parent"
