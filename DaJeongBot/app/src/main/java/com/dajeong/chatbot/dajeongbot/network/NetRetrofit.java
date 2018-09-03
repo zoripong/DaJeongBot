@@ -1,5 +1,10 @@
 package com.dajeong.chatbot.dajeongbot.network;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.dajeong.chatbot.dajeongbot.control.Util;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 
@@ -12,6 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetRetrofit {
+    private final String TAG = "NetRetrofit";
     // 싱글톤 패턴 (singleton)
         // 인스턴스가 사용될 때에 똑같은 인스턴스를 만들어 내는 것이 아니라,
         // 동일 인스턴스를 사용하게끔 하는 것이 기본 전략
@@ -21,13 +27,27 @@ public class NetRetrofit {
         // lazy initialization 을 통해 인스턴스가 사용되는 시점에 생성할 수 있도록
         // https://blog.seotory.com/post/2016/03/java-singleton-pattern
     private static NetRetrofit instance;
-    public static NetRetrofit getInstance() {
+    private RetrofitService mService;
+    public static NetRetrofit getInstance(Context context) {
         if( instance == null){
-            instance = new NetRetrofit();
+            instance = new NetRetrofit(context);
         }
         return instance;
     }
-    private NetRetrofit() {
+
+    private NetRetrofit(){}
+
+    private NetRetrofit(Context context) {
+        Log.e(TAG, Util.getProperty("server_host",context));
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
+                .baseUrl(Util.getProperty("server_host",context))
+                .client(builder.build())
+                .build();
+
+        mService = retrofit.create(RetrofitService.class);
+
     }
 
 
@@ -58,16 +78,8 @@ public class NetRetrofit {
 
 
 
-    Retrofit retrofit = new Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
-            .baseUrl("http://192.168.0.20:8282/")
-            .client(builder.build())
-            .build();
-
-    RetrofitService service = retrofit.create(RetrofitService.class);
-
     public RetrofitService getService() {
-        return service;
+        return mService;
     }
 
 }

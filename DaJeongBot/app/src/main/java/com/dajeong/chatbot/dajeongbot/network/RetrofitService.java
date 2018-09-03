@@ -18,6 +18,10 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface RetrofitService {
+    // check internet status
+    @GET("/")
+    Call<String> checkInternetStatus();
+
     // 로그인 & 회원가입
     @GET("users/{account_type}/{user_id}/{password}")
     Call<ArrayList<JsonObject>> getUserInfo(@Path("account_type")int accountType, @Path("user_id") String userId, @Path("password") String password);

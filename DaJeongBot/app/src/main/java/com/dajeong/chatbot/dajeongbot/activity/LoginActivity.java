@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 pw = "test";
                 if((!id.isEmpty())&&(!pw.isEmpty())){
                     findViewById(R.id.pgb).setVisibility(View.VISIBLE);
-                    Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getUserInfo(AccountType.BASIC_ACCOUNT, id, pw);
+                    Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserInfo(AccountType.BASIC_ACCOUNT, id, pw);
                         new NetworkCall().execute(res);
                 }else{
                     Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
@@ -195,6 +195,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mEtUserPw = findViewById(R.id.etUserPw);
     }
 
+
+    // FIXME : token 여러개 들어가는거..ㅠㅠ
     private class NetworkCall extends AsyncTask<Call, Void, String> {
         @Override
         protected String doInBackground(Call... calls) {
@@ -461,7 +463,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         if((!id.isEmpty())&&(!token.isEmpty())){
             findViewById(R.id.pgb).setVisibility(View.VISIBLE);
-            Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getUserInfo(accountType, id, token);
+            Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserInfo(accountType, id, token);
             new NetworkCall().execute(res);
         }else{
             Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
@@ -482,7 +484,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         final RequestRegisterToken param = new RequestRegisterToken(Integer.parseInt(userJson.getString("id")), refreshedToken);
-        Call<JsonObject> res = NetRetrofit.getInstance().getService().registerFcmToken(param);
+        Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().registerFcmToken(param);
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

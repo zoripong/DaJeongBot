@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.CellInfoWcdma;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -136,24 +137,28 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mTvSchedule.setText(memories.indexOf(memories.get(1))+"번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
 
-                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
-                        if(viewPager.getCurrentItem() > 0)
-                            viewPager.setCurrentItem(viewPager.getCurrentItem()-1, true);
-                    }
-                });
-
-                chatBotCarouselHolder.mBtNext.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
-                        if(viewPager.getCurrentItem() < memories.size()-1)
-                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1, true);
-
-                    }
-                });
+//                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
+//                        if(viewPager.getCurrentItem() > 0)
+//                            viewPager.setCurrentItem(viewPager.getCurrentItem()-1, true);
+//                        else if(viewPager.getCurrentItem()==0)
+//                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.INVISIBLE);
+//                        else
+//                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.VISIBLE);
+//                    }
+//                });
+//
+//                chatBotCarouselHolder.mBtNext.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
+//                        if(viewPager.getCurrentItem() < memories.size()-1)
+//                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1, true);
+//
+//                    }
+//                });
 
                 break;
 
@@ -231,12 +236,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             // 마진 지정
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) myButton.getLayoutParams();
+//            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) myButton.getLayoutParams();
 //            p.bottomMargin = 5;
 //            int dp = (int)convertPixelsToDp(5.0f);
-            p.setMargins(5, 3, 5, 3);
-            myButton.requestLayout();
+//            p.setMargins(5, 5, 5, 5);
+//            myButton.requestLayout();
 
+//            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) myButton.getLayoutParams();
+//            layoutParams.setMargins(5,5,5,5);
+//            myButton.setLayoutParams(layoutParams);
 
             myButton.setId(i);
             final int id_ = myButton.getId();

@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
      private void getMessage(){
-        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId);
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getMessages(mAccountId);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity  {
 
         Log.e(TAG, "Last Index is "+ lastIndex);
 
-        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getMessages(mAccountId, lastIndex);
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getMessages(mAccountId, lastIndex);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity  {
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
 
         Call<JsonObject> res = NetRetrofit
-                .getInstance()
+                .getInstance(getApplicationContext())
                 .getService()
                 .sendMessage(new RequestSendMessage(accountId, content,0, chatType, time, isBot, mJsonResponse));
 
