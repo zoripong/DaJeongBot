@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity  {
         findViewById(R.id.ivAddChat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
                 startActivity(intent);
             }
@@ -124,8 +123,7 @@ public class MainActivity extends AppCompatActivity  {
         findViewById(R.id.ivAddImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "준비 중", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
                 startActivity(intent);
             }
         });
