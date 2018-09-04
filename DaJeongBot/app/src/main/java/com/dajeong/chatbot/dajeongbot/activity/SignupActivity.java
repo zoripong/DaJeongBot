@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 
 import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.fragment.InputNameFragment;
@@ -39,6 +40,10 @@ public class SignupActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_input_info);
 
         Intent intent = getIntent();

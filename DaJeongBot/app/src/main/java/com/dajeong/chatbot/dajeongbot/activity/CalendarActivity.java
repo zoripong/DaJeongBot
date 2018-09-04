@@ -195,7 +195,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
     private  void getEventList(){
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
-        final Call<ArrayList<String>> EventList = NetRetrofit.getInstance().getService().getDatesHavingEvent(mAccountId);
+        final Call<ArrayList<String>> EventList = NetRetrofit.getInstance(getApplicationContext()).getService().getDatesHavingEvent(mAccountId);
 
         EventList.enqueue(new Callback<ArrayList<String>>() {
             @Override
@@ -227,7 +227,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
     private void getSchedule(){
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
 
-        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance().getService().getEvent(mAccountId,mYear,mMonth,mDate);
+        Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getEvent(mAccountId,mYear,mMonth,mDate);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {

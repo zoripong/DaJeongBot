@@ -18,6 +18,10 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface RetrofitService {
+    // check internet status
+    @GET("/")
+    Call<String> checkInternetStatus();
+
     // 로그인 & 회원가입
     @GET("users/{account_type}/{user_id}/{password}")
     Call<ArrayList<JsonObject>> getUserInfo(@Path("account_type")int accountType, @Path("user_id") String userId, @Path("password") String password);
@@ -37,11 +41,10 @@ public interface RetrofitService {
     Call<ArrayList<JsonObject>> getMessages(@Path("account_id") int accountId, @Path("last_index") int lastIndex);
 
     @Headers("Content-Type: application/json")
-    @POST("messages")
+    @POST("messages/")
     Call<JsonObject> sendMessage(@Body RequestSendMessage params);
 
     // 일정
-    // TODO : 이율앙 이 메소드를 활용..!
     @GET("events/{account_id}/{year}/{month}/{date}")
     Call<ArrayList<JsonObject>> getEvent(@Path("account_id") int accountId, @Path("year") String year, @Path("month") String month, @Path("date") String date);
 

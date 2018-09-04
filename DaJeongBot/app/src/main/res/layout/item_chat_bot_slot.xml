@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/chat_"
+    android:id="@+id/cl_root"
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
 
@@ -38,30 +38,32 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="7dp"
-        android:background="@drawable/chatbot_tv_custom"
         android:text="자세한 일정이 있어?"
         />
-    <Button
-        android:id="@+id/btYes"
+    <LinearLayout
+        android:id="@+id/ll_dynamic_btns"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="응"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        style="?android:attr/borderlessButtonStyle"
-        android:background="@drawable/chatbot_tv_slot_custom"/>
-    <Button
-        android:id="@+id/btNo"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="아니"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        style="?android:attr/borderlessButtonStyle"
-        android:background="@drawable/chatbot_tv_slot_custom"/>
+        android:layout_height="wrap_content">
+
+        <!--<Button-->
+            <!--android:id="@+id/btYes"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:text="응"-->
+            <!--android:layout_margin="5dp"-->
+            <!--style="?android:attr/borderlessButtonStyle"-->
+            <!--android:background="@drawable/chatbot_tv_slot_custom"/>-->
+        <!--<Button-->
+            <!--android:id="@+id/btNo"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:text="아니"-->
+            <!--android:layout_margin="5dp"-->
+            <!--style="?android:attr/borderlessButtonStyle"-->
+            <!--android:background="@drawable/chatbot_tv_slot_custom"/>-->
+    </LinearLayout>
+
 </LinearLayout>
 
     <TextView
