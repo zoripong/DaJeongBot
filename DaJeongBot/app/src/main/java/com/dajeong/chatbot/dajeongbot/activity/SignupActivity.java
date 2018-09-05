@@ -50,11 +50,6 @@ public class SignupActivity extends AppCompatActivity{
         mAccountType = intent.getIntExtra("account_type", -1);
         mToken = intent.getStringExtra("token");
 
-        Log.e(TAG, String.valueOf(mAccountType));
-        if(mAccountType > AccountType.BASIC_ACCOUNT){
-            setCurrentItem(2, true);
-        }
-
 
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mPager = findViewById(R.id.pager);
@@ -66,6 +61,13 @@ public class SignupActivity extends AppCompatActivity{
                 return true;
             }
         });
+
+        Log.e(TAG, String.valueOf(mAccountType));
+        if(mAccountType > AccountType.BASIC_ACCOUNT){
+            setCurrentItem(2, true);
+        }
+
+
 
 
 //        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
