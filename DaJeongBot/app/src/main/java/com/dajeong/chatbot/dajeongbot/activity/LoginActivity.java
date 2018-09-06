@@ -5,6 +5,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
@@ -77,8 +79,7 @@ import static com.kakao.usermgmt.StringSet.email;
 
 
 // 로그인
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity {
     // control ui variables
     private EditText mEtUserId;
     private EditText mEtUserPw;
@@ -90,10 +91,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private CallbackManager mFacebookCallbackManager;
 
     // TAG variables for Log
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "LoginActivity";
     private static final String FACEBOOK_TAG = "Facebook";
     private static final String GOOGLE_TAG = "google";
     private static final String KAKAO_TAG = "kakao";
+
+    private static final int RC_SIGN_IN = 9001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -102,6 +106,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행
         setContentView(R.layout.activity_login);
         init();
+
+        //구글
+        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build();
+
         //facebook start
         mFacebookCallbackManager = CallbackManager.Factory.create();  //로그인 응답을 처리할 콜백 관리자
 
@@ -122,8 +137,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                                 boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-                                Log.d("TAG", "페이스북 토큰 -> " + loginResult.getAccessToken().getToken());
-                                Log.e("onSuccess", "onSuccess");
+                                Log.e("TAG", "페이스북 토큰 -> " + loginResult.getAccessToken().getToken());
+                                Log.e("onSuccess", "onSuccess77");
                                 Log.d("Success", String.valueOf(loginResult.getAccessToken()));
                                 //    Log.d("Success", String.valueOf(Profile.getCurrentProfile().getId()));
                                 //    Log.d("Success", String.valueOf(Profile.getCurrentProfile().getName()));
@@ -240,6 +255,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             try {
                 JSONObject response = new JSONArray(result).getJSONObject(0);
+                if (response==null){
+                    Log.e(TAG,"에러다ㅏㅏ  response가 null");
+                }
+                else Log.e(TAG,"에러 아니다ㅏㅏ  response가 null 아니지롱");
                 if(response.getString("status").equals("OK")){
                     saveUserInfo(response.getJSONObject("user_info"));
 
@@ -294,121 +313,61 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void mOnClick(View view){
         switch (view.getId()){
             case R.id.btn_google_login:
-                Toast.makeText(this, "접속합니다", Toast.LENGTH_SHORT).show();
-
-                mGoogleApiClient = new GoogleApiClient.Builder(this)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(Plus.API)
-                        .addScope(Plus.SCOPE_PLUS_PROFILE)
-                        .build();
-
-                mGoogleApiClient.connect();
-
+                signIn();
                 break;
         }
     }
 
-
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.d(TAG, "구글 플레이 연결이 되었습니다.");
-
-        if (!mGoogleApiClient.isConnected() || Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) == null) {
-
-            Log.d(TAG, "onConnected 연결 실패");
-
-        } else {
-            Log.d(TAG, "onConnected 연결 성공");
-
-            Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-
-            if (currentPerson.hasImage()) {
-
-                Log.d(TAG, "이미지 경로는 : " + currentPerson.getImage().getUrl());
-               /* Glide.with(MainActivity.this)
-                        .load(currentPerson.getImage().getUrl())
-                        .into(userphoto);*/
-            }
-            if (currentPerson.hasDisplayName()) {
-                Person currentUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-
-
-                AsyncTask<Void, Void, String > task = new AsyncTask<Void, Void, String>() {
-                    @Override
-                    protected String doInBackground(Void... params) {
-                        String token = null;
-                        final String SCOPES = "https://www.googleapis.com/auth/plus.login ";
-
-                        try {
-                            token = GoogleAuthUtil.getToken(
-                                    getApplicationContext(),
-                                    Plus.AccountApi.getAccountName(mGoogleApiClient),
-                                    "oauth2:" + SCOPES);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (GoogleAuthException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        return token;
-
-                    }
-
-                    @Override
-                    protected void onPostExecute(String token) {
-                        Log.i(TAG, "Access token retrieved:" + token);
-                    }
-
-                };
-                task.execute();
-
-
-
-                Log.d(GOOGLE_TAG,"구글 사용자 이름 : "+ currentPerson.getDisplayName());
-                Log.d(GOOGLE_TAG, "구글 사용자 아이디 : " + currentPerson.getId());
-                Log.d(GOOGLE_TAG, "구글 사용자 성별 : " + currentPerson.getGender());
-                Log.d(GOOGLE_TAG, "구글 사용자 생일 : " + currentPerson.getBirthday());
-//                String GoogleEmail = Plus.AccountApi.getAccountName(mGoogleApiClient); //이메일만 오류남
-//                Log.d(TAG, "구글 사용자 이메일 : " + GoogleEmail);
-            }
-            redirectSignUpActivity(currentPerson.getId(), "", AccountType.GOOGLE_ACCOUNT);  // 세션 연결성공 시 redirectSignUpActivity() 호출
-        }
+    private void signIn(){
+        Intent signInIntent=Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "연결 에러 " + connectionResult);
-        if (connectionResult.hasResolution()) {
-            Log.e(TAG,
-                    String.format(
-                            "Connection to Play Services Failed, error: %d, reason: %s",
-                            connectionResult.getErrorCode(),
-                            connectionResult.toString()));
-            try {
-                connectionResult.startResolutionForResult(this, 0);
-            } catch (IntentSender.SendIntentException e) {
-                Log.e(TAG, e.toString(), e);
-            }
-        }else{
-            Toast.makeText(getApplicationContext(), "이미 로그인 중", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //google LogIn end
-    //kakao LogIn start
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
+
+        //구글
+        if(mGoogleApiClient!=null) {
+            if (requestCode == RC_SIGN_IN) {
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleSignInResult(result);
+            }
+        }
+        else{
+            Log.e(TAG,"mGoogleApiClient is NULL");
+        }
+        //페이스북
+        if(mFacebookCallbackManager!=null) {
+            mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+            if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+                return;
+            }
+        }
+        else {
+            Log.e(TAG,"mGoogleApiClient is NULL");
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result){
+        Log.d(TAG,"handleSignInResult : " + result.isSuccess());
+        if(result.isSuccess()){ //구글 로그인 성공
+            GoogleSignInAccount acct=result.getSignInAccount();
+            String authCode=acct.getServerAuthCode();
+            String googleToken=acct.getIdToken();
+            String googleName=acct.getDisplayName();
+            String googleEmail=acct.getEmail();
+            String googleID=acct.getId();
+            Uri googlePhoto=acct.getPhotoUrl();
+
+            Log.e(GOOGLE_TAG,"구글 사용자 Authcode"+authCode);
+            Log.e(GOOGLE_TAG,"구글 사용자 토큰"+googleToken);
+            Log.e(GOOGLE_TAG,"구글 사용자 이름"+googleName);
+            Log.e(GOOGLE_TAG,"구글 사용자 이메일"+googleEmail);
+            Log.e(GOOGLE_TAG,"구글 사용자 ID"+googleID);
+            Log.e(GOOGLE_TAG,"구글 사용자 포토"+googlePhoto);
+
+            redirectSignUpActivity(acct.getId(), "", AccountType.GOOGLE_ACCOUNT);  // 세션 연결성공 시 redirectSignUpActivity() 호출
         }
     }
 

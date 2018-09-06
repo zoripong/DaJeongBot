@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,9 +55,9 @@ public class AddPhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo);
 
-        Intent intent = getIntent();
-        mBookCode = intent.getStringExtra("BOOK_CODE");
-        mPeriod = intent.getStringExtra("DATE");
+//        Intent intent = getIntent();
+//        mBookCode = intent.getStringExtra("BOOK_CODE");
+//        mPeriod = intent.getStringExtra("DATE");
 
 
         if (ContextCompat.checkSelfPermission(this,
@@ -123,38 +124,6 @@ public class AddPhotoActivity extends AppCompatActivity {
             }
         });
 
-        //mDateSpinner = findViewById(R.id.date_spinner);
-
-        //DateListManager dateListManager = new DateListManager();
-        //Date[] dates = dateListManager.convertDates(mPeriod);
-
-        //dateList = dateListManager.makeDateList(dates[0], dates[1]);
-
-        //String stringArray[] = new String[dateList.size()];
-        //stringArray = dateList.toArray(stringArray);
-
-       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-        //        android.R.layout.simple_spinner_item, stringArray);
-
-       // mDateSpinner.setAdapter(adapter);
-
-    //    mPosition = dateList.size()-1;
-        //mDateSpinner.setSelection(mPosition);
-
-//        mDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                mPosition = i;
-//                int dates[] = convertDate(dateList.get(mPosition));
-//                galleryImages = mGalleryManager.getDatePhotoPathList(dates[0], dates[1], dates[2]);
-//                initRecyclerGallery();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
     }
 
     /**
@@ -185,17 +154,17 @@ public class AddPhotoActivity extends AppCompatActivity {
             Toast.makeText(AddPhotoActivity.this, "이미지를 선택해주세요 :D", Toast.LENGTH_SHORT).show();
             return;
         }
-//        for (int i = 0; i < selectedPhotoList.size(); i++) {
-//            Log.e(TAG, ">>> selectedPhotoList   :  " + selectedPhotoList.get(i).getImgPath());
-//        }
+        for (int i = 0; i < selectedPhotoList.size(); i++) {
+            Log.e(TAG, ">>> selectedPhotoList   :  " + selectedPhotoList.get(i).getImgPath());
+        }
 
-        Intent intent = new Intent(this, AddPhotoDetailActivity.class);
-        intent.putExtra(INTENT_PHOTO_EXTRA, (Serializable) selectedPhotoList);
-        intent.putExtra("BOOK_CODE", mBookCode);
-        intent.putExtra("DATE", mPeriod);
-//        intent.putExtra("SELECT_DATE", dateList.get(mPosition));
-
-        startActivity(intent);
+//        Intent intent = new Intent(this, AddPhotoDetailActivity.class);
+//        intent.putExtra(INTENT_PHOTO_EXTRA, (Serializable) selectedPhotoList);
+//        intent.putExtra("BOOK_CODE", mBookCode);
+//        intent.putExtra("DATE", mPeriod);
+////        intent.putExtra("SELECT_DATE", dateList.get(mPosition));
+//
+//        startActivity(intent);
 
         finish();
 

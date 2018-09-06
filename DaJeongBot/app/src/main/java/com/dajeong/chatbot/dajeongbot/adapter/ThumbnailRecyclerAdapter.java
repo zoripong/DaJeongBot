@@ -54,7 +54,6 @@ public class ThumbnailRecyclerAdapter extends RecyclerView.Adapter<ThumbnailRecy
 //                        holder.imageView.setImageBitmap(resource);
 //                    }
 //                });
-        int thumbnailSize=400;
         Glide.with(context)
                 .load(item.getImgPath())
                 .thumbnail(0.4f)

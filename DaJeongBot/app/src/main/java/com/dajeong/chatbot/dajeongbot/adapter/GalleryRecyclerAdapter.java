@@ -2,19 +2,28 @@ package com.dajeong.chatbot.dajeongbot.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BaseTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.transition.Transition;
 import com.dajeong.chatbot.dajeongbot.Interface.OnItemClickListener;
@@ -24,6 +33,7 @@ import com.dajeong.chatbot.dajeongbot.model.GalleryImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.WINDOW_SERVICE;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.bumptech.glide.request.RequestOptions.centerCropTransform;
 
@@ -172,66 +182,41 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<GalleryRecycler
                 });
 
 
-                dialog.findViewById(R.id.close_btn).setOnClickListener(new View.OnClickListener() {
+                dialog.findViewById(R.id.preview_iv).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
                     }
                 });
 
-//                //// TODO: 2017-11-18 다이얼로그 가로만큼..
-//                Glide.with(mActivity)
-//                        .load(galleryImage.getImgPath())
-//                        .into(new SimpleTarget<Bitmap>() {
-//                            @Override
-//                            public void onResourceReady(Bitmap bitmap, Transition<? super Drawable> transition) {
-//                                preView.setImageBitmap(bitmap);
-//                                dialog.show();
-//                               // Log.e(TAG, "base : " + bitmap.getWidth()+" / resize : "+preView.getWidth());
-//                            }
-//                        });
-//
-//
-//                Glide.with(mActivity)
-//                        .asBitmap()
-//                        .load(galleryImage.getImgPath())
-//                        .into(testview);
 
-
-
-                //// TODO: 2017-11-18 다이얼로그 가로만큼..
+                Point pt = new Point();
+                mActivity.getWindowManager().getDefaultDisplay().getSize(pt);
+                ((WindowManager) mActivity.getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getSize(pt);
+                double dwidth = (pt.x)*0.8;
+                int width=(int)dwidth;
                 Glide.with(mActivity)
                         .asBitmap()
                         .load(galleryImage.getImgPath())
-                        .into(target2);
+                        .apply(new RequestOptions().override(width, width))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                preView.setImageBitmap(resource);
+                                dialog.show();
+                            }
+                        });
 
-
-                ((TextView)dialog.findViewById(R.id.detail_tv)).setText(galleryImage.getImgPath());
 
 
                  return true;
             }
         });
 
+
     }
-    private BaseTarget target2 = new BaseTarget<BitmapDrawable>() {
-        @Override
-        public void onResourceReady(BitmapDrawable bitmap, Transition<? super BitmapDrawable> transition) {
-            // do something with the bitmap
-            // for demonstration purposes, let's set it to an imageview
-            //preView.setImageBitmap(bitmap);
-            dialog.show();
-            //Log.e(TAG, "base : " + bitmap.getWidth()+" / resize : "+preView.getWidth());
-        }
 
-        @Override
-        public void getSize(SizeReadyCallback cb) {
-            //cb.onSizeReady(250, 250);
-        }
 
-        @Override
-        public void removeCallback(SizeReadyCallback cb) {}
-    };
 
     @Override
     public int getItemCount() {
