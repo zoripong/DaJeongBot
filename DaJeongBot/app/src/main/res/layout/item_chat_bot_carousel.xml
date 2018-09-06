@@ -39,7 +39,8 @@
                 android:paddingRight="15dp"
                 android:paddingTop="7dp"
                 android:layout_gravity="center_horizontal"
-                android:text="아래 목록에서 궁금한 일정을 골라주세요."
+                android:text="@string/schedule"
+                android:gravity="center"
                 />
             <TextView
                 android:id="@+id/tvSchedule"
@@ -54,22 +55,22 @@
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp"
-                android:layout_width="260dp"
-                android:layout_height="200dp"
+                android:layout_width="235dp"
+                android:layout_height="190dp"
                 android:layout_gravity="center"
                 tools:ignore="InvalidId" />
-
             <Button
                 android:id="@+id/btText"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:text=""
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="4dp"
                 style="?android:attr/borderlessButtonStyle"
-                android:background="@drawable/chatbot_tv_slot_custom"/>
+                android:background="@drawable/chatbot_tv_slot_custom"
+                />
         </LinearLayout>
 
     <TextView

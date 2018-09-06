@@ -20,6 +20,7 @@ import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.network.RetrofitService;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -49,6 +50,7 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.apicompatibility.APICompatibility;
 import com.kakao.util.exception.KakaoException;
 
 import org.json.JSONArray;
@@ -62,9 +64,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.usage.NetworkStats.Bucket.STATE_DEFAULT;
 import static com.kakao.usermgmt.StringSet.email;
@@ -90,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static final String KAKAO_TAG = "kakao";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide(); //<< this
         FacebookSdk.sdkInitialize(getApplicationContext()); // SDK 초기화 (setContentView 보다 먼저 실행
@@ -198,11 +205,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     // FIXME : token 여러개 들어가는거..ㅠㅠ
     private class NetworkCall extends AsyncTask<Call, Void, String> {
+
         @Override
         protected String doInBackground(Call... calls) {
+
             try {
                 Call<List<JsonObject>> call = calls[0];
                 Response<List<JsonObject>> response = call.execute();
+
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://backend.example.com")
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
                 return response.body().toString();
             } catch (IOException e) {
                 Log.e(TAG, e.toString());

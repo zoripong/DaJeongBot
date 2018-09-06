@@ -3,6 +3,7 @@ package com.dajeong.chatbot.dajeongbot.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,7 +52,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private View vUser;
     private View vSlot;
     private View vCarousel;
-    private int count;
+    private int count=0;
+
+    Bundle bundle;
 
     public ChatAdapter(FragmentManager fragmentManager, LinkedList<Chat> chats, Context context) {
         this.mFragmentManager = fragmentManager;
@@ -82,7 +85,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        Chat chat = mChats.get(position);
+        final Chat chat = mChats.get(position);
         switch (holder.getItemViewType()) {
             case 0:
                 ChatBotHolder chatBotHolder = (ChatBotHolder) holder;
@@ -121,6 +124,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 // FIXME Test Code
 
                 final ArrayList<Memory> memories = new ArrayList<>();
+
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..1"));
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..2"));
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..3"));
@@ -133,32 +137,32 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 //TODO: TextView 현재 인덱스 값으로 set, Button에 넣기
 
                 final CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
-                chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter); // viewpager 에 adapter 달아주기
-                chatBotCarouselHolder.mTvSchedule.setText(memories.indexOf(memories.get(1))+"번째 일정");
-                chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
+                chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
+                chatBotCarouselHolder.mTvSchedule.setText(memories.get(carouselPagerAdapter.getCount()).getContent());
 
-//                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
-//                        if(viewPager.getCurrentItem() > 0)
-//                            viewPager.setCurrentItem(viewPager.getCurrentItem()-1, true);
-//                        else if(viewPager.getCurrentItem()==0)
-//                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.INVISIBLE);
-//                        else
-//                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.VISIBLE);
-//                    }
-//                });
-//
-//                chatBotCarouselHolder.mBtNext.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
-//                        if(viewPager.getCurrentItem() < memories.size()-1)
-//                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1, true);
-//
-//                    }
-//                });
+                chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
+                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
+                        if (viewPager.getCurrentItem()>0){
+                            viewPager.setCurrentItem(viewPager.getCurrentItem()-1,true);
+                        } else if(viewPager.getCurrentItem()==0){
+                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.INVISIBLE);
+                        } else {
+                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+                chatBotCarouselHolder.mBtNext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
+                        if (viewPager.getCurrentItem()<memories.size()-1){
+                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1,true);
+                        }
+                    }
+                });
 
                 break;
 
@@ -172,14 +176,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
-        ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
+//        ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
 //        mViewPagerState.put(holder.getAdapterPosition(), chatBotCarouselHolder.mVpimage.getCurrentItem());
     }
 
     @Override
     public int getItemViewType(int position) {
         //
-
         if (mChats.get(position).getSender() != null) {
             // 챗봇이 전송
             if (mChats.get(position).getNodeType() == NodeType.SLOT_NODE
@@ -214,9 +217,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
             final JsonObject option = options.get(i).getAsJsonObject();
             Button myButton = new Button(mContext);
+
+            // 가로, 세로, 마진
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(7,3,7,7);
+            myButton.setLayoutParams(lp);
             myButton.setText(option.get("label").getAsString());
-            // 가로 세로 지정
-            myButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
             // 스타일 지정
             TypedValue typedValue = new TypedValue();
@@ -226,7 +232,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
 //                myButton.setBackgroundColor(typedValue.data);
             }
-
             // 배경 지정
             final int version = Build.VERSION.SDK_INT;
             if (version >= 21) {
@@ -235,21 +240,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 myButton.setBackground(mContext.getResources().getDrawable(R.drawable.chatbot_tv_slot_custom));
             }
 
-            // 마진 지정
-//            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) myButton.getLayoutParams();
-//            p.bottomMargin = 5;
-//            int dp = (int)convertPixelsToDp(5.0f);
-//            p.setMargins(5, 5, 5, 5);
-//            myButton.requestLayout();
-
-//            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) myButton.getLayoutParams();
-//            layoutParams.setMargins(5,5,5,5);
-//            myButton.setLayoutParams(layoutParams);
-
             myButton.setId(i);
             final int id_ = myButton.getId();
-
-//            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
+            //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
 
             myButton.setOnClickListener(new View.OnClickListener() {
@@ -340,6 +333,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public Fragment getItem(final int position) {
+            count++;
             return CarouselFragment.newInstance(position, memories.get(position));
         }
 
@@ -348,9 +342,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return memories.size();
         }
 
-        public void setPosition(int i){
-
-        }
 
     }
 

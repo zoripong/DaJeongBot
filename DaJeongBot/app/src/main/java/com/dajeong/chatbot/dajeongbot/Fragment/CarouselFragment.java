@@ -22,11 +22,13 @@ import com.dajeong.chatbot.dajeongbot.model.Memory;
  */
 
 public class CarouselFragment extends Fragment {
-    private static final String APG_PARM1 = "parm1";
+    private static final String LIST_MEMORY = null;
     private static int mPosition;
-    private TextView mTv;
+    private TextView mTvContent;
 
-    private String mParm1;
+    private String Content;
+    private int count=0;
+
     public CarouselFragment() {
 
     }
@@ -35,8 +37,9 @@ public class CarouselFragment extends Fragment {
         mPosition = position;
         CarouselFragment fragment = new CarouselFragment();
         Bundle args = new Bundle();
-        args.putString(APG_PARM1, memory.getContent());
+        args.putString(LIST_MEMORY, memory.getContent());
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -44,7 +47,7 @@ public class CarouselFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParm1 = getArguments().getString(APG_PARM1);
+            Content = getArguments().getString(LIST_MEMORY);
         }
     }
 
@@ -56,25 +59,25 @@ public class CarouselFragment extends Fragment {
 
         Button btnNext = rootView.findViewById(R.id.btn_carousel_next);
         Button btnPrevious = rootView.findViewById(R.id.btn_carousel_previous);
-        mTv = rootView.findViewById(R.id.textview);
 
-        mTv.setText(mParm1);
+        mTvContent = rootView.findViewById(R.id.textview);
 
+        mTvContent.setText(Content);
         //TODO: 버튼으로 fragment 넘기기
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-        btnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+//        btnNext.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//            }
+//        });
+//        btnPrevious.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
         return rootView;
     }
