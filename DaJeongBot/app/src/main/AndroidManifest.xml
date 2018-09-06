@@ -39,7 +39,7 @@
         </service>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_add" />
+            android:resource="@drawable/ic_notify_chat" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
