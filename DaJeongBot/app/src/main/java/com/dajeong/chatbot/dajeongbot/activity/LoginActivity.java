@@ -235,6 +235,10 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
                 JSONObject response = new JSONArray(result).getJSONObject(0);
+                if (response==null){
+                    Log.e(TAG,"에러다ㅏㅏ  response가 null");
+                }
+                else Log.e(TAG,"에러 아니다ㅏㅏ  response가 null 아니지롱");
                 if(response.getString("status").equals("OK")){
                     saveUserInfo(response.getJSONObject("user_info"));
 
