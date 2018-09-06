@@ -27,6 +27,9 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +64,9 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        onNewIntent(getIntent());
+
         init();
         getMessage();
 
@@ -195,6 +201,22 @@ public class MainActivity extends AppCompatActivity  {
         mStringNodeTypeMap.put("speak", NodeType.SPEAK_NODE);
         mStringNodeTypeMap.put("slot", NodeType.SLOT_NODE);
         mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
+
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        String notificationMessage = extras.getString("data", "UNDEFINED");
+        try {
+            JSONObject jsonObject = new JSONObject(notificationMessage);
+            Log.e(TAG, jsonObject.getString("a"));
+            Toast.makeText(getApplicationContext(), jsonObject.getString("a"), Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e(TAG, notificationMessage);
     }
 
     @NonNull

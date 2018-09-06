@@ -9,16 +9,24 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
+import com.dajeong.chatbot.dajeongbot.activity.SplashActivity;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobService;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
@@ -42,31 +50,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // [END_EXCLUDE]
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Log.e(TAG, "Foreground");
+            Log.e(TAG, "Message data payload: " + remoteMessage.getData());
+            Log.e(TAG, "Message type " + remoteMessage.getClass());// com.google.firebase.messaging.RemoteMessage
+            Log.e(TAG, "Message type " + remoteMessage.getData().getClass()); // android.support.v4.util.ArrayMap
 
-            if (remoteMessage.getData().size() > 0) {
-                Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Map<String, String> params = remoteMessage.getData();
+            JSONObject object = new JSONObject(params);
 
-                if (/* Check if data needs to be processed by long running job */ true) {
-                    // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                    scheduleJob();
-                } else {
-                    // Handle message within 10 seconds
-                    handleNow();
-                }
-
+            try {
+                sendNotification(object.getString("title"), object.getString("body"), object.getString("data"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(TAG, "잉?"+e.toString());
             }
+//                if (/* Check if data needs to be processed by long running job */ true) {
+//                    // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
+//                    scheduleJob();
+//                } else {
+//                    // Handle message within 10 seconds
+//                    handleNow();
+//                }
 
         }
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
+
+//        // Check if message contains a notification payload.
+//        if (remoteMessage.getNotification() != null) {
+//            Log.e(TAG, "Background");
+//            Log.e(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+////            sendNotification(remoteMessage.getNotification().getBody());
+//        }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -100,12 +116,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageTitle, String messageBody) {
+    private void sendNotification(String messageTitle, String messageBody, String data) {
         Log.e(TAG, "sendNotification"+messageBody);
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("data", data);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -131,6 +149,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify((int) System.currentTimeMillis() /* ID of notification */, notificationBuilder.build());
     }
 }
