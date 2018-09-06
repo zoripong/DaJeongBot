@@ -38,7 +38,6 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="7dp"
-        android:background="@drawable/chatbot_tv_custom"
         android:text="자세한 일정이 있어?"
         />
     <LinearLayout

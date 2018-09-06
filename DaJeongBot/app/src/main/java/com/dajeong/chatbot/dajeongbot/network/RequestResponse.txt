@@ -237,3 +237,102 @@ Response
 	"new_token" : "adsade"
 }
 
+
+
+#일정 후기 등록
+# request
+
+
+#response
+# 후기등록 이라고 챗봇에 메세지 request 를 요청한 후 받은 response 의 값입니다.
+RESPONSE
+{
+    "responseSet": {
+        "code": "success",
+        "result": {
+            "version": "0.1",
+            "chatbot_id": "9c94e975-49c8-4a08-bdfe-b19085ecf42f",
+            "user_id": "",
+            "input_sentence": "새로운 일정이 생김",
+            "ins_id": "55723884",
+            "intent_id": "25e87c92-a2a9-4aea-85c5-34860f40d328",
+            "ref_intent_id": "2933dbcf-5717-42aa-8bf1-ed37599cd722",
+            "chatflow_id": "FLOW1533045900000",
+            "node_id": "SlotNode_1533084112968",
+            "param_id": "where",
+            "another_result": [],
+            "result": [
+                {
+                    "nodeType": "speak",
+                    "timestamp": 1535265568661,
+                    "message": "할 일이 생겼구나! 어떤 건데?",
+                    "imgRoute": "",
+                    "optionList": [],
+                    "carouselList": [],
+                    "quickList": []
+                },
+                {
+                    "nodeType": "slot",
+                    "timestamp": 1535265568875,
+                    "message": "어디서 하나요?",
+                    "imgRoute": "",
+                    "optionList": [],
+                    "carouselList": [],
+                    "quickList": []
+                }
+            ],
+            "debugging_result": [],
+            "parameters": {
+                "@chatbotName": "Dajeong",
+                "@message": "할 일이 생겼구나! 어떤 건데?",
+                "sysany": "",
+                "what": "",
+                "@sessionId": "15404613",
+                "where": "",
+                "detail": "",
+                "detail_content": "",
+                "when": "",
+                "status": "3"
+            },
+            "emotions": {},
+            "session_id": 15404613,
+            "log_id": 167310938,
+            "debugCode": "",
+            "debugMsg": "",
+            "evaluate_setting": "N",
+            "greetingYn": "N",
+            "resultStatus": {
+                "resultCmt": "",
+                "resultCode": "200",
+                "resultMsg": "success"
+            },
+            "personalityObj": {
+                "intentId": "",
+                "nodeMessage": "",
+                "isChatflow": ""
+            },
+            "pauseFlowInsList": [],
+            "extension": {},
+            "channel_id": "0",
+            "flow_type": ""
+        }
+    }
+}
+
+# 일정 알람
+request
+
+
+response
+ {
+     "status": "Success",
+     "result" : {
+          "node_type" : 0,
+          "id": 0,
+          "chat_type" : 3,
+          "time" : 123456,
+          "img_url": [],
+          "content" : ["너는 그날 강변역에서 피크닉 햇구나. 너가 즐거웠다고 말했어.", "또 궁금한 일정이 있니?"]
+     }
+
+ }

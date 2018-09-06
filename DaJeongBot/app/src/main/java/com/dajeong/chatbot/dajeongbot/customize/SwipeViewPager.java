@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 
 public class SwipeViewPager extends ViewPager {
 
-    private boolean enabled;
+    private boolean enabled = false;
 
     public SwipeViewPager(Context context){super(context);}
 

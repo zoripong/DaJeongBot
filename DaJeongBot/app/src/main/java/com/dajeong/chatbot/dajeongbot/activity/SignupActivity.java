@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 
 import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.fragment.InputNameFragment;
@@ -39,16 +40,15 @@ public class SignupActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_input_info);
 
         Intent intent = getIntent();
         mAccountType = intent.getIntExtra("account_type", -1);
         mToken = intent.getStringExtra("token");
-
-        Log.e(TAG, String.valueOf(mAccountType));
-        if(mAccountType > AccountType.BASIC_ACCOUNT){
-            setCurrentItem(2, true);
-        }
 
 
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -61,6 +61,13 @@ public class SignupActivity extends AppCompatActivity{
                 return true;
             }
         });
+
+        Log.e(TAG, String.valueOf(mAccountType));
+        if(mAccountType > AccountType.BASIC_ACCOUNT){
+            setCurrentItem(2, true);
+        }
+
+
 
 
 //        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {

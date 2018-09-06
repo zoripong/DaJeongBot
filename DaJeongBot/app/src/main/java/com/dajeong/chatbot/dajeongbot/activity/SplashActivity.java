@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
@@ -37,6 +38,11 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 액션바 없애기
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_splash);
         getHashKey();
         test();

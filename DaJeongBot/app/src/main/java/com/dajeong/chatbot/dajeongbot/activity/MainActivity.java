@@ -27,6 +27,9 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,10 +64,15 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        onNewIntent(getIntent());
+
         init();
         getMessage();
 
         showProgressBar();
+
+        test();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvChatList.setHasFixedSize(true);
@@ -180,10 +188,10 @@ public class MainActivity extends AppCompatActivity  {
         mEtMessage = findViewById(R.id.etMessage);
         mChats = new LinkedList<>();
         mRvChatList = findViewById(R.id.rvChatList);
-        mChatAdapter = new ChatAdapter(mChats, MainActivity.this);
+        mChatAdapter = new ChatAdapter(getSupportFragmentManager(), mChats, MainActivity.this);
 
         mBotChar = setBot();
-        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
+//        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         mIsLoad = false;
         mMoreChat = true;
         mChatType = ChatType.BASIC_CHAT;
@@ -193,13 +201,29 @@ public class MainActivity extends AppCompatActivity  {
         mStringNodeTypeMap.put("speak", NodeType.SPEAK_NODE);
         mStringNodeTypeMap.put("slot", NodeType.SLOT_NODE);
         mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
+
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        String notificationMessage = extras.getString("data", "UNDEFINED");
+        try {
+            JSONObject jsonObject = new JSONObject(notificationMessage);
+            Log.e(TAG, jsonObject.getString("a"));
+            Toast.makeText(getApplicationContext(), jsonObject.getString("a"), Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e(TAG, notificationMessage);
     }
 
     @NonNull
     private Character setBot(){
         int charImage = R.drawable.ic_char1;
         String charNames[] = {"다정군", "다정냥", "다정곰", "다정몽"};
-        int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type") ;
+        int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
 
         return new Character(charNames[charType=1], charImage+charType);
     }
@@ -369,7 +393,9 @@ public class MainActivity extends AppCompatActivity  {
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
     }
 
-
-
+    private void test(){
+        hideProgressBar();
+        mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
+    }
 
 }

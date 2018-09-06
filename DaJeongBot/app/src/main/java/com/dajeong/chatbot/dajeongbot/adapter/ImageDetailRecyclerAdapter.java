@@ -83,22 +83,6 @@ public class ImageDetailRecyclerAdapter extends RecyclerView.Adapter<ImageDetail
                         .priority(Priority.HIGH))
                 .into(holder.imageView);
 
-//        holder.commentEt.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                mComments.set(position, holder.commentEt.getText().toString());
-//            }
-//        });
-
     }
 
 
