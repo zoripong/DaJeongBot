@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dajeong.chatbot.dajeongbot.adapter.EventAdapter;
@@ -68,6 +69,15 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
     private String mDate;
 
     private String[] result;
+    String strToday;
+    private boolean isTodayEvent=false; //오늘 날짜에 이벤트가 있는지 확인
+
+    LinearLayout scheduleList;
+    LinearLayout noScheduleList;
+
+    String shot_Day;
+
+    TextView selectDay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +96,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         Calendar instance = Calendar.getInstance();
         widget.setSelectedDate(instance);
         //오늘 날짜로 변경
+        getToday();
         TextView selectDay = (TextView) findViewById(R.id.select_day_tv);
         selectDay.setText(instance.get(Calendar.YEAR)+"."+(instance.get(Calendar.MONTH) + 1)+"."+instance.get(Calendar.DAY_OF_MONTH));
         //캘린더 header format 변경하기
@@ -105,6 +116,8 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                 oneDayDecorator
         );
 
+        scheduleList=(LinearLayout)findViewById(R.id.schedule_li);
+        noScheduleList=(LinearLayout)findViewById(R.id.no_schedule_li);
         getEventList();
 
     }
@@ -112,6 +125,8 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
         mEvents.clear(); //리사이클러 뷰에 있는 데이터 지우기
+        scheduleList.setVisibility(View.VISIBLE);
+        noScheduleList.setVisibility(View.GONE);
         oneDayDecorator.setDate(date.getDate());
         widget.invalidateDecorators();
 
@@ -139,19 +154,24 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         Log.i("Month test", Month + "");
         Log.i("Day test", Day + "");
 
-        String shot_Day = Year + "." + Month + "." + Day;
+        shot_Day = Year + "." + Month + "." + Day;
 
         Log.i("shot_Day test", shot_Day + "");
 
         widget.addDecorator(new MySelectorDecorator(CalendarActivity.this));
 
-        TextView selectDay = (TextView) findViewById(R.id.select_day_tv);
-        selectDay.setText(shot_Day);
 
+        selectDay = (TextView) findViewById(R.id.select_day_tv);
+        selectDay.setText("");
         getSchedule(); //선택한 날짜의 일정 가져오기
 
         mEventAdapter = new EventAdapter(mEvents);
         mRvEventList.setAdapter(mEventAdapter);
+        if(mEventAdapter.getItemCount()==0){
+            Log.e(TAG,"선택된 날은 일정이 없음");
+//            scheduleList.setVisibility(View.GONE);
+//            noScheduleList.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -193,6 +213,14 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         return true;
     }
 
+    public void getToday(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c1 = Calendar.getInstance();
+        strToday = sdf.format(c1.getTime());
+        //strToday="2018-09-05";
+        Log.e(TAG,"strToday >> "+strToday);
+    }
+
     private  void getEventList(){
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         final Call<ArrayList<String>> EventList = NetRetrofit.getInstance(getApplicationContext()).getService().getDatesHavingEvent(mAccountId);
@@ -208,6 +236,14 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
                 for(String date : dates){
                     Log.e(TAG, date);
+                    if(date.equals(strToday)){
+                        isTodayEvent=true; //오늘 일정이 있을 경우 true
+                        Log.e(TAG,"오늘 일정 있음");
+                    }
+                    else{ //일정 없음
+                        scheduleList.setVisibility(View.GONE);
+                        noScheduleList.setVisibility(View.VISIBLE);
+                    }
                     String[] time = date.split("-");
                     calendar.set(Integer.parseInt(time[0]),Integer.parseInt(time[1]) -1 ,Integer.parseInt(time[2]));
                     calendarDays.add(CalendarDay.from(calendar));
@@ -251,7 +287,10 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
                 if(body.size() == 0){
                     Log.i(TAG, "event info is not exist");
+                    scheduleList.setVisibility(View.GONE);
+                    noScheduleList.setVisibility(View.VISIBLE);
                 }else{
+                    selectDay.setText(shot_Day);
                     mEventAdapter.notifyDataSetChanged();
                 }
 
