@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis()), null));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -279,12 +279,16 @@ public class MainActivity extends AppCompatActivity  {
 
         ArrayList<JsonObject> body = response.body();
 
+        // TODO: 이미지 노드 추가하기
         for(JsonObject json : body){
-            if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0)
-                mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
-            else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1)
-                mChats.addFirst(new Chat(json.get("chat_type").getAsInt(), mBotChar,json.get("content").getAsString(), json.get("time").getAsString()));
+            // 챗봇인지 아닌지 확인하기
 
+            if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
+                mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+            }
+            else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
+                mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
+            }
 //            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
 
         }
@@ -327,7 +331,8 @@ public class MainActivity extends AppCompatActivity  {
                         mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
                     JsonArray jsonArray = mJsonResponse.getAsJsonArray( "result");
                     for( int i = 0; i<jsonArray.size(); i++ ){
-
+                        String imgUrl = jsonArray.get(i).getAsJsonObject().get("imgRoute").getAsString();
+                        // TODO : 이미지 노드 추가하기
                         String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
                         String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
                         String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();

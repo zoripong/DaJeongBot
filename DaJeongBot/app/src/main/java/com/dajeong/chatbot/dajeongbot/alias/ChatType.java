@@ -5,5 +5,6 @@ public interface ChatType {
     int REGISTER_CHAT = 1;
     int MEMORY_CHAT = 2;
     int NOTIFICATION_CHAT = 3;
+    int QUESTION_SCHEDULE_CHAT = 4;
 
 }
