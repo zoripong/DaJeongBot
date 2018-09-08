@@ -1,9 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,24 +9,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.CellInfoWcdma;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.customize.SwipeViewPager;
 import com.dajeong.chatbot.dajeongbot.fragment.CarouselFragment;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -52,9 +45,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private View vUser;
     private View vSlot;
     private View vCarousel;
-    private int count=0;
+    private int count = 0;
+    private ArrayList<Memory> memories = new ArrayList<>();
 
-    Bundle bundle;
 
     public ChatAdapter(FragmentManager fragmentManager, LinkedList<Chat> chats, Context context) {
         this.mFragmentManager = fragmentManager;
@@ -123,8 +116,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 // FIXME Test Code
 
-                final ArrayList<Memory> memories = new ArrayList<>();
-
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..1"));
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..2"));
                 memories.add(new Memory("이미지 입니다.. ", "일정이지요..3"));
@@ -138,29 +129,28 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 final CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
-                chatBotCarouselHolder.mTvSchedule.setText(memories.get(carouselPagerAdapter.getCount()).getContent());
-
+                chatBotCarouselHolder.mTvSchedule.setText("1번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
-                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
+                chatBotCarouselHolder.mLiPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
+                chatBotCarouselHolder.mLiNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
+                chatBotCarouselHolder.mBtPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
+                chatBotCarouselHolder.mBtNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
+
+                chatBotCarouselHolder.mVpimage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
-                    public void onClick(View v) {
-                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
-                        if (viewPager.getCurrentItem()>0){
-                            viewPager.setCurrentItem(viewPager.getCurrentItem()-1,true);
-                        } else if(viewPager.getCurrentItem()==0){
-                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.INVISIBLE);
-                        } else {
-                            chatBotCarouselHolder.mBtPrevious.setVisibility(View.VISIBLE);
-                        }
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                        count = position;
                     }
-                });
-                chatBotCarouselHolder.mBtNext.setOnClickListener(new View.OnClickListener() {
+
                     @Override
-                    public void onClick(View v) {
-                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
-                        if (viewPager.getCurrentItem()<memories.size()-1){
-                            viewPager.setCurrentItem(viewPager.getCurrentItem()+1,true);
-                        }
+                    public void onPageSelected(final int position) {
+                        count = position;
+                        chatBotCarouselHolder.CarouselBtnHandler();
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
                     }
                 });
 
@@ -168,6 +158,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             default:
                 return;
+
         }
 
 
@@ -220,7 +211,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // 가로, 세로, 마진
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(7,3,7,7);
+            lp.setMargins(7, 3, 7, 7);
             myButton.setLayoutParams(lp);
             myButton.setText(option.get("label").getAsString());
 
@@ -307,6 +298,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ViewPager mVpimage;
         TextView mTvTime;
         Button mBtNext, mBtPrevious; // layout view_test.xml
+        LinearLayout mLiPrevious, mLiNext;
 
         public ChatBotCarouselHolder(View itemView) {
             super(itemView);
@@ -317,8 +309,41 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mBtNext = itemView.findViewById(R.id.btn_carousel_next);
             mBtPrevious = itemView.findViewById(R.id.btn_carousel_previous);
             mTvTime = itemView.findViewById(R.id.tvTime);
+            mLiNext = itemView.findViewById(R.id.linear_next);
+            mLiPrevious = itemView.findViewById(R.id.linear_previous);
+        }
 
 
+        public View.OnClickListener CarouselBtnHandler() {
+            switch (vCarousel.getId()) {
+                case R.id.btn_carousel_previous:
+                case R.id.linear_previous:
+                    count--;
+                    break;
+                case R.id.btn_carousel_next:
+                case R.id.linear_next:
+                    count++;
+                    break;
+            }
+            if (count == 0) {
+                mLiPrevious.setVisibility(View.INVISIBLE);
+                mLiNext.setVisibility(View.VISIBLE);
+                mBtPrevious.setVisibility(View.INVISIBLE);
+                mBtNext.setVisibility(View.VISIBLE);
+            } else if (count == memories.size() - 1) {
+                mLiPrevious.setVisibility(View.VISIBLE);
+                mLiNext.setVisibility(View.INVISIBLE);
+                mBtNext.setVisibility(View.INVISIBLE);
+                mBtPrevious.setVisibility(View.VISIBLE);
+            } else {
+                mLiPrevious.setVisibility(View.VISIBLE);
+                mLiNext.setVisibility(View.VISIBLE);
+                mBtNext.setVisibility(View.VISIBLE);
+                mBtPrevious.setVisibility(View.VISIBLE);
+            }
+            mVpimage.setCurrentItem(count);
+            mTvSchedule.setText(count + 1 + "번째 일정");
+            mBtText.setText(memories.get(count).getContent());
         }
     }
 
@@ -333,7 +358,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public Fragment getItem(final int position) {
-            count++;
             return CarouselFragment.newInstance(position, memories.get(position));
         }
 
@@ -344,7 +368,5 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     }
-
-
 
 }

@@ -39,7 +39,6 @@ public class CarouselFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(LIST_MEMORY, memory.getContent());
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -57,27 +56,9 @@ public class CarouselFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         @SuppressLint("ResourceType") final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_test, container, false);
 
-        Button btnNext = rootView.findViewById(R.id.btn_carousel_next);
-        Button btnPrevious = rootView.findViewById(R.id.btn_carousel_previous);
-
         mTvContent = rootView.findViewById(R.id.textview);
 
         mTvContent.setText(Content);
-        //TODO: 버튼으로 fragment 넘기기
-
-//        btnNext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//            }
-//        });
-//        btnPrevious.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
 
         return rootView;
     }

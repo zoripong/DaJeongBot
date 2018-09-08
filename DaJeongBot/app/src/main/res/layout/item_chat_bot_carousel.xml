@@ -2,11 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/chat_"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
 
     <ImageView
         android:id="@+id/ivSenderProfile"
@@ -18,73 +18,113 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="5dp" />
-        <LinearLayout
-            android:id="@+id/liContent"
+
+    <LinearLayout
+        android:id="@+id/liContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/chatbot_tv_custom"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivSenderProfile"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/chatbot_tv_custom"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivSenderProfile"
-            app:layout_constraintTop_toTopOf="parent">
-            <TextView
-                android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="7dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="7dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/schedule"
-                android:gravity="center"
-                />
-            <TextView
-                android:id="@+id/tvSchedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="7dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text=""
-                android:textColor="@color/black"
-                />
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingBottom="7dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="7dp"
+            android:text="@string/schedule" />
+
+        <TextView
+            android:id="@+id/tvSchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text=""
+            android:textColor="@color/black" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="235dp"
+            android:layout_height="190dp">
+
+            <LinearLayout
+                android:id="@+id/linear_previous"
+                android:layout_width="30dp"
+                android:layout_height="190dp"
+                android:gravity="center_vertical|center_horizontal"
+                >
+
+                <Button
+                    android:id="@+id/btn_carousel_previous"
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/btn_previous" />
+            </LinearLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp"
-                android:layout_width="235dp"
+                android:layout_width="175dp"
                 android:layout_height="190dp"
-                android:layout_gravity="center"
-                tools:ignore="InvalidId" />
-            <Button
-                android:id="@+id/btText"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text=""
-                android:layout_marginTop="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="4dp"
-                style="?android:attr/borderlessButtonStyle"
-                android:background="@drawable/chatbot_tv_slot_custom"
-                />
-        </LinearLayout>
+                app:layout_constraintStart_toEndOf="@+id/linear_previous"
+                tools:ignore="MissingConstraints"
+                app:layout_constraintRight_toRightOf="@+id/linear_previous"></android.support.v4.view.ViewPager>
+
+            <LinearLayout
+                android:id="@+id/linear_next"
+                android:layout_width="28dp"
+                android:layout_height="190dp"
+                android:gravity="center_vertical|center_horizontal"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <Button
+                    android:id="@+id/btn_carousel_next"
+                    android:layout_width="10dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/btn_next" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+        <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/vp"-->
+        <!--android:layout_width="235dp"-->
+        <!--android:layout_height="190dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--tools:ignore="InvalidId" />-->
+        <Button
+            android:id="@+id/btText"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/chatbot_tv_slot_custom"
+            android:text="" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:paddingBottom="8dp"
         android:text="10:10"
         android:textSize="11sp"
-        app:layout_constraintStart_toEndOf="@+id/liContent"
-        tools:layout_editor_absoluteY="41dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:paddingBottom="8dp"/>
+        app:layout_constraintStart_toEndOf="@+id/liContent"
+        tools:layout_editor_absoluteY="41dp" />
 
 </android.support.constraint.ConstraintLayout>
