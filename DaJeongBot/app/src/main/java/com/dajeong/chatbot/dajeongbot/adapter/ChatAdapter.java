@@ -162,6 +162,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 break;
 
+            case 4:
+                // 챗봇이 보낸 이미지 채팅 ui
+                break;
+            case 5:
+                // 사용자가 보낸 이미지 채팅 ui
+                break;
+
             default:
                 return;
         }
@@ -193,10 +200,23 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 // carousel node 일 경우
                 return 3;
             }
+            if (mChats.get(position).getNodeType() == NodeType.IMAGE_NODE) {
+                // image  node 일 경우
+                return 4;
+            }
+
+
+
 
             return 0;
         } else {
             // 사용자가 전송
+
+            if (mChats.get(position).getNodeType() == NodeType.IMAGE_NODE) {
+                // image node 일 경우
+
+                return 5;
+            }
             return 1;
         }
 
