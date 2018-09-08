@@ -137,7 +137,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mTvSchedule.setText(memories.indexOf(memories.get(1))+"번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
 
-//                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() { 
+//                chatBotCarouselHolder.mBtPrevious.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
 //                        ViewPager viewPager = chatBotCarouselHolder.mVpimage;
