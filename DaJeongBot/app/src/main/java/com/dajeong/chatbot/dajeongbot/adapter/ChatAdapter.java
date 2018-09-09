@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
@@ -124,7 +125,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotCarouselHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotCarouselHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-                ArrayList<Memory> memories = chat.getCarouselList();
+                final ArrayList<Memory> memories = chat.getCarouselList();
                 chatBotCarouselHolder.setMemories(memories);
 
                 //TODO: TextView 현재 인덱스 값으로 set, Button에 넣기
@@ -134,6 +135,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
                 chatBotCarouselHolder.mTvSchedule.setText("1번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
+
                 chatBotCarouselHolder.mLiPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
                 chatBotCarouselHolder.mLiNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
                 chatBotCarouselHolder.mBtPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
@@ -153,6 +155,25 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     @Override
                     public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+
+                // 버튼 선택
+                chatBotCarouselHolder.mBtText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // ChatType : Memory와 Question 분리하기
+                        Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
+                        int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
+                        String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
+                        int chatType = ChatType.QUESTION_SCHEDULE_CHAT;
+                        long time = System.currentTimeMillis();
+                        int isBot = 0;
+
+                        ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
+                        notifyDataSetChanged();
 
                     }
                 });
@@ -198,7 +219,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             if (mChats.get(position).getNodeType() == NodeType.CAROUSEL_NODE
-                    /*&& mChats.get(position).getCarouselList() != null*/) {
+                    && mChats.get(position).getCarouselList() != null) {
                 // carousel node 일 경우
                 return 3;
             }

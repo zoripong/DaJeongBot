@@ -31,7 +31,7 @@ public class CarouselFragment extends Fragment {
     public static CarouselFragment newInstance(int position, Memory memory) {
         CarouselFragment fragment = new CarouselFragment();
         Bundle args = new Bundle();
-        args.putInt(LIST_MEMORY, memory.getImage());
+        args.putString(LIST_MEMORY, memory.getImage());
         fragment.setArguments(args);
         return fragment;
     }

@@ -28,6 +28,7 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Node;
@@ -213,8 +214,12 @@ public class MainActivity extends AppCompatActivity  {
         String notificationMessage = extras.getString("data", "UNDEFINED");
         try {
             JSONObject jsonObject = new JSONObject(notificationMessage);
-            Log.e(TAG, jsonObject.getString("a"));
-            Toast.makeText(getApplicationContext(), jsonObject.getString("a"), Toast.LENGTH_LONG).show();
+            Log.e(TAG, jsonObject.getString("status"));
+            if(jsonObject.has("status")){
+                // FCM Message로 Open
+
+            }
+            Toast.makeText(getApplicationContext(), jsonObject.getString("status"), Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -275,23 +280,46 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void controlJsonObj(Response<ArrayList<JsonObject>> response){
-
         Log.e(TAG, "HERE"+String.valueOf(mAccountId));
 
         ArrayList<JsonObject> body = response.body();
 
         // TODO: 이미지 노드 추가하기
-        for(JsonObject json : body){
-            // 챗봇인지 아닌지 확인하기
 
-            if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-                mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+        for(int i = 0 ; i<body.size(); i++){
+            JsonObject json  = body.get(i).getAsJsonObject();
+            if(json.get("carousel_list").isJsonNull()){
+                // 챗봇인지 아닌지 확인하기
+                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+                }
+                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
+                }
+            }else{
+                Log.e(TAG, json.toString());
+                Log.e(TAG, json.get("carousel_list").getAsString());
+                JSONArray carouselList = null;
+                ArrayList<Memory> memories = new ArrayList<>();
+                try {
+                    carouselList = new JSONArray(json.get("carousel_list").getAsString());
+                    for(int j = 0; j<carouselList.length(); j++){
+                        memories.add(new Memory(carouselList.getJSONObject(j).getInt("id"), null,
+                                carouselList.getJSONObject(j).getString("schedule_where")+"에서"+carouselList.getJSONObject(j).getString("schedule_what")));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.e(TAG, "memories Length is "+ memories.size());
+                Log.e(TAG, "node_type is "+ json.get("node_type").getAsInt());
+                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), memories));
+                }
+                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), memories));
+                }
             }
-            else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-                mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
-            }
-//            Log.e(TAG, "얍"+String.valueOf(json.get("content"))+"/"+mChats.size());
-
+            mChatType = json.get("chat_type").getAsInt();
         }
         if(body.size() == 0 ){
             // 더이상의 대화 내역이 없음
@@ -306,7 +334,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-
+        Log.e(TAG, "이 대화의 타입은"+chatType);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
@@ -346,7 +374,7 @@ public class MainActivity extends AppCompatActivity  {
                                         }else{
                                             if(events.size() > 0){
                                                 ArrayList<Memory> memories = new ArrayList<>();
-                                                for(int j = 0; i<events.size(); j++){
+                                                for(int j = 0; j<events.size(); j++){
                                                     Log.e(TAG, "event"+j);
                                                     JsonObject event = events.get(j).getAsJsonObject();
                                                     memories.add(new Memory(event.get("id").getAsInt(), event.get("event_detail").getAsString(), event.get("event_image").getAsString()));
@@ -414,6 +442,10 @@ public class MainActivity extends AppCompatActivity  {
 
     private void hideProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
+    }
+
+    public int getCurrentChatType(){
+        return mChatType;
     }
 
     private void test(){

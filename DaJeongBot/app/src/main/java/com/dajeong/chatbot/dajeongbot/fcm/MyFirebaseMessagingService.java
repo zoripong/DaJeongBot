@@ -61,7 +61,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             JSONObject object = new JSONObject(params);
 
             try {
-                sendNotification(object.getString("title"), object.getString("body"), object.getString("data"));
+                sendNotification(object.getString("title"), object.getString("message"), object.getString("data"));
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e(TAG, "잉?"+e.toString());
