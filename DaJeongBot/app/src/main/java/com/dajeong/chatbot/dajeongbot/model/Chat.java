@@ -11,7 +11,7 @@ public class Chat {
     private String content;
     private String time;
     private JsonArray optionList;
-    private ArrayList<JsonObject> carouselList;
+    private ArrayList<Memory> carouselList;
 
     public Chat(int nodeType, Character sender, String content, String time) {
         this.nodeType = nodeType;
@@ -31,12 +31,21 @@ public class Chat {
         this.carouselList = null;
     }
 
+    public Chat(int nodeType, Character sender, String content, String time, ArrayList<Memory> carouselList) {
+        this.nodeType = nodeType;
+        this.sender = sender;
+        this.content = content;
+        this.time = time;
+        this.optionList = null;
+        this.carouselList = carouselList;
+    }
+
 
     public JsonArray getOptionList() {
         return optionList;
     }
 
-    public ArrayList<JsonObject> getCarouselList() {
+    public ArrayList<Memory> getCarouselList() {
         return carouselList;
     }
 

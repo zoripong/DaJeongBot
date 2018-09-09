@@ -7,10 +7,12 @@ import android.media.Image;
  */
 
 public class Memory {
+    private  int eventId;
     private String image;
     private String content;
 
-    public Memory(String image, String content) {
+    public Memory(int eventId, String image, String content) {
+        this.eventId = eventId;
         this.image = image;
         this.content = content;
     }

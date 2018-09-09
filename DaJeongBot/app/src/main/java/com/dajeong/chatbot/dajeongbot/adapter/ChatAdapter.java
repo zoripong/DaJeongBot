@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ import com.dajeong.chatbot.dajeongbot.model.Memory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +48,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private View vSlot;
     private View vCarousel;
     private int count = 0;
-    private ArrayList<Memory> memories = new ArrayList<>();
 
 
     public ChatAdapter(FragmentManager fragmentManager, LinkedList<Chat> chats, Context context) {
@@ -58,26 +59,26 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        vBot = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_default, parent, false);
-        vUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_user_default, parent, false);
-        vSlot = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_slot, parent, false);
-        vCarousel = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_carousel, parent, false);
         switch (viewType) {
             case 0:
+                vBot = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_default, parent, false);
                 return new ChatBotHolder(vBot);
             case 1:
+                vUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_user_default, parent, false);
                 return new ChatUserHolder(vUser);
             case 2:
+                vSlot = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_slot, parent, false);
                 return new ChatBotSlotHolder(vSlot);
             case 3:
+                vCarousel = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_carousel, parent, false);
                 return new ChatBotCarouselHolder(vCarousel);
-            default:
-                return null;
         }
+
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Chat chat = mChats.get(position);
         switch (holder.getItemViewType()) {
             case 0:
@@ -106,27 +107,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case 3:
                 // TODO: setText 로 i번째 일정 text 넣기, Button 에 일정넣기
-
                 final ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
                 chatBotCarouselHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotCarouselHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
 //                chatBotCarouselHolder.mTvTime.setText(chat.getTime());
                 chatBotCarouselHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-
-
-                // FIXME Test Code
-
-                memories.add(new Memory("이미지 입니다.. ", "일정이지요..1"));
-                memories.add(new Memory("이미지 입니다.. ", "일정이지요..2"));
-                memories.add(new Memory("이미지 입니다.. ", "일정이지요..3"));
-                memories.add(new Memory("이미지 입니다.. ", "일정이지요..4"));
-                memories.add(new Memory("이미지 입니다.. ", "일정이지요..5"));
-                memories.add(new Memory("이미지 입니다.. ", "일정이지요..6"));
-
-                // end of Test Code
+                ArrayList<Memory> memories = chat.getCarouselList();
+                chatBotCarouselHolder.setMemories(memories);
 
                 //TODO: TextView 현재 인덱스 값으로 set, Button에 넣기
-
                 final CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
                 chatBotCarouselHolder.mTvSchedule.setText("1번째 일정");
@@ -165,7 +154,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
 
             default:
-                return;
 
         }
 
@@ -239,11 +227,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // 스타일 지정
             TypedValue typedValue = new TypedValue();
             mContext.getTheme().resolveAttribute(android.R.attr.borderlessButtonStyle, typedValue, true);
-            if (typedValue.resourceId != 0) {
-//                myButton.setBackgroundResource(typedValue.resourceId);
-            } else {
-//                myButton.setBackgroundColor(typedValue.data);
-            }
+
             // 배경 지정
             final int version = Build.VERSION.SDK_INT;
             if (version >= 21) {
@@ -253,7 +237,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             myButton.setId(i);
-            final int id_ = myButton.getId();
             //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
 
@@ -272,7 +255,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mTvContent;
         TextView mTvTime;
 
-        public ChatBotHolder(View itemView) {
+        ChatBotHolder(View itemView) {
             super(itemView);
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             //mTvSenderName = itemView.findViewById(R.id.tvSenderName);
@@ -285,7 +268,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mTvContent;
         TextView mTvTime;
 
-        public ChatUserHolder(View itemView) {
+        ChatUserHolder(View itemView) {
             super(itemView);
             mTvContent = itemView.findViewById(R.id.tvContentUser);
             mTvTime = itemView.findViewById(R.id.tvTimeUser);
@@ -299,7 +282,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         boolean hasBtn;
 
-        public ChatBotSlotHolder(View itemView) {
+        ChatBotSlotHolder(View itemView) {
             super(itemView);
             mRootLayout = itemView.findViewById(R.id.ll_dynamic_btns);
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
@@ -307,7 +290,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
-        public void setHasBtn(boolean hasBtn) {
+        void setHasBtn(boolean hasBtn) {
             this.hasBtn = hasBtn;
         }
     }
@@ -320,8 +303,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView mTvTime;
         Button mBtNext, mBtPrevious; // layout view_item_carousel.xmlousel.xml
         LinearLayout mLiPrevious, mLiNext;
+        ArrayList<Memory> memories;
 
-        public ChatBotCarouselHolder(View itemView) {
+        ChatBotCarouselHolder(View itemView) {
             super(itemView);
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             mTvSchedule = itemView.findViewById(R.id.tvSchedule);
@@ -333,6 +317,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mLiNext = itemView.findViewById(R.id.linear_next);
             mLiPrevious = itemView.findViewById(R.id.linear_previous);
         }
+
+        void setMemories(ArrayList<Memory> memories){
+            this.memories = memories;
+        }
+
         View.OnClickListener CarouselBtnHandler = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -350,6 +339,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             }
         };
+        @SuppressLint("SetTextI18n")
         private void CarouselCondition(){
             if (count == 0) {
                 mLiPrevious.setVisibility(View.INVISIBLE);
@@ -387,7 +377,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private ArrayList<Memory> memories;
 
-        public CarouselPagerAdapter(FragmentManager fm, ArrayList<Memory> memories) {
+        CarouselPagerAdapter(FragmentManager fm, ArrayList<Memory> memories) {
             super(fm);
             this.memories = memories;
         }

@@ -21,6 +21,7 @@ import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
+import com.dajeong.chatbot.dajeongbot.model.Memory;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -29,6 +30,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Node;
 
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis()), null));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity  {
         mChatAdapter = new ChatAdapter(getSupportFragmentManager(), mChats, MainActivity.this);
 
         mBotChar = setBot();
-//        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
+        mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
         mIsLoad = false;
         mMoreChat = true;
         mChatType = ChatType.BASIC_CHAT;
@@ -228,7 +230,7 @@ public class MainActivity extends AppCompatActivity  {
         return new Character(charNames[charType=1], charImage+charType);
     }
 
-     private void getMessage(){
+    private void getMessage(){
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getMessages(mAccountId);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
@@ -317,61 +319,78 @@ public class MainActivity extends AppCompatActivity  {
                 Log.e(TAG, String.valueOf(response));
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 if(response.body() != null){
-                    Log.e(TAG, String.valueOf(response.body()
-                    ));
+                    Log.e(TAG, String.valueOf(response.body()));
+
                     if(response.body().has("status")){
+                        // 서버 에러
                         if(response.body().get("status").getAsString().equals("Failed")){
                             Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+                        }else if(response.body().get("status").getAsString().equals("Success")){
+                            // custom api
+                            if(response.body().has("result")){
+                                JsonObject result = response.body().getAsJsonObject("result");
+                                if(result.has("events")){
+                                    // 추억 리스트 보여주기
+                                    //TODO: 버튼 클릭할 때 request 정보
+                                    // carousel item
+                                    Log.e(TAG, "추억회상");
+
+                                    String timestamp = String.valueOf(result.get("time").getAsLong());
+
+                                    JsonArray messages = result.getAsJsonArray("contents");
+                                    JsonArray events = result.getAsJsonArray("events");
+
+                                    for(int i = 0; i<messages.size(); i++){
+                                        Log.e(TAG, "messages"+i);
+                                        if(i < messages.size()-1){
+                                            mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), timestamp));
+                                        }else{
+                                            if(events.size() > 0){
+                                                ArrayList<Memory> memories = new ArrayList<>();
+                                                for(int j = 0; i<events.size(); j++){
+                                                    Log.e(TAG, "event"+j);
+                                                    JsonObject event = events.get(j).getAsJsonObject();
+                                                    memories.add(new Memory(event.get("id").getAsInt(), event.get("event_detail").getAsString(), event.get("event_image").getAsString()));
+                                                }
+                                                mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, mBotChar, messages.get(i).getAsString(), timestamp, memories));
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
                         }
 
                     }else if(response.body().has("responseSet")){
-                    mChatType = ChatType.BASIC_CHAT;
-                    // 챗봇과 대화한 경우
-                    Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
+                        // 단비 api
+                        mChatType = ChatType.BASIC_CHAT;
+                        // 챗봇과 대화한 경우
+                        Log.e(TAG, response.body().getAsJsonObject("responseSet").getAsJsonObject("result").toString());
                         mJsonResponse = response.body().getAsJsonObject("responseSet").getAsJsonObject("result");
-                    JsonArray jsonArray = mJsonResponse.getAsJsonArray( "result");
-                    for( int i = 0; i<jsonArray.size(); i++ ){
-                        String imgUrl = jsonArray.get(i).getAsJsonObject().get("imgRoute").getAsString();
-                        // TODO : 이미지 노드 추가하기
-                        String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
-                        String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
-                        String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
-                        Log.e(TAG, "node type is " + nodeType);
-                        JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
+                        JsonArray jsonArray = mJsonResponse.getAsJsonArray( "result");
+                        for( int i = 0; i<jsonArray.size(); i++ ){
+                            String imgUrl = jsonArray.get(i).getAsJsonObject().get("imgRoute").getAsString();
+                            // TODO : 이미지 노드 추가하기
+                            String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
+                            String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
+                            String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
+                            Log.e(TAG, "node type is " + nodeType);
+                            JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
 
-                        if(options.size() > 0){
-                            //TODO : EditText enable
+                            if(options.size() > 0){
+                                //TODO : EditText enable
                                 mChats.addLast(new Chat(NodeType.SLOT_NODE, mBotChar, message, timestamp, options));
-                        }else{
-                            mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
+                            }else{
+                                mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
+                            }
                         }
-
                     }
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
-                }else if(response.body().getAsJsonObject("result").has("events")){
-                        // 추억 리스트 보여주기
-                    //TODO: 버튼 클릭할 때 request 정보
-                    // carousel item
-                    JsonObject result = response.body().getAsJsonObject("result");
-
-                    String timestamp = String.valueOf(result.get("time").getAsLong());
-
-                    JsonArray messages = result.getAsJsonArray("content");
-                    for(int i = 0; i<messages.size(); i++){
-                        mChats.addFirst(new Chat(0, mBotChar, messages.get(i).getAsString(), timestamp));
-                    }
-
-                    JsonArray events = result.getAsJsonArray("events");
-                    for(int i = 0; i<events.size(); i++){
-
-                    }
-
-                }
-//                    mChats.addLast(new Chat(mStringNodeTypeMap.get(nodeType), mBotChar, message, timestamp));
                 }else{
-                    Log.e(TAG, response.body().toString());
+                    Log.e(TAG, "a" + response.body().toString());
                 }
+
             }
 
             @Override
@@ -379,7 +398,7 @@ public class MainActivity extends AppCompatActivity  {
                 if(t instanceof SocketTimeoutException){
                     Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
                 }else{
-                    Log.e(TAG, t.toString());
+                    Log.e(TAG, "B" + t.toString());
                 }
             }
         });
