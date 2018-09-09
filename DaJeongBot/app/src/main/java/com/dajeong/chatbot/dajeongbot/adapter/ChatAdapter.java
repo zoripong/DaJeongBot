@@ -131,10 +131,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
                 chatBotCarouselHolder.mTvSchedule.setText("1번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
-                chatBotCarouselHolder.mLiPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
-                chatBotCarouselHolder.mLiNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
-                chatBotCarouselHolder.mBtPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
-                chatBotCarouselHolder.mBtNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler());
+                chatBotCarouselHolder.mLiPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
+                chatBotCarouselHolder.mLiNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
+                chatBotCarouselHolder.mBtPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
+                chatBotCarouselHolder.mBtNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
 
                 chatBotCarouselHolder.mVpimage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
@@ -145,7 +145,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     @Override
                     public void onPageSelected(final int position) {
                         count = position;
-                        chatBotCarouselHolder.CarouselBtnHandler();
+                        chatBotCarouselHolder.CarouselCondition();
+
                     }
 
                     @Override
@@ -317,7 +318,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Button mBtText;
         ViewPager mVpimage;
         TextView mTvTime;
-        Button mBtNext, mBtPrevious; // layout view_test.xml
+        Button mBtNext, mBtPrevious; // layout view_item_carousel.xmlousel.xml
         LinearLayout mLiPrevious, mLiNext;
 
         public ChatBotCarouselHolder(View itemView) {
@@ -332,19 +333,24 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mLiNext = itemView.findViewById(R.id.linear_next);
             mLiPrevious = itemView.findViewById(R.id.linear_previous);
         }
+        View.OnClickListener CarouselBtnHandler = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.btn_carousel_previous:
+                    case R.id.linear_previous:
+                        count--;
+                        break;
+                    case R.id.btn_carousel_next:
+                    case R.id.linear_next:
+                        count++;
+                        break;
+                }
+               CarouselCondition();
 
-
-        public View.OnClickListener CarouselBtnHandler() {
-            switch (vCarousel.getId()) {
-                case R.id.btn_carousel_previous:
-                case R.id.linear_previous:
-                    count--;
-                    break;
-                case R.id.btn_carousel_next:
-                case R.id.linear_next:
-                    count++;
-                    break;
             }
+        };
+        private void CarouselCondition(){
             if (count == 0) {
                 mLiPrevious.setVisibility(View.INVISIBLE);
                 mLiNext.setVisibility(View.VISIBLE);
@@ -365,8 +371,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvSchedule.setText(count + 1 + "번째 일정");
             mBtText.setText(memories.get(count).getContent());
         }
+
+
     }
 
+    private class ChatBotGifHolder extends RecyclerView.ViewHolder{
+        ImageView mIvGif;
+        public ChatBotGifHolder(View itemView) {
+            super(itemView);
+            mIvGif = itemView.findViewById(R.id.imageview_gif);
+
+        }
+    }
     public class CarouselPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Memory> memories;

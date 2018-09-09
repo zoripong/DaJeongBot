@@ -4,17 +4,12 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.dajeong.chatbot.dajeongbot.R;
-import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
-import com.dajeong.chatbot.dajeongbot.customize.SwipeViewPager;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
 
 /**
@@ -54,7 +49,7 @@ public class CarouselFragment extends Fragment {
     // 현재 viewpager 의 position
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        @SuppressLint("ResourceType") final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_test, container, false);
+        @SuppressLint("ResourceType") final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_item_carousel, container, false);
 
         mTvContent = rootView.findViewById(R.id.textview);
 
