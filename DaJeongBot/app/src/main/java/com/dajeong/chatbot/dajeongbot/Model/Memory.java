@@ -1,21 +1,21 @@
 package com.dajeong.chatbot.dajeongbot.model;
 
-import android.media.Image;
+import android.widget.ImageView;
 
 /**
  * Created by s2017 on 2018-08-31.
  */
 
 public class Memory {
-    private String image;
     private String content;
+    private int image;
 
-    public Memory(String image, String content) {
-        this.image = image;
+    public Memory(String content, int image) {
         this.content = content;
+        this.image = image;
     }
 
-    public String getImage() {
+    public int getImage() {
         return image;
     }
 
