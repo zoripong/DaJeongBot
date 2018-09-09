@@ -1,6 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.model;
 
-import android.media.Image;
+import android.widget.ImageView;
 
 /**
  * Created by s2017 on 2018-08-31.
@@ -15,6 +15,10 @@ public class Memory {
         this.eventId = eventId;
         this.image = image;
         this.content = content;
+    }
+
+    public int getEventId() {
+        return eventId;
     }
 
     public String getImage() {

@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
-    // 테스트할려면 getMoreMessage 주석처리, getMessage 주석처리 해서 테스트
     private void getMoreMessage(){
         int lastIndex = CustomSharedPreference.getInstance(getApplicationContext(), "chat").getIntPreferences("last_index");
 

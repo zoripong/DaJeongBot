@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dajeong.chatbot.dajeongbot.R;
@@ -17,11 +18,10 @@ import com.dajeong.chatbot.dajeongbot.model.Memory;
  */
 
 public class CarouselFragment extends Fragment {
-    private static final String LIST_MEMORY = null;
-    private static int mPosition;
-    private TextView mTvContent;
+    private static final String  LIST_MEMORY = null;
+    private ImageView mIvContent;
 
-    private String Content;
+    private int Content;
     private int count=0;
 
     public CarouselFragment() {
@@ -29,10 +29,9 @@ public class CarouselFragment extends Fragment {
     }
 
     public static CarouselFragment newInstance(int position, Memory memory) {
-        mPosition = position;
         CarouselFragment fragment = new CarouselFragment();
         Bundle args = new Bundle();
-        args.putString(LIST_MEMORY, memory.getContent());
+        args.putInt(LIST_MEMORY, memory.getImage());
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,19 +40,20 @@ public class CarouselFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            Content = getArguments().getString(LIST_MEMORY);
+            Content = getArguments().getInt(LIST_MEMORY);
         }
     }
 
 
     // 현재 viewpager 의 position
+    @SuppressLint("WrongViewCast")
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         @SuppressLint("ResourceType") final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.view_item_carousel, container, false);
 
-        mTvContent = rootView.findViewById(R.id.textview);
+        mIvContent = rootView.findViewById(R.id.ivCarousel);
 
-        mTvContent.setText(Content);
+        mIvContent.setImageResource(Content);
 
         return rootView;
     }

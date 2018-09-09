@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-        <TextView
-            android:id="@+id/textview"
+        <ImageView
+            android:id="@+id/ivCarousel"
             android:layout_width="match_parent"
             android:layout_height="170dp"
             android:text=""

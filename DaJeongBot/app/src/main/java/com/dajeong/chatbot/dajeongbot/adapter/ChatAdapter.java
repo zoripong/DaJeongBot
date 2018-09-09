@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
@@ -37,16 +39,21 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
 
+import retrofit2.http.HEAD;
+
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
     private LinkedList<Chat> mChats;
     private Context mContext;
     private FragmentManager mFragmentManager;
-    //    HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
+//        HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
     private View vBot;
     private View vUser;
     private View vSlot;
     private View vCarousel;
+    private View vBotImage;
+    private View vUserImage;
+
     private int count = 0;
 
 
@@ -72,9 +79,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 3:
                 vCarousel = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_carousel, parent, false);
                 return new ChatBotCarouselHolder(vCarousel);
+            case 4:
+                vBotImage = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_image, parent, false);
+                return new ChatBotImageHolder(vBotImage);
+            case 5:
+                vUserImage = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_user_image, parent, false);
+                return new ChatUserImageHolder(vUserImage);
+            default:
+                return null;
         }
-
-        return null;
     }
 
     @Override
@@ -110,12 +123,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 final ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
                 chatBotCarouselHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotCarouselHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
-//                chatBotCarouselHolder.mTvTime.setText(chat.getTime());
                 chatBotCarouselHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
                 ArrayList<Memory> memories = chat.getCarouselList();
                 chatBotCarouselHolder.setMemories(memories);
 
                 //TODO: TextView 현재 인덱스 값으로 set, Button에 넣기
+
+
                 final CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
                 chatBotCarouselHolder.mTvSchedule.setText("1번째 일정");
@@ -124,7 +138,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mLiNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
                 chatBotCarouselHolder.mBtPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
                 chatBotCarouselHolder.mBtNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
-
                 chatBotCarouselHolder.mVpimage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -143,16 +156,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     }
                 });
-
                 break;
 
             case 4:
                 // 챗봇이 보낸 이미지 채팅 ui
+                ChatBotImageHolder chatBotImageHolder = (ChatBotImageHolder) holder;
+                chatBotImageHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
+                chatBotImageHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
+                chatBotImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
+                chatBotImageHolder.showImage();
                 break;
             case 5:
                 // 사용자가 보낸 이미지 채팅 ui
+                ChatUserImageHolder chatUserImageHolder = (ChatUserImageHolder) holder;
+                chatUserImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
+                chatUserImageHolder.showImage();
                 break;
-
             default:
 
         }
@@ -189,8 +208,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
 
-
-
             return 0;
         } else {
             // 사용자가 전송
@@ -219,8 +236,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Button myButton = new Button(mContext);
 
             // 가로, 세로, 마진
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(7, 3, 7, 7);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75);
+            lp.setMargins(15, 5, 15, 10);
             myButton.setLayoutParams(lp);
             myButton.setText(option.get("label").getAsString());
 
@@ -335,12 +352,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         count++;
                         break;
                 }
-               CarouselCondition();
+                CarouselCondition();
 
             }
         };
-        @SuppressLint("SetTextI18n")
-        private void CarouselCondition(){
+
+        private void CarouselCondition() {
             if (count == 0) {
                 mLiPrevious.setVisibility(View.INVISIBLE);
                 mLiNext.setVisibility(View.VISIBLE);
@@ -365,14 +382,40 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-    private class ChatBotGifHolder extends RecyclerView.ViewHolder{
-        ImageView mIvGif;
-        public ChatBotGifHolder(View itemView) {
-            super(itemView);
-            mIvGif = itemView.findViewById(R.id.imageview_gif);
+    private class ChatBotImageHolder extends RecyclerView.ViewHolder {
+        ImageView mIvSenderProfile;
+        ImageView mIvImage;
+        TextView mTvTime;
 
+        public ChatBotImageHolder(View itemView) {
+            super(itemView);
+            mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
+            mIvImage = itemView.findViewById(R.id.ivBotImage);
+            mTvTime = itemView.findViewById(R.id.tvTime);
+        }
+
+        private void showImage() {
+            DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
+            Glide.with(ChatBotImageHolder.this.itemView).load("https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif").into(imageViewTarget);
         }
     }
+
+    private class ChatUserImageHolder extends RecyclerView.ViewHolder {
+        ImageView mIvImage;
+        TextView mTvTime;
+
+        public ChatUserImageHolder(View itemView) {
+            super(itemView);
+            mIvImage = itemView.findViewById(R.id.ivUserImage);
+            mTvTime = itemView.findViewById(R.id.tvTime);
+        }
+
+        private void showImage() {
+            DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
+            Glide.with(ChatUserImageHolder.this.itemView).load("https://media.giphy.com/media/3oriNO0p3Sn0itamg8/giphy.gif").into(imageViewTarget);
+        }
+    }
+
     public class CarouselPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Memory> memories;
