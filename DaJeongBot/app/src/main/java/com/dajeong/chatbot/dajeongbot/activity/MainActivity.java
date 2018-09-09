@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private void test(){
         hideProgressBar();
-        mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
+//        mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
     }
 
 }
