@@ -21,7 +21,7 @@
 
     <LinearLayout
         android:id="@+id/liContent"
-        android:layout_width="wrap_content"
+        android:layout_width="235dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:background="@drawable/chatbot_tv_custom"
@@ -41,8 +41,8 @@
             android:paddingBottom="7dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="7dp"
-            android:text="@string/schedule" />
+            android:paddingTop="7dp"/>
+            <!--android:text="@string/schedule" />-->
 
         <TextView
             android:id="@+id/tvSchedule"

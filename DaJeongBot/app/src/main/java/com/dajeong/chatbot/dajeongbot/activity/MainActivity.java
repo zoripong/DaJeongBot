@@ -381,6 +381,7 @@ public class MainActivity extends AppCompatActivity  {
                                         mChatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
                                         MessageReceiver.getInstance().receiveCarouselMessage(result, mChats, mBotChar);
                                         //TODO: EditText disable
+                                        mEtMessage.setEnabled(false);
                                         break;
                                 }
                             }

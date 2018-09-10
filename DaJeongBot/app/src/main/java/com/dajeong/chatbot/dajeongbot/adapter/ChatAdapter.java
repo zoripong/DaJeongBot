@@ -121,16 +121,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
                 break;
             case 3:
-                // TODO: setText 로 i번째 일정 text 넣기, Button 에 일정넣기
                 final ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
                 chatBotCarouselHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotCarouselHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotCarouselHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
+                chatBotCarouselHolder.mTvHead.setText(chat.getContent());
                 final ArrayList<Memory> memories = chat.getCarouselList();
                 chatBotCarouselHolder.setMemories(memories);
-
-                //TODO: TextView 현재 인덱스 값으로 set, Button에 넣기
-
 
                 final CarouselPagerAdapter carouselPagerAdapter = new CarouselPagerAdapter(mFragmentManager, memories);
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
@@ -336,6 +333,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private class ChatBotCarouselHolder extends RecyclerView.ViewHolder {
+        TextView mTvHead;
         ImageView mIvSenderProfile;
         TextView mTvSchedule;
         Button mBtText;
@@ -347,6 +345,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ChatBotCarouselHolder(View itemView) {
             super(itemView);
+            mTvHead = itemView.findViewById(R.id.tvContent);
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             mTvSchedule = itemView.findViewById(R.id.tvSchedule);
             mBtText = itemView.findViewById(R.id.btText);
