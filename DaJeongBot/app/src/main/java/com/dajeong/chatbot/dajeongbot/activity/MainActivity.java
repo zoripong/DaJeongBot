@@ -288,16 +288,7 @@ public class MainActivity extends AppCompatActivity  {
 
         for(int i = 0 ; i<body.size(); i++){
             JsonObject json  = body.get(i).getAsJsonObject();
-            if(json.get("carousel_list").isJsonNull()){
-                // carousel_list 가 비어있을 경우
-                // 챗봇인지 아닌지 확인하기
-                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
-                }
-                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
-                }
-            }else{
+            if(!json.get("carousel_list").isJsonNull()){
                 // carousel_list 가 있을 경우
                 Log.e(TAG, json.toString());
                 JSONArray carouselList = null;
@@ -318,6 +309,16 @@ public class MainActivity extends AppCompatActivity  {
                 else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), memories));
                 }
+            }else{
+                // carousel_list 가 비어있을 경우
+                // 챗봇인지 아닌지 확인하기
+                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+                }
+                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
+                }
+
             }
 
             mChatType = json.get("chat_type").getAsInt();
@@ -335,6 +336,10 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
+        // TODO REMOVE IT
+        // DEBUG
+        chatType = ChatType.BASIC_CHAT;
+
         Log.e(TAG, "이 대화의 타입은"+chatType);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
