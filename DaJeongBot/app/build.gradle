@@ -85,6 +85,7 @@ dependencies {
     //Logging
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
+    // json parser
 
     testImplementation 'junit:junit:4.12'
 

@@ -76,8 +76,6 @@ public class NetRetrofit {
         }
     });
 
-
-
     public RetrofitService getService() {
         return mService;
     }

@@ -32,6 +32,7 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -163,14 +164,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mBtText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // ChatType : Memory와 Question 분리하기
+                        // ChatType : Memory 와 Question 분리하기
                         Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
                         int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
-                        String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
-                        int chatType = ChatType.QUESTION_SCHEDULE_CHAT;
+                        String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
+                        int chatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
                         long time = System.currentTimeMillis();
                         int isBot = 0;
-
+                        ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
+                        ((MainActivity)mContext).setJsonResponse(new JsonParser().parse("{\"select_idx\":"+((MainActivity)mContext).getSelectIndex()+"}").getAsJsonObject());
                         ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
                         mChats.addLast(new Chat(NodeType.SPEAK_NODE, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
                         notifyDataSetChanged();
