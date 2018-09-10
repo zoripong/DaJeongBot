@@ -63,7 +63,6 @@ public class MessageReceiver {
     public void receiveBasicMessage(JsonObject result, LinkedList<Chat> mChats, Character mBotChar){
         JsonArray messages = result.getAsJsonArray("content");
         messages = result.get("content").getAsJsonArray();
-
         for(int i = 0; i<messages.size(); i++){
             mChats.addLast(new Chat(result.get("node_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
         }

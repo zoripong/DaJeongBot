@@ -289,6 +289,7 @@ public class MainActivity extends AppCompatActivity  {
         for(int i = 0 ; i<body.size(); i++){
             JsonObject json  = body.get(i).getAsJsonObject();
             if(json.get("carousel_list").isJsonNull()){
+                // carousel_list 가 비어있을 경우
                 // 챗봇인지 아닌지 확인하기
                 if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
@@ -297,8 +298,8 @@ public class MainActivity extends AppCompatActivity  {
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
                 }
             }else{
+                // carousel_list 가 있을 경우
                 Log.e(TAG, json.toString());
-                Log.e(TAG, json.get("carousel_list").getAsString());
                 JSONArray carouselList = null;
                 ArrayList<Memory> memories = new ArrayList<>();
                 try {
@@ -310,8 +311,7 @@ public class MainActivity extends AppCompatActivity  {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.e(TAG, "memories Length is "+ memories.size());
-                Log.e(TAG, "node_type is "+ json.get("node_type").getAsInt());
+
                 if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), memories));
                 }
@@ -319,6 +319,7 @@ public class MainActivity extends AppCompatActivity  {
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), memories));
                 }
             }
+
             mChatType = json.get("chat_type").getAsInt();
         }
         if(body.size() == 0 ){
@@ -360,7 +361,7 @@ public class MainActivity extends AppCompatActivity  {
                                     case ChatType.BASIC_CHAT:
                                         // TODO just add
                                         mChatType = ChatType.BASIC_CHAT;
-
+                                        MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
                                     case ChatType.MEMORY_CHAT:
                                         // TODO TEST
