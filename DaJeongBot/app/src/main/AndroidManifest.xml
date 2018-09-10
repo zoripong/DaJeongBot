@@ -79,13 +79,15 @@
         <activity android:name=".activity.CalendarActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.AddPhotoActivity" />
-        <activity android:name=".activity.AddPhotoDetailActivity" />
-        <activity android:name=".activity.TutorialActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+        <activity
+            android:name=".activity.TutorialActivity"
+            android:theme="@android:style/Theme.Dialog">
+        </activity>
     </application>
 
 </manifest>

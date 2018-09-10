@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity  {
     private JsonObject mJsonResponse;
     private HashMap<String, Integer> mStringNodeTypeMap;
 
+    private CustomSharedPreference spm;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +139,27 @@ public class MainActivity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+
+        showTutorial();
+        this.setFinishOnTouchOutside(false);
+    }
+
+    private void showTutorial() { //dialog로 띄움
+
+        spm = new CustomSharedPreference(this);
+        //spm.removePreferences("SHOW_TUTORIAL");
+        if(spm.retrieveBoolean("SHOW_TUTORIAL")){
+            Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+            return;
+        }
+        else{
+            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+        }
+
+        spm.savePreferences("SHOW_TUTORIAL", true);
+        //spm.removePreferences("SHOW_TUTORIAL");
+        startActivity(new Intent(this, TutorialActivity.class));
+
     }
 
     @Override
@@ -288,16 +311,7 @@ public class MainActivity extends AppCompatActivity  {
 
         for(int i = 0 ; i<body.size(); i++){
             JsonObject json  = body.get(i).getAsJsonObject();
-            if(json.get("carousel_list").isJsonNull()){
-                // carousel_list 가 비어있을 경우
-                // 챗봇인지 아닌지 확인하기
-                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
-                }
-                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
-                }
-            }else{
+            if(!json.get("carousel_list").isJsonNull()){
                 // carousel_list 가 있을 경우
                 Log.e(TAG, json.toString());
                 JSONArray carouselList = null;
@@ -318,6 +332,16 @@ public class MainActivity extends AppCompatActivity  {
                 else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), memories));
                 }
+            }else{
+                // carousel_list 가 비어있을 경우
+                // 챗봇인지 아닌지 확인하기
+                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+                }
+                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
+                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
+                }
+
             }
 
             mChatType = json.get("chat_type").getAsInt();
@@ -335,6 +359,10 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
+        // TODO REMOVE IT
+        // DEBUG
+        chatType = ChatType.BASIC_CHAT;
+
         Log.e(TAG, "이 대화의 타입은"+chatType);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())

@@ -89,6 +89,8 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
+    //tutorial circle
+    implementation  'com.romandanylyk:pageindicatorview:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'
 GoogleServicesPlugin.config.disableVersionCheck = true
