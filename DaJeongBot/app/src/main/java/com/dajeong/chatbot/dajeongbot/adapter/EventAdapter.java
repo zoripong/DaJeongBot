@@ -20,7 +20,6 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Vector<Event> mEvents;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvtitle;
         TextView tvScheduleWhen;
         TextView tvScheduleWhere;
         TextView tvScheduleWhat;
@@ -28,7 +27,6 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         MyViewHolder(View view){
             super(view);
-            tvtitle = view.findViewById(R.id.tvTItle);
             tvScheduleWhen = view.findViewById(R.id.tvScheduleWhen);
             tvScheduleWhere = view.findViewById(R.id.tvScheduleWhere);
             tvScheduleWhat = view.findViewById(R.id.tvScheduleWhat);
@@ -56,15 +54,13 @@ public class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         // Event event = mEvents.get(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         switch (holder.getItemViewType()){
-            case 0: //제목+내용
-                myViewHolder.tvtitle.setText(EventInfoArrayList.get(position).eventTitle);
+            case 0: //내용
                 myViewHolder.tvScheduleWhen.setText(EventInfoArrayList.get(position).scheduleWhen);
                 myViewHolder.tvScheduleWhere.setText(EventInfoArrayList.get(position).scheduleWhere);
                 myViewHolder.tvScheduleWhat.setText(EventInfoArrayList.get(position).scheduleWhat);
                 myViewHolder.ivEventImage.setVisibility(View.GONE);
                 break;
-            case 1: //제목+내용+사진
-                myViewHolder.tvtitle.setText(EventInfoArrayList.get(position).eventTitle);
+            case 1: //내용+사진
                 myViewHolder.tvScheduleWhen.setText(EventInfoArrayList.get(position).scheduleWhen);
                 myViewHolder.tvScheduleWhere.setText(EventInfoArrayList.get(position).scheduleWhere);
                 myViewHolder.tvScheduleWhat.setText(EventInfoArrayList.get(position).scheduleWhat);

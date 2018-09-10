@@ -11,8 +11,7 @@ public class Event {
     public int drawableId;
 
 
-    public Event(int EventId, String eventTitle, String scheduleWhat, String scheduleWhen, String scheduleWhere, int drawableId) {
-        this.eventTitle = eventTitle;
+    public Event(int EventId, String scheduleWhat, String scheduleWhen, String scheduleWhere, int drawableId) {
         this.scheduleWhat = scheduleWhat;
         this.scheduleWhen = scheduleWhen;
         this.scheduleWhere = scheduleWhere;
@@ -28,7 +27,6 @@ public class Event {
     public String toString() {
         return "Event{" +
                 "id=" + EventId + '\'' +
-                "review=" + eventTitle + '\'' +
                 ", schedule_what='" + scheduleWhat + '\'' +
                 ", schedule_when='" + scheduleWhen + '\'' +
                 ", schedule_where='" + scheduleWhere + '\'' +

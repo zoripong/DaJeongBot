@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity  {
     private JsonObject mJsonResponse;
     private HashMap<String, Integer> mStringNodeTypeMap;
 
+    private CustomSharedPreference spm;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +139,27 @@ public class MainActivity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+
+        showTutorial();
+        this.setFinishOnTouchOutside(false);
+    }
+
+    private void showTutorial() { //dialog로 띄움
+
+        spm = new CustomSharedPreference(this);
+        //spm.removePreferences("SHOW_TUTORIAL");
+        if(spm.retrieveBoolean("SHOW_TUTORIAL")){
+            Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+            return;
+        }
+        else{
+            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+        }
+
+        spm.savePreferences("SHOW_TUTORIAL", true);
+        //spm.removePreferences("SHOW_TUTORIAL");
+        startActivity(new Intent(this, TutorialActivity.class));
+
     }
 
     @Override

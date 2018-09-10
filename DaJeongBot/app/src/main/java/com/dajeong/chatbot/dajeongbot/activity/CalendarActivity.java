@@ -282,7 +282,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
                 for(JsonObject json : body){
                     //정보 가져오기
-                    mEvents.add(new Event(json.get("id").getAsInt(),null, json.get("schedule_what").getAsString(), json.get("schedule_when").getAsString(), json.get("schedule_where").getAsString(),-1)); //이미지 일단 넣어둠
+                    mEvents.add(new Event(json.get("id").getAsInt(), json.get("schedule_what").getAsString(), json.get("schedule_when").getAsString(), json.get("schedule_where").getAsString(),-1)); //이미지 일단 넣어둠
                 }
 
                 if(body.size() == 0){
