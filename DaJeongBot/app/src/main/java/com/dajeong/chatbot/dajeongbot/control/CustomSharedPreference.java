@@ -1,18 +1,36 @@
 package com.dajeong.chatbot.dajeongbot.control;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class CustomSharedPreference {
     private SharedPreferences pref;
     private static CustomSharedPreference instance;
-
+    public static final String MyPREFERENCES = "MyPrefs" ; //튜토리얼시 사용
     public static CustomSharedPreference getInstance(Context context, String prefName) {
         if( instance == null){
             instance = new CustomSharedPreference(context, prefName);
         }
         return instance;
     }
+
+    //튜토리얼
+    public CustomSharedPreference(Activity activity){
+        pref = activity.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+    }
+
+    public CustomSharedPreference(Context context) {
+        pref = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+    }
+
+    //튜토리얼 보였줬는지 유무 판단
+    public boolean retrieveBoolean(String tag){
+        return pref.getBoolean(tag, false);
+    }
+
 
     private CustomSharedPreference(Context context, String prefName) {
         pref = context.getSharedPreferences(prefName, context.MODE_PRIVATE);
@@ -37,6 +55,12 @@ public class CustomSharedPreference {
     public void savePreferences(String key, int value){
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(key, value);
+        editor.commit();
+    }
+
+    public void savePreferences(String key, boolean isShow){
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(key, isShow);
         editor.commit();
     }
 

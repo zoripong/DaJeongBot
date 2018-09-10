@@ -33,16 +33,12 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-//        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(SettingActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
-
+        findViewById(R.id.LiShowTutorial).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, TutorialActivity.class));
+            }
+        });
 
         findViewById(R.id.LiLogout).setOnClickListener(new View.OnClickListener() {
             @Override
