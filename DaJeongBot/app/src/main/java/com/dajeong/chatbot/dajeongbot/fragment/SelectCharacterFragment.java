@@ -165,10 +165,12 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.e(TAG, String.valueOf(response.body()));
                         Intent intent = null;
+
                         if (response.body().get("status").getAsString().equals("Success")) {
                             // 회원가입 성공
                             intent = new Intent(getActivity(), MainActivity.class);
 
+                            Log.e(TAG, "id is "+  response.body().getAsJsonObject("user_info").get("id").getAsString());
                             CustomSharedPreference.getInstance(getContext(), "user_info")
                                     .savePreferences("id", response.body().getAsJsonObject("user_info").get("id").getAsString());
                             CustomSharedPreference.getInstance(getContext(), "user_info")
@@ -195,8 +197,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 });
 
 //                    userCall.enqueue(this);
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
 
             }
         });
