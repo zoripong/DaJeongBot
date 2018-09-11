@@ -114,15 +114,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case 2:
                 ChatBotSlotHolder chatBotSlotHolder = (ChatBotSlotHolder) holder;
+                chatBotSlotHolder.mTvContent.setText(chat.getContent());
                 chatBotSlotHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotSlotHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
+                chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
 
                 if (!chatBotSlotHolder.hasBtn) {
                     chatBotSlotHolder.setHasBtn(true);
                     createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList());
                 }
 
-                chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
                 break;
             case 3:
                 final ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
@@ -152,7 +153,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     public void onPageSelected(final int position) {
                         count = position;
                         chatBotCarouselHolder.CarouselCondition();
-
                     }
 
                     @Override
@@ -235,16 +235,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return 0;
         } else {
             // 사용자가 전송
-
             if (mChats.get(position).getNodeType() == NodeType.IMAGE_NODE) {
                 // image node 일 경우
-
                 return 5;
             }
             return 1;
         }
-
-
     }
 
     @Override
@@ -254,12 +250,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList) {
         Log.e(TAG, "createSlotBtns : "+ slotArrayList.size());
+        Log.e(TAG, "slotArrayList.toString(): " + slotArrayList.toString());
         for (int i = 0; i < slotArrayList.size(); i++) {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
             final Button myButton = new Button(mContext);
 
             // 가로, 세로, 마진
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
             lp.setMargins(15, 5, 15, 10);
             myButton.setLayoutParams(lp);
             myButton.setText(slotArrayList.get(i).getLabel());
@@ -323,6 +320,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout mRootLayout;
         ImageView mIvSenderProfile;
         TextView mTvTime;
+        TextView mTvContent;
 
         boolean hasBtn;
 
@@ -332,6 +330,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             hasBtn = false;
             mTvTime = itemView.findViewById(R.id.tvTime);
+            mTvContent = itemView.findViewById(R.id.tvContent);
         }
 
         void setHasBtn(boolean hasBtn) {

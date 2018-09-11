@@ -35,15 +35,15 @@ public class MessageReader {
         // carousel_list 와 slot list 가 비어있을 경우
         // 챗봇인지 아닌지 확인하기
         if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
+            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
         }
         else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
+            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
         }
     }
 
     public void readCarouselMessage(JsonObject json, LinkedList<Chat> mChats, Character mBotChar){
-        Log.e(TAG, "carousel_list가 있습니다.");
+        Log.e(TAG, "carousel_list 가 있습니다.");
         // carousel_list 가 있을 경우
 //                Log.e(TAG, json.toString());
         JSONArray carouselList = null;
@@ -56,16 +56,16 @@ public class MessageReader {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "carousel_list를 파싱하는데 문제가 생겼습니다..");
+            Log.e(TAG, "carousel_list 를 파싱하는데 문제가 생겼습니다..");
 
         }
-        Log.e(TAG, "carousel_list의 길이는 : "+memories.size());
+        Log.e(TAG, "carousel_list 의 길이는 : "+memories.size());
 
         if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
+            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
         }
         else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
+            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
         }
     }
 
@@ -90,10 +90,10 @@ public class MessageReader {
         Log.e(TAG, "slot_list 의 길이는 : "+slots.size());
 
         if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), slots,null));
+            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), slots,null));
         }
         else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), slots,null));
+            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), slots,null));
         }
 
     }

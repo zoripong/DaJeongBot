@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(mChatType, NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
