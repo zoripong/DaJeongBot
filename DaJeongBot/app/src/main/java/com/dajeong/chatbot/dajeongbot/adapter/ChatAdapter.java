@@ -31,6 +31,7 @@ import com.dajeong.chatbot.dajeongbot.fragment.CarouselFragment;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
+import com.dajeong.chatbot.dajeongbot.model.Slot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -96,7 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Chat chat = mChats.get(position);
-        Log.e(TAG, "view type is "+holder.getItemViewType());
+        Log.e(TAG, "view type is "+holder.getItemViewType() + "/" +chat.getContent());
 
         switch (holder.getItemViewType()) {
             case 0:
@@ -118,7 +119,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 if (!chatBotSlotHolder.hasBtn) {
                     chatBotSlotHolder.setHasBtn(true);
-                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getOptionList());
+                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList());
                 }
 
                 chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
@@ -215,7 +216,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (mChats.get(position).getSender() != null) {
             // 챗봇이 전송
             if (mChats.get(position).getNodeType() == NodeType.SLOT_NODE
-                    && mChats.get(position).getOptionList() != null) {
+                    && mChats.get(position).getSlotList() != null) {
                 // slot node 일 경우
                 return 2;
             }
@@ -251,18 +252,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mChats.size();
     }
 
-    private void createSlotBtns(LinearLayout layout, JsonArray options) {
-
-        for (int i = 0; i < options.size(); i++) {
+    private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList) {
+        Log.e(TAG, "createSlotBtns : "+ slotArrayList.size());
+        for (int i = 0; i < slotArrayList.size(); i++) {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
-            final JsonObject option = options.get(i).getAsJsonObject();
             final Button myButton = new Button(mContext);
 
             // 가로, 세로, 마진
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75);
             lp.setMargins(15, 5, 15, 10);
             myButton.setLayoutParams(lp);
-            myButton.setText(option.get("label").getAsString());
+            myButton.setText(slotArrayList.get(i).getLabel());
 
             // 스타일 지정
             TypedValue typedValue = new TypedValue();
@@ -280,11 +280,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
 
+            final int finalI = i;
             myButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
 //                    Toast.makeText(mContext, myButton.getText().toString(), Toast.LENGTH_LONG).show();
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
-                    ((MainActivity) mContext).sendMessage(accountId, option.get("value").getAsString(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
+                    ((MainActivity) mContext).sendMessage(accountId, slotArrayList.get(finalI).getValue(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
+                    notifyDataSetChanged();
                 }
             });
         }

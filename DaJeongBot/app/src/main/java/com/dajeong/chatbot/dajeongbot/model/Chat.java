@@ -10,7 +10,7 @@ public class Chat {
     private Character sender; // null 일 경우 User
     private String content;
     private String time;
-    private JsonArray optionList;
+    private ArrayList<Slot> slotList;
     private ArrayList<Memory> carouselList;
 
     public Chat(int nodeType, Character sender, String content, String time) {
@@ -18,31 +18,22 @@ public class Chat {
         this.sender = sender;
         this.content = content;
         this.time = time;
-        this.optionList = null;
+        this.slotList = null;
         this.carouselList = null;
     }
 
-    public Chat(int nodeType, Character sender, String content, String time, JsonArray optionList) {
+    public Chat(int nodeType, Character sender, String content, String time, ArrayList<Slot> slotList, ArrayList<Memory> carouselList) {
         this.nodeType = nodeType;
         this.sender = sender;
         this.content = content;
         this.time = time;
-        this.optionList = optionList;
-        this.carouselList = null;
-    }
-
-    public Chat(int nodeType, Character sender, String content, String time, ArrayList<Memory> carouselList) {
-        this.nodeType = nodeType;
-        this.sender = sender;
-        this.content = content;
-        this.time = time;
-        this.optionList = null;
+        this.slotList = slotList;
         this.carouselList = carouselList;
     }
 
 
-    public JsonArray getOptionList() {
-        return optionList;
+    public ArrayList<Slot> getSlotList() {
+        return slotList;
     }
 
     public ArrayList<Memory> getCarouselList() {
@@ -73,7 +64,7 @@ public class Chat {
                 ", sender=" + sender +
                 ", content='" + content + '\'' +
                 ", time='" + time + '\'' +
-                ", optionList=" + optionList +
+                ", optionList=" + slotList +
                 ", carouselList=" + carouselList +
                 '}';
     }

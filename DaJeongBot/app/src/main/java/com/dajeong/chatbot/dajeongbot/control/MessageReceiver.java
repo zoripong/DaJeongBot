@@ -6,6 +6,7 @@ import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
+import com.dajeong.chatbot.dajeongbot.model.Slot;
 import com.dajeong.chatbot.dajeongbot.network.RetrofitService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -52,7 +53,7 @@ public class MessageReceiver {
                             memories.add(new Memory(event.get("id").getAsInt(), event.get("event_image").getAsString(),  event.get("event_detail").getAsString()));
                         }
                         memories.add(new Memory(-1, "", "이제 없어!"));
-                        mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, mBotChar, messages.get(i).getAsString(), timestamp, memories));
+                        mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, mBotChar, messages.get(i).getAsString(), timestamp, null, memories));
                     }else{
                         mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
                     }
@@ -89,7 +90,12 @@ public class MessageReceiver {
 
             if(options.size() > 0){
                 //TODO : EditText enable
-                mChats.addLast(new Chat(NodeType.SLOT_NODE, mBotChar, message, timestamp, options));
+                ArrayList<Slot> slotArrayList = new ArrayList<>();
+                for(int j = 0; j<options.size(); j++){
+                    JsonObject slotJson = options.get(j).getAsJsonObject();
+                    slotArrayList.add(new Slot(slotJson.get("id").getAsInt(), slotJson.get("label").getAsString(), slotJson.get("value").getAsString()));
+                }
+                mChats.addLast(new Chat(NodeType.SLOT_NODE, mBotChar, message, timestamp, slotArrayList, null));
             }else{
                 mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
             }
