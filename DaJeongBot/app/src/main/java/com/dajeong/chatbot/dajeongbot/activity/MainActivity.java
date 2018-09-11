@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity  {
 
             }
 
-            mChatType = json.get("chat_type").getAsInt();
+//            mChatType = json.get("chat_type").getAsInt();
         }
         if(body.size() == 0 ){
             // 더이상의 대화 내역이 없음
@@ -385,10 +385,10 @@ public class MainActivity extends AppCompatActivity  {
                                 JsonObject result = response.body().getAsJsonObject("result");
                                 mJsonResponse = result;
                                 // receive
+                                mChatType = result.get("chat_type").getAsInt();
                                 switch (result.get("chat_type").getAsInt()){
                                     case ChatType.BASIC_CHAT:
                                         // TODO just add
-                                        mChatType = ChatType.BASIC_CHAT;
                                         MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
                                     case ChatType.MEMORY_CHAT:

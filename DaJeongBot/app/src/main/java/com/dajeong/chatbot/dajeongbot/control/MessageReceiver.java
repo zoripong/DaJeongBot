@@ -71,13 +71,21 @@ public class MessageReceiver {
     public void receiveDanbeeMessage(JsonObject mJsonResponse, LinkedList<Chat>mChats, Character mBotChar){
         JsonArray jsonArray = mJsonResponse.getAsJsonArray("result");
         for( int i = 0; i<jsonArray.size(); i++ ){
-            String imgUrl = jsonArray.get(i).getAsJsonObject().get("imgRoute").getAsString();
-            // TODO : 이미지 노드 추가하기
+
             String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
             String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
             String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
             Log.e(TAG, "node type is " + nodeType);
             JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
+
+            if(!jsonArray.get(i).getAsJsonObject().get("imgRoute").isJsonNull()){
+                String imgUrl = jsonArray.get(i).getAsJsonObject().get("imgRoute").getAsString();
+                Log.e(TAG, "here"+ i +":" + imgUrl);
+                Log.e(TAG, "here"+ i +":" + jsonArray.get(i).getAsJsonObject().toString());
+                if(!imgUrl.equals(""))
+                    mChats.addLast(new Chat(NodeType.IMAGE_NODE, mBotChar, imgUrl, timestamp));
+
+            }
 
             if(options.size() > 0){
                 //TODO : EditText enable

@@ -51,9 +51,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void test(){
-//        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("id", "32");
-//        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").savePreferences("bot_type", 0);
-//        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
         Log.e(TAG, "firebase device token is :" + FirebaseInstanceId.getInstance().getToken());
     }
 
