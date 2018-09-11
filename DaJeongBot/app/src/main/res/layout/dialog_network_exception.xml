@@ -1,26 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:orientation="vertical
-"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/tv_guide_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/btnRetry"
-        android:text="재시도"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnCancel"
-        android:text="취소"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:theme="@style/DialogMinWidth">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/dialog_bg"
+            android:layout_gravity="top"
+            android:layout_marginTop="40dp"
+            android:paddingTop="60dp"
+            android:paddingBottom="25dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp">
+            <TextView
+                android:id="@+id/tv_guide_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여기 메시지 들어감"
+                android:textAlignment="center"
+                />
+            <TextView
+                android:id="@+id/btnRetry"
+                android:text="재시도"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/dialog_btn_bg"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:layout_marginTop="30dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/dialog_circle"
+            android:layout_gravity="top|center"
+            android:paddingTop="15dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="17.5dp"
+            android:paddingRight="17.5dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/warning_ic"/>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>
