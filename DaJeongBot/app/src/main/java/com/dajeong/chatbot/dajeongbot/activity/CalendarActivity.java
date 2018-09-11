@@ -120,6 +120,9 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         noScheduleList=(LinearLayout)findViewById(R.id.no_schedule_li);
         getEventList();
 
+        // 하단의 이벤트 리스트
+        mEventAdapter = new EventAdapter(mEvents);
+        mRvEventList.setAdapter(mEventAdapter);
     }
 
     @Override
@@ -163,15 +166,9 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
         selectDay = (TextView) findViewById(R.id.select_day_tv);
         selectDay.setText("");
+
         getSchedule(); //선택한 날짜의 일정 가져오기
 
-        mEventAdapter = new EventAdapter(mEvents);
-        mRvEventList.setAdapter(mEventAdapter);
-        if(mEventAdapter.getItemCount()==0){
-            Log.e(TAG,"선택된 날은 일정이 없음");
-//            scheduleList.setVisibility(View.GONE);
-//            noScheduleList.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -285,16 +282,16 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                     mEvents.add(new Event(json.get("id").getAsInt(), json.get("schedule_what").getAsString(), json.get("schedule_when").getAsString(), json.get("schedule_where").getAsString(),-1)); //이미지 일단 넣어둠
                 }
 
-                if(body.size() == 0){
+                if(mEvents.size() == 0){
                     Log.i(TAG, "event info is not exist");
                     scheduleList.setVisibility(View.GONE);
                     noScheduleList.setVisibility(View.VISIBLE);
                 }else{
                     selectDay.setText(shot_Day);
-                    mEventAdapter.notifyDataSetChanged();
                 }
 
-                mRvEventList.scrollToPosition(mEventAdapter.getItemCount() - 1);
+                Log.e(TAG, String.valueOf(mEventAdapter.getItemCount()));
+                mEventAdapter.notifyDataSetChanged();
             }
 
             @Override

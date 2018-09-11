@@ -27,7 +27,6 @@ import retrofit2.Response;
 // setting activity ( 사용자 정보 수정 / 챗봇 선택 / 데이터 초기화 .. )
 public class SettingActivity extends AppCompatActivity {
     private final String TAG = "SettingActivity";
-    // TODO : 로그아웃시 로그인 정보 삭제
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

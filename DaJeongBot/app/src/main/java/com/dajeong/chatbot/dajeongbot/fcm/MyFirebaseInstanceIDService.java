@@ -49,7 +49,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(final String token) {
-//Todo : test
         Log.e(TAG, "token updating ...  : "+token);
         String accountId = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")

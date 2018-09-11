@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!mRvChatList.canScrollVertically(-1)) {
-                    Log.e(TAG, "OnScrolled : TOP");
+//                    Log.e(TAG, "OnScrolled : TOP");
                     if (mIsLoad && mMoreChat) {
                         showProgressBar();
                         getMoreMessage();
@@ -149,11 +149,11 @@ public class MainActivity extends AppCompatActivity  {
         spm = new CustomSharedPreference(this);
         //spm.removePreferences("SHOW_TUTORIAL");
         if(spm.retrieveBoolean("SHOW_TUTORIAL")){
-            Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+            //Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
             return;
         }
         else{
-            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+//            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
         }
 
         spm.savePreferences("SHOW_TUTORIAL", true);
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity  {
         String notificationMessage = extras.getString("data", "UNDEFINED");
         try {
             JSONObject jsonObject = new JSONObject(notificationMessage);
-            Log.e(TAG, jsonObject.getString("status"));
+            //Log.e(TAG, jsonObject.getString("status"));
             if(jsonObject.has("status")){
                 // FCM Message로 Open
 
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity  {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e(TAG, notificationMessage);
+//        Log.e(TAG, notificationMessage);
     }
 
     @NonNull
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity  {
     private void getMoreMessage(){
         int lastIndex = CustomSharedPreference.getInstance(getApplicationContext(), "chat").getIntPreferences("last_index");
 
-        Log.e(TAG, "Last Index is "+ lastIndex);
+        //Log.e(TAG, "Last Index is "+ lastIndex);
 
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getMessages(mAccountId, lastIndex);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
@@ -303,17 +303,14 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void controlJsonObj(Response<ArrayList<JsonObject>> response){
-        Log.e(TAG, "HERE"+String.valueOf(mAccountId));
+//        Log.e(TAG, "HERE"+String.valueOf(mAccountId));
 
         ArrayList<JsonObject> body = response.body();
-
-        // TODO: 이미지 노드 추가하기
-
         for(int i = 0 ; i<body.size(); i++){
             JsonObject json  = body.get(i).getAsJsonObject();
             if(!json.get("carousel_list").isJsonNull()){
                 // carousel_list 가 있을 경우
-                Log.e(TAG, json.toString());
+//                Log.e(TAG, json.toString());
                 JSONArray carouselList = null;
                 ArrayList<Memory> memories = new ArrayList<>();
                 try {
@@ -359,11 +356,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-        // TODO REMOVE IT
-        // DEBUG
-        chatType = ChatType.BASIC_CHAT;
-
-        Log.e(TAG, "이 대화의 타입은"+chatType);
+//        Log.e(TAG, "이 대화의 타입은"+chatType);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
@@ -372,7 +365,7 @@ public class MainActivity extends AppCompatActivity  {
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, String.valueOf(response));
+//                Log.e(TAG, String.valueOf(response));
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 if(response.body() != null){
                     Log.e(TAG, String.valueOf(response.body()));
@@ -388,7 +381,6 @@ public class MainActivity extends AppCompatActivity  {
                                 mChatType = result.get("chat_type").getAsInt();
                                 switch (result.get("chat_type").getAsInt()){
                                     case ChatType.BASIC_CHAT:
-                                        // TODO just add
                                         MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
                                     case ChatType.MEMORY_CHAT:
