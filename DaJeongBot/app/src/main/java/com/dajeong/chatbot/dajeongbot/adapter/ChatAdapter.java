@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -254,9 +256,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
             final JsonObject option = options.get(i).getAsJsonObject();
             final Button myButton = new Button(mContext);
-
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, mContext.getResources().getDisplayMetrics());
             // 가로, 세로, 마진
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             lp.setMargins(15, 5, 15, 10);
             myButton.setLayoutParams(lp);
             myButton.setText(option.get("label").getAsString());
@@ -286,6 +288,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
     }
+
 
     private class ChatBotHolder extends RecyclerView.ViewHolder {
         ImageView mIvSenderProfile;
@@ -460,5 +463,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     }
-
+    private static float dpFrompx(final Context context,final float px){
+        return px / context.getResources().getDisplayMetrics().density;
+    }
 }
