@@ -309,6 +309,7 @@ public class MainActivity extends AppCompatActivity  {
         for(int i = 0 ; i<body.size(); i++){
             JsonObject json  = body.get(i).getAsJsonObject();
             if(!json.get("carousel_list").isJsonNull()){
+                Log.e(TAG, "carousel_list가 있습니다.");
                 // carousel_list 가 있을 경우
 //                Log.e(TAG, json.toString());
                 JSONArray carouselList = null;
@@ -321,7 +322,10 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.e(TAG, "carousel_list를 파싱하는데 문제가 생겼습니다..");
+
                 }
+                Log.e(TAG, "carousel_list의 길이는 : "+memories.size());
 
                 if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
                     mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), memories));
@@ -343,6 +347,7 @@ public class MainActivity extends AppCompatActivity  {
 
 //            mChatType = json.get("chat_type").getAsInt();
         }
+
         if(body.size() == 0 ){
             // 더이상의 대화 내역이 없음
             mMoreChat = false;
@@ -352,7 +357,6 @@ public class MainActivity extends AppCompatActivity  {
             mChatAdapter.notifyDataSetChanged();
         }
         hideProgressBar();
-
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {

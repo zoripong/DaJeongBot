@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,6 +96,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Chat chat = mChats.get(position);
+        Log.e(TAG, "view type is "+holder.getItemViewType());
+
         switch (holder.getItemViewType()) {
             case 0:
                 ChatBotHolder chatBotHolder = (ChatBotHolder) holder;
