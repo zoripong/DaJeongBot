@@ -46,7 +46,7 @@ public class NetworkExceptionDialog {
 
         WindowManager.LayoutParams wm = dlg.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
         wm.copyFrom(dlg.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
-        wm.width = width;  //화면 너비의 절반
+        wm.width = width;
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         dlg.show();

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.customize.LogoutDialog;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
@@ -65,6 +66,8 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 logout();
+ //               LogoutDialog customDialog = new LogoutDialog(SettingActivity.this);
+//                customDialog.callFunction();
             }
         });
     }
@@ -106,7 +109,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    private void releaseUserInfo(){
+    public void releaseUserInfo(){
         CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
         Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
         startActivity(intent);

@@ -163,7 +163,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_change_chatbot" />
+                android:src="@drawable/help_ic" />
 
             <TextView
                 android:layout_width="wrap_content"
