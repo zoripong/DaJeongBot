@@ -32,6 +32,28 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        findViewById(R.id.LiNickname).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, ChangeNameActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.LiChangeChatbot).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, ChangeBotActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.LiChangeTime).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, ChangeTimeActivity.class);
+                startActivity(intent);
+            }
+        });
+
         findViewById(R.id.LiShowTutorial).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
             @Override
             public void onClick(View v) {

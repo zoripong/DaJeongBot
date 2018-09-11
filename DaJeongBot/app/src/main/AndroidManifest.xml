@@ -88,6 +88,9 @@
             android:name=".activity.TutorialActivity"
             android:theme="@android:style/Theme.Dialog">
         </activity>
+        <activity android:name=".activity.ChangeNameActivity" />
+        <activity android:name=".activity.ChangeBotActivity" />
+        <activity android:name=".activity.ChangeTimeActivity" />
     </application>
 
 </manifest>

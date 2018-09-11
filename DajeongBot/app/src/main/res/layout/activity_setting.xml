@@ -9,9 +9,9 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        android:layout_marginTop="12dp">
+        app:layout_constraintTop_toBottomOf="@+id/button">
 
         <LinearLayout
             android:id="@+id/LiNickname"
@@ -24,8 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="25dp"
@@ -35,10 +34,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="닉네임 변경"
-                android:textSize="14sp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"/>
+                android:text="닉네임 변경"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -49,7 +48,6 @@
             android:clickable="true"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/LiNickname">
 
@@ -57,26 +55,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#ebebeb"></LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:src="@drawable/ic_change_chatbot" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="챗봇 변경"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:textSize="14sp"
-                    android:layout_gravity="center_vertical"/>
+                    android:text="챗봇 변경"
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#ebebeb"></LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LiChangeTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_settings"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LiChangeChatbot">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/set_time_ic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:text="시간 변경"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,27 +113,41 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_settings"
             android:clickable="true"
-            android:orientation="horizontal"
-            android:padding="15dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LiChangeChatbot">
+            app:layout_constraintTop_toBottomOf="@+id/LiChangeTime">
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_logout"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ebebeb"></LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="로그아웃"
-                android:textSize="14sp"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                />
+                android:padding="15dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_logout" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="로그아웃"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ebebeb"></LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/LiShowTutorial"
             android:layout_width="match_parent"
@@ -115,23 +157,21 @@
             android:orientation="horizontal"
             android:padding="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/LiLogout">
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_logout"/>
+                android:src="@drawable/ic_change_chatbot" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="도움말 보기"
-                android:textSize="14sp"
-                android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
-                />
+                android:layout_marginLeft="10dp"
+                android:text="도움말 보기"
+                android:textSize="14sp" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
