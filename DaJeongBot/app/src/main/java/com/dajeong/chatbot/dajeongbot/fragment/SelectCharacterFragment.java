@@ -53,6 +53,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
     private ImageView mIvBotHead, mIvBotTitle, mIvBotIntroduce;
     private TextView mTvBotString;
     private LinearLayout mLiBtnPrevious, mLiBtnNext;
+    private int currentPage;
 //    private Button mBtnBotImg01,mBtnBotImg02,mBtnBotImg03,mBtnBotImg04;
 //    private ImageView mIvBotDot01, mIvBotDot02, mIvBotDot03, mIvBotDot04;
 
@@ -100,7 +101,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         for (int i = 0; i < 4; i++) {
             botHeads.set(i, (Button) rootView.findViewById(selectImage[i]));
         }
-
         for (int i = 0; i < botHeads.size(); i++) {
             botHeads.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,6 +118,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                         btnSelectPrevious.setVisibility(View.VISIBLE);
                         btnSelectNext.setVisibility(View.INVISIBLE);
                     }
+                    currentPage(index);
                     changeVisibleImage(index);
                     changeIntroduceImage(index);
                 }
@@ -139,7 +140,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                         CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_month"),
                         CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_day"));
 
-                int botType = 1;
+                int botType = currentPage;
                 int accountType = ((SignupActivity) getActivity()).getAccountType();
                 String password = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_pw");
                 String token = ((SignupActivity) getActivity()).getToken();
@@ -272,6 +273,10 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         return rootView;
     }
 
+    public  void currentPage(int index){
+        currentPage=index;
+        Log.e(TAG,"인덱스"+currentPage);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

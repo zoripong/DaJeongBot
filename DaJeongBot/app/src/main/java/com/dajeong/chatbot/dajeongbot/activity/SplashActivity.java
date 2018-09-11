@@ -80,7 +80,7 @@ public class SplashActivity extends AppCompatActivity {
                 .getService()
                 .checkInternetStatus();
 
-        final String[] message = {"서버에 문제가 발생하였습니다. 서비스 이용에 불편을 드려 대단히 죄송합니다. 빠른 시일 내에 원활한 서비스 이용이 가능하도록 하겠습니다."};
+        final String[] message = {"서버에 문제가 발생하였습니다.\n \n 서비스 이용에 불편을 드려 대단히 죄송합니다.\n빠른 시일 내에 원활한 서비스 이용이\n가능하도록 하겠습니다."};
         final NetworkExceptionDialog networkExceptionDialog = new NetworkExceptionDialog(SplashActivity.this);
 
         res.enqueue(new Callback<JsonObject>() {
@@ -106,7 +106,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, t.toString());
                 if(t instanceof SocketTimeoutException){
-                    message[0] = "네트워크 연결을 확인해주세요. 다정봇은 인터넷이 필요한 서비스입니다.";
+                    message[0] = "네트워크 연결을 확인해주세요.\n 다정봇은 인터넷이 필요한 서비스입니다.";
                 }
                 runOnUiThread(new Runnable() {
                     @Override

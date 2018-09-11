@@ -1,6 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
@@ -251,11 +253,30 @@ public class MainActivity extends AppCompatActivity  {
 
     @NonNull
     private Character setBot(){
-        int charImage = R.drawable.ic_char1;
         String charNames[] = {"다정군", "다정냥", "다정곰", "다정뭉"};
         int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
-
-        return new Character(charNames[charType=1], charImage+charType);
+        int charImage;
+        Log.e(TAG,"CharType >>"+charType);
+        switch (charType){
+            case 0:
+                charImage=R.drawable.ic_char1;
+                break;
+            case 1:
+                charImage=R.drawable.ic_char2;
+                break;
+            case 2:
+                charImage=R.drawable.ic_char3;
+                break;
+            case 3:
+                charImage=R.drawable.ic_char4;
+                break;
+                default:
+                    charImage=R.drawable.ic_char1;
+                    break;
+        }
+        TextView botName = (TextView) findViewById(R.id.tvbotName);
+        botName.setText(charNames[charType]);
+        return new Character(charNames[charType], charImage);
     }
 
     private void getMessage(){
