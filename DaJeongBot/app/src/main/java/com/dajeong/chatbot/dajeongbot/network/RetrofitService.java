@@ -56,9 +56,28 @@ public interface RetrofitService {
     @POST("me/tokens")
     Call<JsonObject> registerFcmToken(@Body RequestRegisterToken params);
 
+    // fcm 토큰 업데이트
     @PUT("me/tokens/")
     Call<JsonObject> updateFcmToken(@Body RequestUpdateToken params);
 
+    // fcm 토큰 삭제
     @DELETE("me/tokens/{account_id}/{fcm_token}")
     Call<JsonObject> releaseFcmToken(@Path("account_id")int accountId, @Path("fcm_token")String fcmToken);
+
+    // 사용자 닉네임 업데이트
+    @PUT("me/names/")
+    Call<JsonObject> updateName(@Body RequestUpdateToken params);
+
+    // 챗봇 업데이트
+    @PUT("me/bots/")
+    Call<JsonObject> updateBots(@Body RequestUpdateToken params);
+
+    // 알림 시간 업데이트
+    @PUT("me/times/")
+    Call<JsonObject> updateTimes(@Body RequestUpdateToken params);
+
+
+
+
+
 }
