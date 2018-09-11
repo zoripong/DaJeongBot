@@ -106,7 +106,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e(TAG, t.toString());
                 if(t instanceof SocketTimeoutException){
-                    d[0] = "네트워크 연결을 확인해주세요. 다정봇은 인터넷이 필요한 서비스입니다.";
+                    message[0] = "네트워크 연결을 확인해주세요. 다정봇은 인터넷이 필요한 서비스입니다.";
                 }
                 runOnUiThread(new Runnable() {
                     @Override
