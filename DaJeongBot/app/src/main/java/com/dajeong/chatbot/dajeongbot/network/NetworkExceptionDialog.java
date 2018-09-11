@@ -57,7 +57,6 @@ public class NetworkExceptionDialog {
         dlg.findViewById(R.id.btnRetry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "재시도합니다.", Toast.LENGTH_SHORT).show();
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
                 ((SplashActivity)mContext).checkInternetStatus();

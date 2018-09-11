@@ -76,6 +76,7 @@ public class MessageReceiver {
             String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
             String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
             String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
+
             Log.e(TAG, "node type is " + nodeType);
             JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
 
@@ -95,9 +96,9 @@ public class MessageReceiver {
                     JsonObject slotJson = options.get(j).getAsJsonObject();
                     slotArrayList.add(new Slot(slotJson.get("id").getAsInt(), slotJson.get("label").getAsString(), slotJson.get("value").getAsString()));
                 }
-                mChats.addLast(new Chat(NodeType.SLOT_NODE, mBotChar, message, timestamp, slotArrayList, null));
+                mChats.addLast(new Chat(NodeType.SLOT_NODE, -1, mBotChar, message, timestamp, slotArrayList, null));
             }else{
-                mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
+                mChats.addLast(new Chat(NodeType.SPEAK_NODE, -1, mBotChar, message, timestamp));
             }
         }
     }

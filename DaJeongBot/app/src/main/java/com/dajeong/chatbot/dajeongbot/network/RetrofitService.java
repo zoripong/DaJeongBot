@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 public interface RetrofitService {
     // check internet status
     @GET("/")
-    Call<String> checkInternetStatus();
+    Call<JsonObject> checkInternetStatus();
 
     // 로그인 & 회원가입
     @GET("users/{account_type}/{user_id}/{password}")
