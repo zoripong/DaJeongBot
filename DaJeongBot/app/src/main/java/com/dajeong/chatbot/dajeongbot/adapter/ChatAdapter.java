@@ -188,13 +188,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotImageHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotImageHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-                chatBotImageHolder.showImage();
+                chatBotImageHolder.showImage(chat.getContent());
                 break;
             case 5:
                 // 사용자가 보낸 이미지 채팅 ui
                 ChatUserImageHolder chatUserImageHolder = (ChatUserImageHolder) holder;
                 chatUserImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-                chatUserImageHolder.showImage();
+                chatUserImageHolder.showImage(chat.getContent());
                 break;
             default:
 
@@ -422,9 +422,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
-        private void showImage() {
+        private void showImage(String imgUrl) {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
-            Glide.with(ChatBotImageHolder.this.itemView).load("https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif").into(imageViewTarget);
+            Glide.with(ChatBotImageHolder.this.itemView)
+                    .load(imgUrl)
+                    .into(imageViewTarget);
         }
     }
 
@@ -438,9 +440,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
-        private void showImage() {
+        private void showImage(String imgUrl) {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
-            Glide.with(ChatUserImageHolder.this.itemView).load("https://media.giphy.com/media/3oriNO0p3Sn0itamg8/giphy.gif").into(imageViewTarget);
+            Glide.with(ChatUserImageHolder.this.itemView)
+                    .load(imgUrl)
+                    .into(imageViewTarget);
         }
     }
 

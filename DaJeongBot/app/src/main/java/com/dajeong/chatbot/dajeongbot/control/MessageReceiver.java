@@ -85,7 +85,7 @@ public class MessageReceiver {
                 Log.e(TAG, "here"+ i +":" + imgUrl);
                 Log.e(TAG, "here"+ i +":" + jsonArray.get(i).getAsJsonObject().toString());
                 if(!imgUrl.equals(""))
-                    mChats.addLast(new Chat(jsonArray.get(i).getAsJsonObject().get("chat_type").getAsInt(), NodeType.IMAGE_NODE, mBotChar, imgUrl, timestamp));
+                    mChats.addLast(new Chat(NodeType.IMAGE_NODE, -1, mBotChar, imgUrl, timestamp));
 
             }
 
