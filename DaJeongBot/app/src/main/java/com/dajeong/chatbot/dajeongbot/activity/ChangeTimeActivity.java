@@ -15,8 +15,16 @@ import android.widget.TextView;
 import com.dajeong.chatbot.dajeongbot.R;
 
 public class ChangeTimeActivity extends AppCompatActivity {
-    private final String TAG = "SettingActivity";
-    // TODO : 로그아웃시 로그인 정보 삭제
+    private final String TAG = "ChangeTimeActivity";
+
+    /*
+    * {
+      "account_id": 32,
+      "new_notify_time": "08:00",
+      "new_ask_time": "09:00"
+    }
+    * */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

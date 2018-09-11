@@ -15,8 +15,14 @@ import android.widget.TextView;
 import com.dajeong.chatbot.dajeongbot.R;
 
 public class ChangeNameActivity extends AppCompatActivity {
-    private final String TAG = "SettingActivity";
-    // TODO : 로그아웃시 로그인 정보 삭제
+    private final String TAG = "ChangeNameActivity";
+    /*
+    * {
+      "account_id": 32,
+      "new_name": "한유리"
+    }
+    * */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

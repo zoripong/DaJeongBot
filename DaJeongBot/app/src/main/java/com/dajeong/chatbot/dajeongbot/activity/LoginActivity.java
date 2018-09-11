@@ -168,9 +168,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String id = String.valueOf(mEtUserId.getText());
                 String pw = String.valueOf(mEtUserPw.getText());
-                // TODO: Remove the test code
-//                id = "test";
-                pw = "test";
+
                 if((!id.isEmpty())&&(!pw.isEmpty())){
                     findViewById(R.id.pgb).setVisibility(View.VISIBLE);
                     Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserInfo(AccountType.BASIC_ACCOUNT, id, pw);
@@ -230,6 +228,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                /* FIXME : What is it????
                 OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
                 Retrofit retrofit = new Retrofit.Builder()
@@ -237,7 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                         .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
-
+                */
                 return response.body().toString();
             } catch (IOException e) {
                 Log.e(TAG, e.toString());

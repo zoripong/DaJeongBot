@@ -15,8 +15,14 @@ import android.widget.TextView;
 import com.dajeong.chatbot.dajeongbot.R;
 
 public class ChangeBotActivity extends AppCompatActivity {
-    private final String TAG = "SettingActivity";
-    // TODO : 로그아웃시 로그인 정보 삭제
+    private final String TAG = "ChangeBotActivity";
+    /*
+    * {
+      "account_id": 32,
+      "new_bot_type": 2
+    }
+    * */
+    //TODO: sharedpreferences 에도 반영..!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
