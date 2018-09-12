@@ -48,7 +48,7 @@ public class ChangeNameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 getEditName = editName.getText().toString();
                 if(getEditName.getBytes().length <= 0){//빈값이 넘어올때의 처리
-                    Toast.makeText(getApplicationContext(), "값을 입력해주세요!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "이름을 입력해주세요!", Toast.LENGTH_LONG).show();
                 }
                 else{
                      updateName();
@@ -72,9 +72,10 @@ public class ChangeNameActivity extends AppCompatActivity {
                     if (response.body().has("status")) {
                         if (response.body().get("status").getAsString().equals("Success")) {
                             Log.e(TAG, "이름변경 성공");
-//                        Intent intent = new Intent(ChangeNameActivity.this, SettingActivity.class);
-//                        startActivity(intent);
-//                        finish();
+                            Toast.makeText(getApplicationContext(), "성공적으로 이름을 변경했습니다", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ChangeNameActivity.this, SettingActivity.class);
+                        startActivity(intent);
+                        finish();
                         } else {
                             Log.e(TAG, "서버의 문제로 이름 변경에 실패하였습니다.");
                         }

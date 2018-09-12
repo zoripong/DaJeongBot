@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
@@ -37,6 +40,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -254,9 +258,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         for (int i = 0; i < slotArrayList.size(); i++) {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
             final Button myButton = new Button(mContext);
-
+            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, mContext.getResources().getDisplayMetrics());
             // 가로, 세로, 마진
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             lp.setMargins(15, 5, 15, 10);
             myButton.setLayoutParams(lp);
             myButton.setText(slotArrayList.get(i).getLabel());
@@ -295,6 +299,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
     }
+
 
     private class ChatBotHolder extends RecyclerView.ViewHolder {
         ImageView mIvSenderProfile;
@@ -428,10 +433,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
+        @SuppressLint("ResourceType")
         private void showImage(String imgUrl) {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatBotImageHolder.this.itemView)
                     .load(imgUrl)
+                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
     }
@@ -446,10 +453,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
+        @SuppressLint("ResourceType")
         private void showImage(String imgUrl) {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatUserImageHolder.this.itemView)
                     .load(imgUrl)
+                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
     }
@@ -475,5 +484,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     }
-
+    private static float dpFrompx(final Context context,final float px){
+        return px / context.getResources().getDisplayMetrics().density;
+    }
 }
