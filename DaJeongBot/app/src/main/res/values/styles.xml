@@ -35,4 +35,13 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
+
+    <style name="DialogMinWidth" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+    </style>
+
+    <!-- The platform's desired minimum size for a dialog's width when it
+        is along the major axis (that is the screen is landscape).  This may
+        be either a fraction or a dimension. -->
+    <item type="dimen" name="dialog_min_width_major">90%</item>
 </resources>

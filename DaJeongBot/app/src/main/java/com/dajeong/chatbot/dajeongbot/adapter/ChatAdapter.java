@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
@@ -31,6 +34,7 @@ import com.dajeong.chatbot.dajeongbot.fragment.CarouselFragment;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
+import com.dajeong.chatbot.dajeongbot.model.Slot;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -97,6 +101,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Chat chat = mChats.get(position);
+        Log.e(TAG, "view type is "+holder.getItemViewType() + "/" +chat.getContent());
+
         switch (holder.getItemViewType()) {
             case 0:
                 ChatBotHolder chatBotHolder = (ChatBotHolder) holder;
@@ -112,15 +118,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case 2:
                 ChatBotSlotHolder chatBotSlotHolder = (ChatBotSlotHolder) holder;
+                chatBotSlotHolder.mTvContent.setText(chat.getContent());
                 chatBotSlotHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotSlotHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
+                chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
 
                 if (!chatBotSlotHolder.hasBtn) {
                     chatBotSlotHolder.setHasBtn(true);
-                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getOptionList());
+                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList());
                 }
 
-                chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
                 break;
             case 3:
                 final ChatBotCarouselHolder chatBotCarouselHolder = (ChatBotCarouselHolder) holder;
@@ -150,7 +157,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     public void onPageSelected(final int position) {
                         count = position;
                         chatBotCarouselHolder.CarouselCondition();
-
                     }
 
                     @Override
@@ -173,7 +179,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
                         ((MainActivity)mContext).setJsonResponse(new JsonParser().parse("{\"select_idx\":"+((MainActivity)mContext).getSelectIndex()+"}").getAsJsonObject());
                         ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, -1, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
                         notifyDataSetChanged();
 
                     }
@@ -186,13 +192,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotImageHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotImageHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-                chatBotImageHolder.showImage();
+                chatBotImageHolder.showImage(chat.getContent());
                 break;
             case 5:
                 // 사용자가 보낸 이미지 채팅 ui
                 ChatUserImageHolder chatUserImageHolder = (ChatUserImageHolder) holder;
                 chatUserImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-                chatUserImageHolder.showImage();
+                chatUserImageHolder.showImage(chat.getContent());
                 break;
             default:
 
@@ -214,7 +220,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (mChats.get(position).getSender() != null) {
             // 챗봇이 전송
             if (mChats.get(position).getNodeType() == NodeType.SLOT_NODE
-                    && mChats.get(position).getOptionList() != null) {
+                    && mChats.get(position).getSlotList() != null) {
                 // slot node 일 경우
                 return 2;
             }
@@ -233,16 +239,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return 0;
         } else {
             // 사용자가 전송
-
             if (mChats.get(position).getNodeType() == NodeType.IMAGE_NODE) {
                 // image node 일 경우
-
                 return 5;
             }
             return 1;
         }
-
-
     }
 
     @Override
@@ -250,18 +252,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mChats.size();
     }
 
-    private void createSlotBtns(LinearLayout layout, JsonArray options) {
-
-        for (int i = 0; i < options.size(); i++) {
+    private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList) {
+        Log.e(TAG, "createSlotBtns : "+ slotArrayList.size());
+        Log.e(TAG, "slotArrayList.toString(): " + slotArrayList.toString());
+        for (int i = 0; i < slotArrayList.size(); i++) {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
-            final JsonObject option = options.get(i).getAsJsonObject();
             final Button myButton = new Button(mContext);
             int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, mContext.getResources().getDisplayMetrics());
             // 가로, 세로, 마진
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             lp.setMargins(15, 5, 15, 10);
             myButton.setLayoutParams(lp);
-            myButton.setText(option.get("label").getAsString());
+            myButton.setText(slotArrayList.get(i).getLabel());
 
             // 스타일 지정
             TypedValue typedValue = new TypedValue();
@@ -279,11 +281,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
 
+            final int finalI = i;
             myButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
 //                    Toast.makeText(mContext, myButton.getText().toString(), Toast.LENGTH_LONG).show();
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
-                    ((MainActivity) mContext).sendMessage(accountId, option.get("value").getAsString(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
+                    ((MainActivity) mContext).sendMessage(accountId, slotArrayList.get(finalI).getValue(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, -1, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
+                    notifyDataSetChanged();
                 }
             });
         }
@@ -320,6 +325,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LinearLayout mRootLayout;
         ImageView mIvSenderProfile;
         TextView mTvTime;
+        TextView mTvContent;
 
         boolean hasBtn;
 
@@ -329,6 +335,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             hasBtn = false;
             mTvTime = itemView.findViewById(R.id.tvTime);
+            mTvContent = itemView.findViewById(R.id.tvContent);
         }
 
         void setHasBtn(boolean hasBtn) {
@@ -420,9 +427,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
-        private void showImage() {
+        @SuppressLint("ResourceType")
+        private void showImage(String imgUrl) {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
-            Glide.with(ChatBotImageHolder.this.itemView).load("https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif").into(imageViewTarget);
+            Glide.with(ChatBotImageHolder.this.itemView)
+                    .load(imgUrl)
+                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
+                    .into(imageViewTarget);
         }
     }
 
@@ -436,9 +447,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
         }
 
-        private void showImage() {
+        @SuppressLint("ResourceType")
+        private void showImage(String imgUrl) {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
-            Glide.with(ChatUserImageHolder.this.itemView).load("https://media.giphy.com/media/3oriNO0p3Sn0itamg8/giphy.gif").into(imageViewTarget);
+            Glide.with(ChatUserImageHolder.this.itemView)
+                    .load(imgUrl)
+                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
+                    .into(imageViewTarget);
         }
     }
 

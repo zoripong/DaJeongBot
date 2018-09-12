@@ -39,6 +39,7 @@ import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormat
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -96,9 +97,9 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         Calendar instance = Calendar.getInstance();
         widget.setSelectedDate(instance);
         //오늘 날짜로 변경
-        getToday();
-        TextView selectDay = (TextView) findViewById(R.id.select_day_tv);
+        selectDay = (TextView) findViewById(R.id.select_day_tv);
         selectDay.setText(instance.get(Calendar.YEAR)+"."+(instance.get(Calendar.MONTH) + 1)+"."+instance.get(Calendar.DAY_OF_MONTH));
+
         //캘린더 header format 변경하기
         widget.setTitleFormatter(new DateFormatTitleFormatter(DATE_FORMAT));
 
@@ -118,8 +119,14 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
         scheduleList=(LinearLayout)findViewById(R.id.schedule_li);
         noScheduleList=(LinearLayout)findViewById(R.id.no_schedule_li);
+        selectDay = (TextView) findViewById(R.id.select_day_tv);
+
+        getToday();
         getEventList();
 
+//        mEventAdapter = new EventAdapter(mEvents);
+//        mRvEventList.setAdapter(mEventAdapter);
+//        Log.e(TAG,"mEvents size >>"+mEventAdapter.getItemCount());
     }
 
     @Override
@@ -160,18 +167,11 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
 
         widget.addDecorator(new MySelectorDecorator(CalendarActivity.this));
 
-
-        selectDay = (TextView) findViewById(R.id.select_day_tv);
         selectDay.setText("");
         getSchedule(); //선택한 날짜의 일정 가져오기
 
         mEventAdapter = new EventAdapter(mEvents);
         mRvEventList.setAdapter(mEventAdapter);
-        if(mEventAdapter.getItemCount()==0){
-            Log.e(TAG,"선택된 날은 일정이 없음");
-//            scheduleList.setVisibility(View.GONE);
-//            noScheduleList.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -219,6 +219,17 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         strToday = sdf.format(c1.getTime());
         //strToday="2018-09-05";
         Log.e(TAG,"strToday >> "+strToday);
+
+        String[] dateArray = strToday.split("-");
+        mYear=dateArray[0];
+        mMonth=dateArray[1];
+        mDate=dateArray[2];
+        shot_Day = mYear + "." + mMonth + "." + mDate;
+        Log.e(TAG,"shot_Day >> "+shot_Day);
+        selectDay.setText(shot_Day);
+
+        mEventAdapter = new EventAdapter(mEvents);
+        mRvEventList.setAdapter(mEventAdapter);
     }
 
     private  void getEventList(){
@@ -235,14 +246,16 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                 List<CalendarDay> calendarDays = new ArrayList<>();
 
                 for(String date : dates){
-                    Log.e(TAG, date);
+                    //Log.e(TAG, date);
                     if(date.equals(strToday)){
                         isTodayEvent=true; //오늘 일정이 있을 경우 true
                         Log.e(TAG,"오늘 일정 있음");
+                        scheduleList.setVisibility(View.VISIBLE);
+                        noScheduleList.setVisibility(View.GONE);
+                        getSchedule();
                     }
                     else{ //일정 없음
-                        scheduleList.setVisibility(View.GONE);
-                        noScheduleList.setVisibility(View.VISIBLE);
+                        Log.e(TAG,"오늘 일정 없음");
                     }
                     String[] time = date.split("-");
                     calendar.set(Integer.parseInt(time[0]),Integer.parseInt(time[1]) -1 ,Integer.parseInt(time[2]));
@@ -285,16 +298,20 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                     mEvents.add(new Event(json.get("id").getAsInt(), json.get("schedule_what").getAsString(), json.get("schedule_when").getAsString(), json.get("schedule_where").getAsString(),-1)); //이미지 일단 넣어둠
                 }
 
+                Log.e(TAG,"정보 가져오기"+mEvents);
+                Log.e(TAG,"mEvents size >>"+mEvents.size());
+
                 if(body.size() == 0){
-                    Log.i(TAG, "event info is not exist");
+                    Log.e(TAG, "event info is not exist");
                     scheduleList.setVisibility(View.GONE);
                     noScheduleList.setVisibility(View.VISIBLE);
                 }else{
                     selectDay.setText(shot_Day);
-                    mEventAdapter.notifyDataSetChanged();
                 }
+                mEventAdapter.notifyDataSetChanged();
 
-                mRvEventList.scrollToPosition(mEventAdapter.getItemCount() - 1);
+                Log.e(TAG,"mEvents size?? >>"+ mEventAdapter.getItemCount());
+//                mRvEventList.scrollToPosition(mEventAdapter.getItemCount() - 1);
             }
 
             @Override
@@ -304,5 +321,6 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
                 }
             }
         });
+
     }
 }

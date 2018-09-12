@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,8 +41,17 @@ public class TutorialActivity extends Activity {
 
         //액티비티 크기 변경
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        getWindow().getAttributes().width = 1156;
-        getWindow().getAttributes().height = 1605;
+
+        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
+
+        float width = (int)(dm.widthPixels*0.8f);
+        Log.e("Tutorial width: ",Float.toString(width));
+        float a=1156/width;
+        int b=(int)(1605/a);
+        Log.e("Tutorial height: ",Float.toString(a));
+        Log.e("Tutorial height: ",Integer.toString(b));
+        getWindow().getAttributes().width = (int)width;
+        getWindow().getAttributes().height = b;
 
         //this.setFinishOnTouchOutside(false);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL , WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);

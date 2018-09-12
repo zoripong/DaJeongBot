@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:theme="@style/DialogMinWidth">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_bg"
+        android:padding="40dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="로그아웃 하시겠습니까?"
+            android:textSize="16sp"
+            android:textAlignment="center"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:id="@+id/tvOk"
+                android:text="확인"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/dialog_btn_bg"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"/>
+
+            <TextView
+                android:id="@+id/tvCancle"
+                android:text="취소"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/dialog_btn_bg"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:layout_marginLeft="20dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

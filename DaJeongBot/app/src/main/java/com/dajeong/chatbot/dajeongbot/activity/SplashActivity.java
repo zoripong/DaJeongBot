@@ -46,8 +46,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         getHashKey();
         test();
-//        checkInternetStatus();
-        startApp();
+        checkInternetStatus();
     }
 
     public void test(){
@@ -75,20 +74,21 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void checkInternetStatus() {
-
-        Call<String> res = NetRetrofit
+        Log.e(TAG, "야호");
+        Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
                 .checkInternetStatus();
 
-        final String[] message = {"서버에 문제가 발생하였습니다. 서비스 이용에 불편을 드려 대단히 죄송합니다. 빠른 시일 내에 원활한 서비스 이용이 가능하도록 하겠습니다."};
+        final String[] message = {"서버에 문제가 발생하였습니다.\n \n 서비스 이용에 불편을 드려 대단히 죄송합니다.\n빠른 시일 내에 원활한 서비스 이용이\n가능하도록 하겠습니다."};
         final NetworkExceptionDialog networkExceptionDialog = new NetworkExceptionDialog(SplashActivity.this);
 
-        res.enqueue(new Callback<String>() {
+        res.enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.e(TAG, response.toString());
                 if(response!=null){
-                    if(!(response.body()!=null && "hello world".equals(response.body()))){
+                    if(!(response.body()!=null && "Success".equals(response.body().get("status").getAsString()))){
                         // 실패
                         runOnUiThread(new Runnable() {
                             @Override
@@ -103,9 +103,10 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e(TAG, t.toString());
                 if(t instanceof SocketTimeoutException){
-                    message[0] = "네트워크 연결을 확인해주세요. 다정봇은 인터넷이 필요한 서비스입니다.";
+                    message[0] = "네트워크 연결을 확인해주세요.\n 다정봇은 인터넷이 필요한 서비스입니다.";
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -115,6 +116,7 @@ public class SplashActivity extends AppCompatActivity {
                 });
             }
         });
+
     }
 
     private void getHashKey(){

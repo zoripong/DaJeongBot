@@ -2,8 +2,15 @@ package com.dajeong.chatbot.dajeongbot.network;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,26 +40,36 @@ public class NetworkExceptionDialog {
         dlg.setContentView(R.layout.dialog_network_exception);
 
         // 커스텀 다이얼로그를 노출한다.
-        dlg.show();
-        TextView textView = dlg.findViewById(R.id.tv_guide_message);
+        DisplayMetrics dm = mContext.getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+        int width = (int)(dm.widthPixels*0.8f); //디바이스 화면 너비
+        //int height = dm.heightPixels; //디바이스 화면 높이
 
+        WindowManager.LayoutParams wm = dlg.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+        wm.copyFrom(dlg.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+        wm.width = width;
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        dlg.show();
+
+
+        TextView textView = dlg.findViewById(R.id.tv_guide_message);
+        textView.setText(text);
         dlg.findViewById(R.id.btnRetry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "재시도합니다.", Toast.LENGTH_SHORT).show();
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
                 ((SplashActivity)mContext).checkInternetStatus();
             }
         });
-        dlg.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "취소 했습니다.", Toast.LENGTH_SHORT).show();
-
-                // 커스텀 다이얼로그를 종료한다.
-                dlg.dismiss();
-            }
-        });
+//        dlg.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(mContext, "취소 했습니다.", Toast.LENGTH_SHORT).show();
+//
+//                // 커스텀 다이얼로그를 종료한다.
+//                dlg.dismiss();
+//            }
+//        });
     }
 }

@@ -6,6 +6,7 @@ import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
+import com.dajeong.chatbot.dajeongbot.model.Slot;
 import com.dajeong.chatbot.dajeongbot.network.RetrofitService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,7 +43,7 @@ public class MessageReceiver {
             for(int i = 0; i<messages.size(); i++){
                 Log.e(TAG, "messages"+i);
                 if(i < messages.size()-1){
-                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), timestamp));
+                    mChats.addLast(new Chat(result.get("chat_type").getAsInt(), NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), timestamp));
                 }else{
                     if(events.size() > 0){
                         ArrayList<Memory> memories = new ArrayList<>();
@@ -52,9 +53,9 @@ public class MessageReceiver {
                             memories.add(new Memory(event.get("id").getAsInt(), event.get("event_image").getAsString(),  event.get("event_detail").getAsString()));
                         }
                         memories.add(new Memory(-1, "", "이제 없어!"));
-                        mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, mBotChar, messages.get(i).getAsString(), timestamp, memories));
+                        mChats.addLast(new Chat(result.get("chat_type").getAsInt(), NodeType.CAROUSEL_NODE, mBotChar, messages.get(i).getAsString(), timestamp, null, memories));
                     }else{
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+                        mChats.addLast(new Chat(result.get("chat_type").getAsInt(), NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
                     }
                 }
             }
@@ -64,7 +65,7 @@ public class MessageReceiver {
         JsonArray messages = result.getAsJsonArray("content");
         messages = result.get("content").getAsJsonArray();
         for(int i = 0; i<messages.size(); i++){
-            mChats.addLast(new Chat(result.get("node_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+            mChats.addLast(new Chat(result.get("chat_type").getAsInt(), result.get("node_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
         }
     }
 
@@ -75,6 +76,7 @@ public class MessageReceiver {
             String message = jsonArray.get(i).getAsJsonObject().get("message").getAsString();
             String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
             String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
+
             Log.e(TAG, "node type is " + nodeType);
             JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
 
@@ -83,15 +85,20 @@ public class MessageReceiver {
                 Log.e(TAG, "here"+ i +":" + imgUrl);
                 Log.e(TAG, "here"+ i +":" + jsonArray.get(i).getAsJsonObject().toString());
                 if(!imgUrl.equals(""))
-                    mChats.addLast(new Chat(NodeType.IMAGE_NODE, mBotChar, imgUrl, timestamp));
+                    mChats.addLast(new Chat(NodeType.IMAGE_NODE, -1, mBotChar, imgUrl, timestamp));
 
             }
 
             if(options.size() > 0){
                 //TODO : EditText enable
-                mChats.addLast(new Chat(NodeType.SLOT_NODE, mBotChar, message, timestamp, options));
+                ArrayList<Slot> slotArrayList = new ArrayList<>();
+                for(int j = 0; j<options.size(); j++){
+                    JsonObject slotJson = options.get(j).getAsJsonObject();
+                    slotArrayList.add(new Slot(slotJson.get("id").getAsInt(), slotJson.get("label").getAsString(), slotJson.get("value").getAsString()));
+                }
+                mChats.addLast(new Chat(NodeType.SLOT_NODE, -1, mBotChar, message, timestamp, slotArrayList, null));
             }else{
-                mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
+                mChats.addLast(new Chat(NodeType.SPEAK_NODE, -1, mBotChar, message, timestamp));
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -13,12 +14,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.control.MessageReader;
 import com.dajeong.chatbot.dajeongbot.control.MessageReceiver;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!mRvChatList.canScrollVertically(-1)) {
-                    Log.e(TAG, "OnScrolled : TOP");
+//                    Log.e(TAG, "OnScrolled : TOP");
                     if (mIsLoad && mMoreChat) {
                         showProgressBar();
                         getMoreMessage();
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(mChatType, NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -149,11 +152,11 @@ public class MainActivity extends AppCompatActivity  {
         spm = new CustomSharedPreference(this);
         //spm.removePreferences("SHOW_TUTORIAL");
         if(spm.retrieveBoolean("SHOW_TUTORIAL")){
-            Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+            //Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
             return;
         }
         else{
-            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+//            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
         }
 
         spm.savePreferences("SHOW_TUTORIAL", true);
@@ -237,25 +240,43 @@ public class MainActivity extends AppCompatActivity  {
         String notificationMessage = extras.getString("data", "UNDEFINED");
         try {
             JSONObject jsonObject = new JSONObject(notificationMessage);
-            Log.e(TAG, jsonObject.getString("status"));
+            //Log.e(TAG, jsonObject.getString("status"));
             if(jsonObject.has("status")){
                 // FCM Message로 Open
-
             }
             Toast.makeText(getApplicationContext(), jsonObject.getString("status"), Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e(TAG, notificationMessage);
+//        Log.e(TAG, notificationMessage);
     }
 
     @NonNull
     private Character setBot(){
-        int charImage = R.drawable.ic_char1;
-        String charNames[] = {"다정군", "다정냥", "다정곰", "다정몽"};
+        String charNames[] = {"다정군", "다정냥", "다정곰", "다정뭉"};
         int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
-
-        return new Character(charNames[charType=1], charImage+charType);
+        int charImage;
+        Log.e(TAG,"CharType >>"+charType);
+        switch (charType){
+            case 0:
+                charImage=R.drawable.ic_char1;
+                break;
+            case 1:
+                charImage=R.drawable.ic_char2;
+                break;
+            case 2:
+                charImage=R.drawable.ic_char3;
+                break;
+            case 3:
+                charImage=R.drawable.ic_char4;
+                break;
+                default:
+                    charImage=R.drawable.ic_char1;
+                    break;
+        }
+        TextView botName = (TextView) findViewById(R.id.tvbotName);
+        botName.setText(charNames[charType]);
+        return new Character(charNames[charType], charImage);
     }
 
     private void getMessage(){
@@ -282,8 +303,6 @@ public class MainActivity extends AppCompatActivity  {
     private void getMoreMessage(){
         int lastIndex = CustomSharedPreference.getInstance(getApplicationContext(), "chat").getIntPreferences("last_index");
 
-        Log.e(TAG, "Last Index is "+ lastIndex);
-
         Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getMessages(mAccountId, lastIndex);
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
@@ -303,48 +322,23 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void controlJsonObj(Response<ArrayList<JsonObject>> response){
-        Log.e(TAG, "HERE"+String.valueOf(mAccountId));
+//        Log.e(TAG, "HERE"+String.valueOf(mAccountId));
 
         ArrayList<JsonObject> body = response.body();
-
-        // TODO: 이미지 노드 추가하기
-
-        for(int i = 0 ; i<body.size(); i++){
-            JsonObject json  = body.get(i).getAsJsonObject();
-            if(!json.get("carousel_list").isJsonNull()){
-                // carousel_list 가 있을 경우
-                Log.e(TAG, json.toString());
-                JSONArray carouselList = null;
-                ArrayList<Memory> memories = new ArrayList<>();
-                try {
-                    carouselList = new JSONArray(json.get("carousel_list").getAsString());
-                    for(int j = 0; j<carouselList.length(); j++){
-                        memories.add(new Memory(carouselList.getJSONObject(j).getInt("id"), null,
-                                carouselList.getJSONObject(j).getString("schedule_where")+"에서"+carouselList.getJSONObject(j).getString("schedule_what")));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        for(int i = 0 ; i<body.size(); i++) {
+            JsonObject json = body.get(i).getAsJsonObject();
+            if (json.get("carousel_list").isJsonNull() && json.get("slot_list").isJsonNull()) {
+                // carousel_list 와 slot list 가 비어있을 경우
+                MessageReader.getInstance().readBasicMessage(json, mChats, mBotChar);
+            } else {
+                if (!json.get("carousel_list").isJsonNull() && json.get("slot_list").isJsonNull()) {
+                    MessageReader.getInstance().readCarouselMessage(json, mChats, mBotChar);
+                } else if (!json.get("slot_list").isJsonNull() && json.get("carousel_list").isJsonNull()) {
+                    MessageReader.getInstance().readSlotMessage(json, mChats, mBotChar);
+                } else {
+                    Log.e(TAG, "error");
                 }
-
-                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), memories));
-                }
-                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), memories));
-                }
-            }else{
-                // carousel_list 가 비어있을 경우
-                // 챗봇인지 아닌지 확인하기
-                if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString()));
-                }
-                else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-                    mChats.addFirst(new Chat(json.get("node_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString()));
-                }
-
             }
-
-//            mChatType = json.get("chat_type").getAsInt();
         }
         if(body.size() == 0 ){
             // 더이상의 대화 내역이 없음
@@ -355,15 +349,10 @@ public class MainActivity extends AppCompatActivity  {
             mChatAdapter.notifyDataSetChanged();
         }
         hideProgressBar();
-
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-        // TODO REMOVE IT
-        // DEBUG
-        chatType = ChatType.BASIC_CHAT;
-
-        Log.e(TAG, "이 대화의 타입은"+chatType);
+//        Log.e(TAG, "이 대화의 타입은"+chatType);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
@@ -372,7 +361,7 @@ public class MainActivity extends AppCompatActivity  {
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.e(TAG, String.valueOf(response));
+//                Log.e(TAG, String.valueOf(response));
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 if(response.body() != null){
                     Log.e(TAG, String.valueOf(response.body()));
@@ -388,7 +377,6 @@ public class MainActivity extends AppCompatActivity  {
                                 mChatType = result.get("chat_type").getAsInt();
                                 switch (result.get("chat_type").getAsInt()){
                                     case ChatType.BASIC_CHAT:
-                                        // TODO just add
                                         MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
                                     case ChatType.MEMORY_CHAT:
@@ -446,10 +434,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private void hideProgressBar(){
         findViewById(R.id.pgb).setVisibility(View.INVISIBLE);
-    }
-
-    public int getCurrentChatType(){
-        return mChatType;
     }
 
     public void setSelectIndex(int index){

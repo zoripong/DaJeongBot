@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.customize.LogoutDialog;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
@@ -27,11 +28,32 @@ import retrofit2.Response;
 // setting activity ( 사용자 정보 수정 / 챗봇 선택 / 데이터 초기화 .. )
 public class SettingActivity extends AppCompatActivity {
     private final String TAG = "SettingActivity";
-    // TODO : 로그아웃시 로그인 정보 삭제
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        findViewById(R.id.LiNickname).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, ChangeNameActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.LiChangeChatbot).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, ChangeBotActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.LiChangeTime).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this, ChangeTimeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         findViewById(R.id.LiShowTutorial).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
             @Override
@@ -44,6 +66,8 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 logout();
+ //               LogoutDialog customDialog = new LogoutDialog(SettingActivity.this);
+//                customDialog.callFunction();
             }
         });
     }
@@ -85,7 +109,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    private void releaseUserInfo(){
+    public void releaseUserInfo(){
         CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
         Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
         startActivity(intent);
