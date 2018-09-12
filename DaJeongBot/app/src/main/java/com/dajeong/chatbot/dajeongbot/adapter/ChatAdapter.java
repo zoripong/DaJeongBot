@@ -288,7 +288,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
                     ((MainActivity) mContext).sendMessage(accountId, slotArrayList.get(finalI).getValue(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
                     mChats.add(new Chat(NodeType.SPEAK_NODE, -1, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
-                    notifyDataSetChanged();
+                    notifyDataSetChanged(); // TODO : chat type debug
                 }
             });
         }

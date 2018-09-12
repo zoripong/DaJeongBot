@@ -65,9 +65,9 @@ public class SettingActivity extends AppCompatActivity {
         findViewById(R.id.LiLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logout();
- //               LogoutDialog customDialog = new LogoutDialog(SettingActivity.this);
-//                customDialog.callFunction();
+                //logout();
+                LogoutDialog customDialog = new LogoutDialog(SettingActivity.this);
+                customDialog.callFunction();
             }
         });
     }
@@ -75,39 +75,6 @@ public class SettingActivity extends AppCompatActivity {
     /*
      * 서버에 저장된 fcm 토큰을 삭제합니다.
      * */
-    private void logout(){
-        final String accountId = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id");
-        final String token = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("fcm_token");
-        Log.e(TAG, "account ID : "+accountId);
-        Log.e(TAG, "token: "+token);
-        if(accountId!=null && !token.equals("")){
-            Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().releaseFcmToken(Integer.parseInt(accountId), token);
-            res.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    if(response.body().has("status")){
-                        if(response.body().get("status").getAsString().equals("Success")){
-                            Log.i(TAG, "토큰 해제 성공하였습니다."+ accountId);
-                            releaseUserInfo();
-                        }else{
-                            Log.e(TAG, "서버의 문제로 토큰 등록에 실패하였습니다.");
-                            Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 로그아웃에 실패하였습니다.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
-                    if(t!=null){
-                        Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 로그아웃에 실패하였습니다.", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }else{
-            releaseUserInfo();
-        }
-
-    }
 
     public void releaseUserInfo(){
         CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();

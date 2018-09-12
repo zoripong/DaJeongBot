@@ -20,15 +20,18 @@ public class RequestSendMessage {
     private int nodeType;
     @SerializedName("chat_type")
     private int chatType;
+    @SerializedName("bot_type")
+    private int botType;
     private String time;
     private int isBot;
     private JsonObject response;
 
-    public RequestSendMessage(int accountId, String content, int nodeType, int chatType, String time, int isBot, JsonObject response) {
+    public RequestSendMessage(int accountId, String content, int nodeType, int chatType, int botType, String time, int isBot, JsonObject response) {
         this.accountId = accountId;
         this.content = content;
         this.nodeType = nodeType;
         this.chatType = chatType;
+        this.botType = botType;
         this.time = time;
         this.isBot = isBot;
         this.response = response;
@@ -56,6 +59,10 @@ public class RequestSendMessage {
 
     public int getIsBot() {
         return isBot;
+    }
+
+    public int getBotType() {
+        return botType;
     }
 
     public JsonObject getResponse() {

@@ -8,7 +8,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="191dp"
+        android:layout_height="259dp"
         android:layout_marginTop="12dp"
         android:background="#FFF"
         app:layout_constraintBottom_toBottomOf="@+id/button"
@@ -30,12 +30,12 @@
             android:id="@+id/LiBot1"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvBotChange"
             app:layout_constraintEnd_toStartOf="@+id/LiBot2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -60,12 +60,12 @@
             android:id="@+id/LiBot2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvBotChange"
             app:layout_constraintEnd_toStartOf="@+id/LiBot3"
             app:layout_constraintStart_toEndOf="@+id/LiBot1"
             app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -90,12 +90,12 @@
             android:id="@+id/LiBot3"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvBotChange"
             app:layout_constraintEnd_toStartOf="@+id/LiBot4"
             app:layout_constraintStart_toEndOf="@+id/LiBot2"
             app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -120,12 +120,12 @@
             android:id="@+id/LiBot4"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvBotChange"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/LiBot3"
             app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -145,5 +145,26 @@
                 android:textAlignment="center"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvBotChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/dialog_btn_bg"
+            android:paddingBottom="7dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="7dp"
+            android:text="변경하기"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 </LinearLayout>

@@ -102,6 +102,7 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
             botHeads.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // TODO TEST 2
                     Button clickButton = (Button) v;
                     int index = botHeads.indexOf(clickButton);
 
@@ -124,6 +125,8 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                     currentPage(index);
                     changeVisibleImage(index);
                     changeIntroduceImage(index);
+                    Log.e(TAG, "here" + String.valueOf(currentPage));
+
                 }
             });
         }
@@ -262,28 +265,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         mIvBotIntroduce.setImageResource(introduceImage[index]);
         Glide.with(this).load(R.raw.chatbot_move_image_1+index).into(mIvBotIntroduce);
 
-    }
-
-    // 서버와 통신하기 위한 내부 클래스
-    private class NetworkCall extends AsyncTask<Call, Void, String> {
-        @Override
-        protected String doInBackground(Call... calls) {
-            try {
-                Call<JsonObject> call = calls[0];
-                Response<JsonObject> response = call.execute();
-                return response.body().toString();
-            } catch (IOException e) {
-                Log.e(TAG, e.toString());
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result != null)
-                Log.e(TAG, result);
-        }
     }
 
     private String concatDate(String year, String month, String date) {

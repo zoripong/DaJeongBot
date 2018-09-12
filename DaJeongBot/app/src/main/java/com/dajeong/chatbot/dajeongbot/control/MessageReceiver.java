@@ -43,7 +43,7 @@ public class MessageReceiver {
             for(int i = 0; i<messages.size(); i++){
                 Log.e(TAG, "messages"+i);
                 if(i < messages.size()-1){
-                    mChats.addLast(new Chat(result.get("chat_type").getAsInt(), NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), timestamp));
+                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp));
                 }else{
                     if(events.size() > 0){
                         ArrayList<Memory> memories = new ArrayList<>();
@@ -53,9 +53,9 @@ public class MessageReceiver {
                             memories.add(new Memory(event.get("id").getAsInt(), event.get("event_image").getAsString(),  event.get("event_detail").getAsString()));
                         }
                         memories.add(new Memory(-1, "", "이제 없어!"));
-                        mChats.addLast(new Chat(result.get("chat_type").getAsInt(), NodeType.CAROUSEL_NODE, mBotChar, messages.get(i).getAsString(), timestamp, null, memories));
+                        mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp, null, memories));
                     }else{
-                        mChats.addLast(new Chat(result.get("chat_type").getAsInt(), NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
                     }
                 }
             }
@@ -65,7 +65,7 @@ public class MessageReceiver {
         JsonArray messages = result.getAsJsonArray("content");
         messages = result.get("content").getAsJsonArray();
         for(int i = 0; i<messages.size(); i++){
-            mChats.addLast(new Chat(result.get("chat_type").getAsInt(), result.get("node_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+            mChats.addLast(new Chat(result.get("node_type").getAsInt(), result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
         }
     }
 

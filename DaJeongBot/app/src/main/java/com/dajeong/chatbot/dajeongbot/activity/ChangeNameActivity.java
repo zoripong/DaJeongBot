@@ -7,15 +7,28 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChangeNameActivity extends AppCompatActivity {
     private final String TAG = "ChangeNameActivity";
+    EditText editName;
+    String getEditName;
     /*
     * {
       "account_id": 32,
@@ -28,8 +41,56 @@ public class ChangeNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
 
+        editName = (EditText)findViewById(R.id.editName);
+
+        findViewById(R.id.tvNameChange).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getEditName = editName.getText().toString();
+                if(getEditName.getBytes().length <= 0){//빈값이 넘어올때의 처리
+                    Toast.makeText(getApplicationContext(), "값을 입력해주세요!", Toast.LENGTH_LONG).show();
+                }
+                else{
+                     updateName();
+
+                }
+            }
+        });
     }
 
+    public  void  updateName() {
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
+        Log.e(TAG,"accountId값 무엇일까,,,"+accountId);
+        if (!(accountId == null && accountId.equals(""))) {
+            final RequestUpdateName param = new RequestUpdateName(Integer.parseInt(accountId), getEditName);
+            Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().updateName(param);
+            res.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    if (response.body().has("status")) {
+                        if (response.body().get("status").getAsString().equals("Success")) {
+                            Log.e(TAG, "이름변경 성공");
+//                        Intent intent = new Intent(ChangeNameActivity.this, SettingActivity.class);
+//                        startActivity(intent);
+//                        finish();
+                        } else {
+                            Log.e(TAG, "서버의 문제로 이름 변경에 실패하였습니다.");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    if (t != null) {
+                        Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 이름을 변경하지 못하였습니다.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar actionBar = getSupportActionBar();

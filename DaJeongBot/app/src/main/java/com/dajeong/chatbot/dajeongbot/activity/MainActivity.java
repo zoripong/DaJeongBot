@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity  {
     private int mAccountId;
     private boolean mIsLoad;
     private boolean mMoreChat;
-    private int mChatType;
+    private int mChatType; // TODO DEBUG
     private int mSelectIndex;
 
     private JsonObject mJsonResponse;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(mChatType, NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -352,11 +352,11 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-//        Log.e(TAG, "이 대화의 타입은"+chatType);
+        int botType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
-                .sendMessage(new RequestSendMessage(accountId, content,0, chatType, time, isBot, mJsonResponse));
+                .sendMessage(new RequestSendMessage(accountId, content,0, chatType, botType, time, isBot, mJsonResponse));
 
         res.enqueue(new Callback<JsonObject>() {
             @Override
@@ -365,10 +365,15 @@ public class MainActivity extends AppCompatActivity  {
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 if(response.body() != null){
                     Log.e(TAG, String.valueOf(response.body()));
+
                     if(response.body().has("status")){
+
                         if(response.body().get("status").getAsString().equals("Failed")){
+
                             Toast.makeText(getApplicationContext(), "서버에 문제가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show();
+
                         }else if(response.body().get("status").getAsString().equals("Success")){
+
                             // custom chatbot api
                             if(response.body().has("result")){
                                 JsonObject result = response.body().getAsJsonObject("result");
@@ -399,6 +404,7 @@ public class MainActivity extends AppCompatActivity  {
                                         //TODO: EditText disable
                                         mEtMessage.setEnabled(false);
                                         break;
+
                                 }
                             }
                         }
