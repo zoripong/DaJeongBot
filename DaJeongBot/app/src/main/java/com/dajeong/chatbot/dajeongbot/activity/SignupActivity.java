@@ -21,7 +21,6 @@ import com.dajeong.chatbot.dajeongbot.R;
 
 // 사용자 정보 입력 activity
 public class SignupActivity extends AppCompatActivity{
-    //TODO : back 버튼 안먹히게
     /*
      * 0 : basic
      * 1 : facebook

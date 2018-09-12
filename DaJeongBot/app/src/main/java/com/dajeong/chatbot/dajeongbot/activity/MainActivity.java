@@ -46,7 +46,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-// TODO : 중간에 네트워크 연결되었을 경우
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity  {
     private final String TAG = "MainActivity";
@@ -114,9 +113,12 @@ public class MainActivity extends AppCompatActivity  {
                     long time = System.currentTimeMillis();
                     int isBot = 0;
 
+                    if(mChatType == ChatType.QUESTION_SCHEDULE_REPLY_CHAT){
+                        content = String.valueOf(mSelectIndex)+":"+content;
+                    }
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString() , String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -388,7 +390,7 @@ public class MainActivity extends AppCompatActivity  {
                                         // TODO TEST
                                         MessageReceiver.getInstance().receiveCarouselMessage(result, mChats, mBotChar);
                                         break;
-                                    case ChatType.QUESTION_SCHEDULE_SELECT_CHAT:
+                                    case ChatType.QUESTION_SCHEDULE_SELECT_CHAT: // 4
                                         // 선택한 일정에 대해 후기를 남겨야 함
                                         // reply_message_for_select_review 를 통해 데이터가 넘어옴
                                         mSelectIndex = result.get("events").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsInt();
@@ -396,13 +398,14 @@ public class MainActivity extends AppCompatActivity  {
                                         mChatType = ChatType.QUESTION_SCHEDULE_REPLY_CHAT;
                                         MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
-                                    case ChatType.QUESTION_SCHEDULE_REPLY_CHAT:
+                                    case ChatType.QUESTION_SCHEDULE_REPLY_CHAT: // 5
                                         // reply_message_for_reply_review 를 통해 데이터가 넘어옴
                                         // 일정을 선택해야 함
                                         mChatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
-                                        MessageReceiver.getInstance().receiveCarouselMessage(result, mChats, mBotChar);
+
+                                        MessageReceiver.getInstance().receiveSlotMessage(result, mChats, mBotChar);
                                         //TODO: EditText disable
-                                        mEtMessage.setEnabled(false);
+//                                        mEtMessage.setEnabled(false);
                                         break;
 
                                 }

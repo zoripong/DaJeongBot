@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.control;
 
 import android.util.Log;
 
+import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
@@ -10,6 +11,9 @@ import com.dajeong.chatbot.dajeongbot.model.Slot;
 import com.dajeong.chatbot.dajeongbot.network.RetrofitService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -35,6 +39,7 @@ public class MessageReceiver {
         if(result.has("events")){
             // carousel item
             Log.e(TAG, "추억회상");
+
             // TODO : 버튼 클릭시 데이터 요청
             String timestamp = String.valueOf(result.get("time").getAsLong());
             JsonArray messages = result.getAsJsonArray("content");
@@ -62,11 +67,43 @@ public class MessageReceiver {
         }
     }
     public void receiveBasicMessage(JsonObject result, LinkedList<Chat> mChats, Character mBotChar){
+        Log.e(TAG, "?"+result.get("chat_type").getAsInt());
         JsonArray messages = result.getAsJsonArray("content");
         messages = result.get("content").getAsJsonArray();
         for(int i = 0; i<messages.size(); i++){
             mChats.addLast(new Chat(result.get("node_type").getAsInt(), result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
         }
+    }
+
+    public void receiveSlotMessage(JsonObject result, LinkedList<Chat> mChats, Character mBotChar){
+        if(result.has("events")){
+            // carousel item
+            String timestamp = String.valueOf(result.get("time").getAsLong());
+            JsonArray messages = result.getAsJsonArray("content");
+            JsonArray events = result.getAsJsonArray("events");
+
+            for(int i = 0; i<messages.size(); i++){
+                if(i < messages.size()-1){
+                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp));
+                }else{
+                    if(events.size() > 0){
+                        ArrayList<Slot> slots = new ArrayList<>();
+                        for(int j = 0; j<events.size(); j++){
+                            Log.e(TAG, "event"+j);
+                            JsonObject event = events.get(j).getAsJsonObject();
+
+                            slots.add(new Slot(event.get("id").getAsInt(), event.get("schedule_where").getAsString()+"에서 "+event.get("schedule_what").getAsString(),  event.get("id").getAsString()));
+                        }
+                        slots.add(new Slot(-1, "이제 없어.", "-1"));
+                        mChats.addLast(new Chat(NodeType.SLOT_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp, slots, null));
+                    }else{
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+                    }
+                }
+            }
+        }
+
+
     }
 
     public void receiveDanbeeMessage(JsonObject mJsonResponse, LinkedList<Chat>mChats, Character mBotChar){
@@ -96,9 +133,9 @@ public class MessageReceiver {
                     JsonObject slotJson = options.get(j).getAsJsonObject();
                     slotArrayList.add(new Slot(slotJson.get("id").getAsInt(), slotJson.get("label").getAsString(), slotJson.get("value").getAsString()));
                 }
-                mChats.addLast(new Chat(NodeType.SLOT_NODE, -1, mBotChar, message, timestamp, slotArrayList, null));
+                mChats.addLast(new Chat(NodeType.SLOT_NODE, ChatType.REGISTER_CHAT, mBotChar, message, timestamp, slotArrayList, null));
             }else{
-                mChats.addLast(new Chat(NodeType.SPEAK_NODE, -1, mBotChar, message, timestamp));
+                mChats.addLast(new Chat(NodeType.SPEAK_NODE, ChatType.BASIC_CHAT, mBotChar, message, timestamp));
             }
         }
     }

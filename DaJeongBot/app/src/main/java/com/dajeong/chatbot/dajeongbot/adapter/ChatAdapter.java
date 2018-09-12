@@ -50,7 +50,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LinkedList<Chat> mChats;
     private Context mContext;
     private FragmentManager mFragmentManager;
-//        HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
+    //        HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
     private View vBot;
     private View vUser;
     private View vSlot;
@@ -118,10 +118,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotSlotHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotSlotHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-
+//                Log.e(TAG, chat.getContent()+"slot의 채트 타입은 :" + chat.getChatType());
                 if (!chatBotSlotHolder.hasBtn) {
                     chatBotSlotHolder.setHasBtn(true);
-                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList());
+                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList(), chat.getChatType());
                 }
 
                 break;
@@ -175,7 +175,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
                         ((MainActivity)mContext).setJsonResponse(new JsonParser().parse("{\"select_idx\":"+((MainActivity)mContext).getSelectIndex()+"}").getAsJsonObject());
                         ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, -1, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, ChatType.MEMORY_CHAT, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
                         notifyDataSetChanged();
 
                     }
@@ -248,7 +248,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mChats.size();
     }
 
-    private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList) {
+    private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList, final int chatType) {
         Log.e(TAG, "createSlotBtns : "+ slotArrayList.size());
         Log.e(TAG, "slotArrayList.toString(): " + slotArrayList.toString());
         for (int i = 0; i < slotArrayList.size(); i++) {
@@ -282,9 +282,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View view) {
 //                    Toast.makeText(mContext, myButton.getText().toString(), Toast.LENGTH_LONG).show();
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
-                    ((MainActivity) mContext).sendMessage(accountId, slotArrayList.get(finalI).getValue(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, -1, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
-                    notifyDataSetChanged(); // TODO : chat type debug
+//                     chattype == > ChatType.REGISTER_CHAT or ChatType.QUESTION_SCHEDULE_SELECT_CHAT
+                    ((MainActivity) mContext)
+                            .sendMessage(accountId,
+                                    slotArrayList.get(finalI).getValue()+":"+slotArrayList.get(finalI).getLabel(),
+                                    ChatType.QUESTION_SCHEDULE_SELECT_CHAT,
+                                    String.valueOf(System.currentTimeMillis()),
+                                    0);
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, chatType, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
+                    notifyDataSetChanged();
                 }
             });
         }

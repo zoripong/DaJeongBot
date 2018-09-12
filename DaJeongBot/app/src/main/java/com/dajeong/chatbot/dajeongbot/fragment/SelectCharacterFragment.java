@@ -105,7 +105,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
             botHeads.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO TEST 2
                     Button clickButton = (Button) v;
                     int index = botHeads.indexOf(clickButton);
 
@@ -122,7 +121,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                     currentPage(index);
                     changeVisibleImage(index);
                     changeIntroduceImage(index);
-                    Log.e(TAG, "here" + String.valueOf(currentPage));
 
                 }
             });
