@@ -54,9 +54,6 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
     private TextView mTvBotString;
     private LinearLayout mLiBtnPrevious, mLiBtnNext;
     private int currentPage;
-//    private Button mBtnBotImg01,mBtnBotImg02,mBtnBotImg03,mBtnBotImg04;
-//    private ImageView mIvBotDot01, mIvBotDot02, mIvBotDot03, mIvBotDot04;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -111,13 +108,19 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
                     if (index == 0) {
                         btnSelectPrevious.setVisibility(View.INVISIBLE);
+                        mLiBtnPrevious.setVisibility(View.INVISIBLE);
                         btnSelectNext.setVisibility(View.VISIBLE);
+                        mLiBtnNext.setVisibility(View.VISIBLE);
                     } else if (index == 1 || index == 2) {
                         btnSelectPrevious.setVisibility(View.VISIBLE);
+                        mLiBtnPrevious.setVisibility(View.VISIBLE);
                         btnSelectNext.setVisibility(View.VISIBLE);
+                        mLiBtnNext.setVisibility(View.VISIBLE);
                     } else if (index == 3) {
                         btnSelectPrevious.setVisibility(View.VISIBLE);
+                        mLiBtnPrevious.setVisibility(View.VISIBLE);
                         btnSelectNext.setVisibility(View.INVISIBLE);
+                        mLiBtnNext.setVisibility(View.INVISIBLE);
                     }
                     currentPage(index);
                     changeVisibleImage(index);
@@ -207,72 +210,10 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         // End
 
 
-        mLiBtnPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count--;
-                switch (count) {
-                    case 0:
-                        btnSelectPrevious.setVisibility(View.INVISIBLE);
-                        btnSelectNext.setVisibility(View.VISIBLE);
-                        changeVisibleImage(0);
-                        changeIntroduceImage(0);
-                        break;
-                    case 1:
-                        btnSelectPrevious.setVisibility(View.VISIBLE);
-                        btnSelectNext.setVisibility(View.VISIBLE);
-                        changeVisibleImage(1);
-                        changeIntroduceImage(1);
-                        break;
-                    case 2:
-                        btnSelectPrevious.setVisibility(View.VISIBLE);
-                        btnSelectNext.setVisibility(View.VISIBLE);
-                        changeVisibleImage(2);
-                        changeIntroduceImage(2);
-                        break;
-                    case 3:
-                        btnSelectPrevious.setVisibility(View.VISIBLE);
-                        btnSelectNext.setVisibility(View.INVISIBLE);
-                        changeVisibleImage(3);
-                        changeIntroduceImage(3);
-                        break;
-                }
-            }
-        });
-        mLiBtnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                switch (count) {
-                    case 0:
-                        btnSelectPrevious.setVisibility(View.INVISIBLE);
-                        btnSelectNext.setVisibility(View.VISIBLE);
-                        changeVisibleImage(0);
-                        changeIntroduceImage(0);
-                        break;
-                    case 1:
-                        btnSelectPrevious.setVisibility(View.VISIBLE);
-                        btnSelectNext.setVisibility(View.VISIBLE);
-                        changeVisibleImage(1);
-                        changeIntroduceImage(1);
-                        break;
-                    case 2:
-                        btnSelectPrevious.setVisibility(View.VISIBLE);
-                        btnSelectNext.setVisibility(View.VISIBLE);
-                        changeVisibleImage(2);
-                        changeIntroduceImage(2);
-                        break;
-                    case 3:
-                        btnSelectPrevious.setVisibility(View.VISIBLE);
-                        btnSelectNext.setVisibility(View.INVISIBLE);
-                        changeVisibleImage(3);
-                        changeIntroduceImage(3);
-                        break;
-                }
-
-            }
-        });
-
+        btnSelectPrevious.setOnClickListener(Handler);
+        btnSelectNext.setOnClickListener(Handler);
+        mLiBtnPrevious.setOnClickListener(Handler);
+        mLiBtnNext.setOnClickListener(Handler);
         return rootView;
     }
 
@@ -335,6 +276,50 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         }
         return year + "-" + month + "-" + date;
     }
+    View.OnClickListener Handler = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_select_previous:
+                case R.id.layout_btn_previous:
+                    count--;
+                    break;
+                case R.id.btn_select_next:
+                case R.id.layout_btn_next:
+                    count++;
+                    break;
+            }
+            ChangeIntroduce();
 
+        }
+    };
+    private void ChangeIntroduce(){
+        switch (count) {
+            case 0:
+                btnSelectPrevious.setVisibility(View.INVISIBLE);
+                btnSelectNext.setVisibility(View.VISIBLE);
+                changeVisibleImage(0);
+                changeIntroduceImage(0);
+                break;
+            case 1:
+                btnSelectPrevious.setVisibility(View.VISIBLE);
+                btnSelectNext.setVisibility(View.VISIBLE);
+                changeVisibleImage(1);
+                changeIntroduceImage(1);
+                break;
+            case 2:
+                btnSelectPrevious.setVisibility(View.VISIBLE);
+                btnSelectNext.setVisibility(View.VISIBLE);
+                changeVisibleImage(2);
+                changeIntroduceImage(2);
+                break;
+            case 3:
+                btnSelectPrevious.setVisibility(View.VISIBLE);
+                btnSelectNext.setVisibility(View.INVISIBLE);
+                changeVisibleImage(3);
+                changeIntroduceImage(3);
+                break;
+        }
+    }
 }
 
