@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity  {
     private int mAccountId;
     private boolean mIsLoad;
     private boolean mMoreChat;
-    private int mChatType;
+    private int mChatType; // TODO DEBUG
     private int mSelectIndex;
 
     private JsonObject mJsonResponse;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                    mChats.add(new Chat(mChatType, NodeType.SPEAK_NODE, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -352,7 +352,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
-        // TODO TEST 1
         int botType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
