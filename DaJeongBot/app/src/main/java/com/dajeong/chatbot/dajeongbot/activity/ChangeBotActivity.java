@@ -32,7 +32,7 @@ public class ChangeBotActivity extends AppCompatActivity {
     ImageView ivBot2;
     ImageView ivBot3;
     ImageView ivBot4;
-//    TextView tvBotChange;
+    //    TextView tvBotChange;
     int check=-1; //어떤 캐릭터를 선택했는지 값 저장
     /*
     * {
@@ -40,7 +40,6 @@ public class ChangeBotActivity extends AppCompatActivity {
       "new_bot_type": 2
     }
     * */
-    //TODO: sharedpreferences 에도 반영..!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
