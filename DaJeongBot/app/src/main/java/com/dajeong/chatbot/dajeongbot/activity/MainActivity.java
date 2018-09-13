@@ -422,7 +422,7 @@ public class MainActivity extends AppCompatActivity  {
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                 }else{
                     Toast.makeText(getApplicationContext(), "서버에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "a" + response.body().toString());
+//                    Log.e(TAG, "a" + response.body().toString());
                 }
             }
             @Override

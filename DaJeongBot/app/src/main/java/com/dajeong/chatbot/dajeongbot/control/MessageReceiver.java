@@ -55,9 +55,13 @@ public class MessageReceiver {
                         for(int j = 0; j<events.size(); j++){
                             Log.e(TAG, "event"+j);
                             JsonObject event = events.get(j).getAsJsonObject();
-                            memories.add(new Memory(event.get("id").getAsInt(), event.get("event_image").getAsString(),  event.get("event_detail").getAsString()));
+                            memories.add(new Memory(event.get("id").getAsInt(),
+                                    event.get("event_image").getAsString(),
+                                    event.get("event_detail").getAsString(),
+                                    event.get("detail").getAsString(),
+                                    event.get("review").getAsString()));
                         }
-                        memories.add(new Memory(-1, "", "이제 없어!"));
+                        memories.add(new Memory(-1,"","이제 궁금한게 없어!", "", ""));
                         mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp, null, memories));
                     }else{
                         mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));

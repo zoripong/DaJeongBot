@@ -173,11 +173,47 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
                         int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
                         String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
-                        int chatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
+                        int chatType = ChatType.MEMORY_CHAT;
                         long time = System.currentTimeMillis();
                         int isBot = 0;
                         ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
-                        ((MainActivity)mContext).setJsonResponse(new JsonParser().parse("{\"select_idx\":"+((MainActivity)mContext).getSelectIndex()+"}").getAsJsonObject());
+                        /*
+                        StringBuffer events = new StringBuffer();
+                        for(int i = 0; i<chat.getCarouselList().size(); i++){
+                            events.append("{");
+                            events.append("\"id\": ");
+                            events.append(chat.getCarouselList().get(i).getEventId());
+                            events.append(",");
+
+                            events.append("\"event_image\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getImage()+"\"");
+                            events.append(",");
+
+                            events.append("\"event_detail\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getContent()+"\"");
+                            events.append(",");
+
+                            events.append("\"detail\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getDetail()+"\"");
+                            events.append(",");
+
+                            events.append("\"review\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getReview()+"\"");
+                            events.append("},");
+                        }
+
+                        String param = "{" +
+                                "\"select_idx\": "+ ((MainActivity)mContext).getSelectIndex() + "," +
+                                "\"events\": ["+ events.toString() +
+                                "]}";
+
+                        */
+                        String param = "{" +
+                                "\"select_idx\": "+ ((MainActivity)mContext).getSelectIndex()  +
+                                "}";
+
+                        Log.e(TAG, param);
+                        ((MainActivity)mContext).setJsonResponse(new JsonParser().parse(param).getAsJsonObject());
                         ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
                         mChats.addLast(new Chat(NodeType.SPEAK_NODE, ChatType.MEMORY_CHAT, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
                         notifyDataSetChanged();
