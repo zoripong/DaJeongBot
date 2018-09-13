@@ -20,6 +20,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -31,14 +33,16 @@ public class TutorialActivity extends Activity {
             R.drawable.tutorial_02,
             R.drawable.tutorial_03,
             R.drawable.tutorial_04,
-            R.drawable.tutorial_05
+            R.drawable.tutorial_05,
+            R.drawable.tutorial_06
     };
+    RelativeLayout lastTutorial;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_tutorial);
-
+        lastTutorial=(RelativeLayout) findViewById(R.id.endTutoral);
         //액티비티 크기 변경
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -72,7 +76,7 @@ public class TutorialActivity extends Activity {
         viewPager.setAdapter(mCustomPagerAdapter);
 
         final PageIndicatorView pageIndicatorView = findViewById(R.id.pageIndicatorView);
-        pageIndicatorView.setCount(5); // specify total count of indicators
+        pageIndicatorView.setCount(6); // specify total count of indicators
         //pageIndicatorView.setSelection(2);
 
 
@@ -86,7 +90,13 @@ public class TutorialActivity extends Activity {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {/*empty*/}
+            public void onPageScrollStateChanged(int state) {
+                int cur = viewPager.getCurrentItem();    //현재 아이템 포지션
+                if(cur ==5)        //마지막 페이지가 아니면
+                    lastTutorial.setVisibility(View.VISIBLE);
+                else                        //마지막 페이지 이면
+                    lastTutorial.setVisibility(View.GONE);
+            }
         });
 
         findViewById(R.id.close_btn).setOnClickListener(new View.OnClickListener() {
