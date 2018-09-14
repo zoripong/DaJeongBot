@@ -51,6 +51,7 @@ public class MessageReceiver {
                     mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp));
                 }else{
                     if(events.size() > 0){
+                        Log.e(TAG, "어라?" + events.toString());
                         ArrayList<Memory> memories = new ArrayList<>();
                         for(int j = 0; j<events.size(); j++){
                             Log.e(TAG, "event"+j);

@@ -169,7 +169,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mBtText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // ChatType : Memory 와 Question 분리하기
                         Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
                         int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
                         String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
@@ -177,9 +176,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         long time = System.currentTimeMillis();
                         int isBot = 0;
                         ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
-                        /*
+
                         StringBuffer events = new StringBuffer();
-                        for(int i = 0; i<chat.getCarouselList().size(); i++){
+                        for(int i = 0; i<chat.getCarouselList().size()-1; i++){
                             events.append("{");
                             events.append("\"id\": ");
                             events.append(chat.getCarouselList().get(i).getEventId());
@@ -199,7 +198,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                             events.append("\"review\": ");
                             events.append("\""+chat.getCarouselList().get(i).getReview()+"\"");
-                            events.append("},");
+                            if(i == chat.getCarouselList().size() -2){
+                                events.append("}");
+                            }else{
+                                events.append("},");
+                            }
                         }
 
                         String param = "{" +
@@ -207,10 +210,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 "\"events\": ["+ events.toString() +
                                 "]}";
 
-                        */
+                        /*
                         String param = "{" +
                                 "\"select_idx\": "+ ((MainActivity)mContext).getSelectIndex()  +
                                 "}";
+                        * */
 
                         Log.e(TAG, param);
                         ((MainActivity)mContext).setJsonResponse(new JsonParser().parse(param).getAsJsonObject());
