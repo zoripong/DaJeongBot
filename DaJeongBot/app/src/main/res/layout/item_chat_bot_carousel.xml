@@ -78,7 +78,7 @@
                 android:layout_height="190dp"
                 app:layout_constraintStart_toEndOf="@+id/linear_previous"
                 tools:ignore="MissingConstraints"
-                app:layout_constraintRight_toRightOf="@+id/linear_previous"></android.support.v4.view.ViewPager>
+                app:layout_constraintRight_toRightOf="@+id/linear_previous"/>
 
             <LinearLayout
                 android:id="@+id/linear_next"

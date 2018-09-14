@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity  {
                         content = String.valueOf(mSelectIndex)+":"+content;
                     }
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
-
+//                    runLayoutAnimation(mRvChatList);
                     mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString() , String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
@@ -165,6 +169,14 @@ public class MainActivity extends AppCompatActivity  {
         startActivity(new Intent(this, TutorialActivity.class));
 
     }
+//    private void runLayoutAnimation(RecyclerView recyclerView){
+//        final Context context = mEtMessage.getContext();
+//        final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
+//
+//        recyclerView.setLayoutAnimation(controller);
+//        recyclerView.getAdapter().notifyDataSetChanged();
+//        recyclerView.scheduleLayoutAnimation();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

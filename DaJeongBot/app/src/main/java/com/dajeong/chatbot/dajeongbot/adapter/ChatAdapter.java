@@ -183,7 +183,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mBtText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
                         int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
                         String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
                         int chatType = ChatType.MEMORY_CHAT;
@@ -420,6 +420,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mVpimage = itemView.findViewById(R.id.vp);
             mBtNext = itemView.findViewById(R.id.btn_carousel_next);
             mBtPrevious = itemView.findViewById(R.id.btn_carousel_previous);
+            mBtPrevious.setVisibility(View.INVISIBLE);
             mTvTime = itemView.findViewById(R.id.tvTime);
             mLiNext = itemView.findViewById(R.id.linear_next);
             mLiPrevious = itemView.findViewById(R.id.linear_previous);
@@ -497,7 +498,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatBotImageHolder.this.itemView)
                     .load(imgUrl)
-                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
+                    .thumbnail(Glide.with(ChatBotImageHolder.this.itemView).load(R.raw.img_loading))
+                    //.apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
     }
@@ -517,7 +519,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatUserImageHolder.this.itemView)
                     .load(imgUrl)
-                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
+                    .thumbnail(Glide.with(ChatUserImageHolder.this.itemView).load(R.raw.img_loading))
+//                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
     }
@@ -541,5 +544,4 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return memories.size();
         }
     }
-
 }
