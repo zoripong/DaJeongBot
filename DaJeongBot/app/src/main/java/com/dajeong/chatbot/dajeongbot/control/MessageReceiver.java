@@ -8,12 +8,8 @@ import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
 import com.dajeong.chatbot.dajeongbot.model.Slot;
-import com.dajeong.chatbot.dajeongbot.network.RetrofitService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -47,7 +43,7 @@ public class MessageReceiver {
             for(int i = 0; i<messages.size(); i++){
                 Log.e(TAG, "messages"+i);
                 if(i < messages.size()-1){
-                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp));
+                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), timestamp));
                 }else{
                     if(events.size() > 0){
                         Log.e(TAG, "어라?" + events.toString());
@@ -64,7 +60,7 @@ public class MessageReceiver {
                         memories.add(new Memory(-1,"","이제 궁금한게 없어!", "", ""));
                         mChats.addLast(new Chat(NodeType.CAROUSEL_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp, null, memories));
                     }else{
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
                     }
                 }
             }
@@ -75,7 +71,7 @@ public class MessageReceiver {
         JsonArray messages = result.getAsJsonArray("content");
         messages = result.get("content").getAsJsonArray();
         for(int i = 0; i<messages.size(); i++){
-            mChats.addLast(new Chat(result.get("node_type").getAsInt(), result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+            mChats.addLast(new Chat(result.get("node_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
         }
     }
 
@@ -88,7 +84,7 @@ public class MessageReceiver {
 
             for(int i = 0; i<messages.size(); i++){
                 if(i < messages.size()-1){
-                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp));
+                    mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), timestamp));
                 }else{
                     if(events.size() > 0){
                         ArrayList<Slot> slots = new ArrayList<>();
@@ -101,7 +97,7 @@ public class MessageReceiver {
                         slots.add(new Slot(-1, "이제 없어.", "-1"));
                         mChats.addLast(new Chat(NodeType.SLOT_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp, slots, null));
                     }else{
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, messages.get(i).getAsString(), result.get("time").getAsString()));
                     }
                 }
             }
@@ -126,7 +122,7 @@ public class MessageReceiver {
                 Log.e(TAG, "here"+ i +":" + imgUrl);
                 Log.e(TAG, "here"+ i +":" + jsonArray.get(i).getAsJsonObject().toString());
                 if(!imgUrl.equals(""))
-                    mChats.addLast(new Chat(NodeType.IMAGE_NODE, -1, mBotChar, imgUrl, timestamp));
+                    mChats.addLast(new Chat(NodeType.IMAGE_NODE, mBotChar, imgUrl, timestamp));
 
             }
 
@@ -138,7 +134,7 @@ public class MessageReceiver {
                 }
                 mChats.addLast(new Chat(NodeType.SLOT_NODE, ChatType.REGISTER_CHAT, mBotChar, message, timestamp, slotArrayList, null));
             }else{
-                mChats.addLast(new Chat(NodeType.SPEAK_NODE, ChatType.BASIC_CHAT, mBotChar, message, timestamp));
+                mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar, message, timestamp));
             }
         }
     }

@@ -1,11 +1,8 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,14 +24,12 @@ import com.dajeong.chatbot.dajeongbot.control.MessageReader;
 import com.dajeong.chatbot.dajeongbot.control.MessageReceiver;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
-import com.dajeong.chatbot.dajeongbot.model.Memory;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -81,6 +73,7 @@ public class MainActivity extends AppCompatActivity  {
         onNewIntent(getIntent());
 
         init();
+//        test();
         getMessage();
         showProgressBar();
 
@@ -121,7 +114,7 @@ public class MainActivity extends AppCompatActivity  {
                     }
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 //                    runLayoutAnimation(mRvChatList);
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString() , String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString() , String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -483,5 +476,8 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void setJsonResponse(JsonObject jsonObject){
         this.mJsonResponse = jsonObject;
+    }
+    public void test(){
+        mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
     }
 }

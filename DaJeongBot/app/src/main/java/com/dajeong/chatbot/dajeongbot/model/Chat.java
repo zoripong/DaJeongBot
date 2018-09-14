@@ -1,8 +1,5 @@
 package com.dajeong.chatbot.dajeongbot.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
 
 public class Chat {
@@ -14,7 +11,7 @@ public class Chat {
     private ArrayList<Slot> slotList;
     private ArrayList<Memory> carouselList;
 
-    public Chat(int nodeType, int chatType, Character sender, String content, String time) {
+    public Chat(int nodeType, Character sender, String content, String time) {
         this.nodeType = nodeType;
         this.chatType = chatType ;
         this.sender = sender;
