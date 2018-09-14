@@ -107,15 +107,21 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         init();
 
-        //구글
-        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
-                .requestEmail()
-                .build();
+        //구글 FIXME
+        findViewById(R.id.btn_google_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "편리한 회원가입을 위해 금방 만들어 올게요 :)", Toast.LENGTH_LONG).show();
+            }
+        });
+//        GoogleSignInOptions gso=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.server_client_id))
+//                .requestEmail()
+//                .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+//                .build();
 
         //facebook start
         mFacebookCallbackManager = CallbackManager.Factory.create();  //로그인 응답을 처리할 콜백 관리자
@@ -127,6 +133,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //LoginManager - 요청된 읽기 또는 게시 권한으로 로그인 절차를 시작합니다.
+
+               // FIXME
+                Toast.makeText(getApplicationContext(), "편리한 회원가입을 위해 금방 만들어 올게요 :)", Toast.LENGTH_LONG).show();
+               /*
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this,
                         Arrays.asList("public_profile", "user_friends","email"));
                 LoginManager.getInstance().registerCallback(mFacebookCallbackManager,
@@ -157,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.e("onError", "onError " + exception.getLocalizedMessage());
                             }
                         });
+                        */
             }
         });
         //facebook end
@@ -201,9 +212,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
 
             public void onClick(View view) {
+                // FIXME
+                Toast.makeText(getApplicationContext(), "편리한 회원가입을 위해 금방 만들어 올게요 :)", Toast.LENGTH_LONG).show();
+
+                /*
                 Session session = Session.getCurrentSession();
                 session.addCallback(new SessionCallback());
                 session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+         */
             }
 
         });

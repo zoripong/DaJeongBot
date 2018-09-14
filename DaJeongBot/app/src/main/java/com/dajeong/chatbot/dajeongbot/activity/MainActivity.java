@@ -132,19 +132,25 @@ public class MainActivity extends AppCompatActivity  {
 
         });
 
+
+        // FIXME
         findViewById(R.id.ivAddChat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+//                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "아주 잠시만 기다려주세요! 더 원활한 대화를 위해 자동완성 기능을 제공해드릴게요!", Toast.LENGTH_LONG).show();
+
             }
         });
 
         findViewById(R.id.ivAddImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
+//                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "아주 잠시만 기다려주세요! 더 생생한 기억을 위해 이미지 저장 기능을 제공해드릴게요!", Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -245,9 +251,6 @@ public class MainActivity extends AppCompatActivity  {
         mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
 
 
-        //FIXME
-        findViewById(R.id.ivAddImage).setVisibility(View.GONE);
-        findViewById(R.id.ivAddChat).setVisibility(View.GONE);
     }
 
 
