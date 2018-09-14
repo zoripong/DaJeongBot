@@ -8,7 +8,47 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+    </android.support.v4.view.ViewPager>
+    <RelativeLayout
+        android:id="@+id/endTutoral"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/tutorial_bg"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/endTutoralLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:src="@drawable/symbol_mark" />
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                 android:src="@drawable/logo_type" />
+            <TextView
+                android:id="@+id/close_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/dialog_btn_bg"
+                android:paddingBottom="7dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="7dp"
+                android:text="시작하기"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:layout_marginTop="40dp"/>
+        </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,12 +69,4 @@
             app:piv_radius="5dp"
             android:padding="2dp"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/close_btn"
-        android:layout_gravity="top|right"
-        android:background="@drawable/dialog_x_btn"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"/>
 </FrameLayout>

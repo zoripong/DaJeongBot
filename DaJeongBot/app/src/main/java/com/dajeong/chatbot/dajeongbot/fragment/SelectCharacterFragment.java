@@ -20,10 +20,14 @@ import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.activity.LoginActivity;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestSignUp;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -149,20 +153,20 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
                 String password = CustomSharedPreference.getInstance(getContext(), "data").getStringPreferences("user_pw");
                 String token = ((SignupActivity) getActivity()).getToken();
 
-
+                // TODO
                 // 추가 데이터 ( basic account : password / api account : token )
-                switch (accountType) {
-                    case AccountType.BASIC_ACCOUNT:
-                        password = "test";
-                        break;
-                    case AccountType.FACEBOOK_ACCOUNT:
-                    case AccountType.KAKAO_ACCOUNT:
-                    case AccountType.GOOGLE_ACCOUNT:
-                        token = "token"; //TODO
-                        Toast.makeText(getActivity().getApplicationContext(), "준비주ㅇ", Toast.LENGTH_LONG).show();
-                        break;
-
-                }
+//                switch (accountType) {
+//                    case AccountType.BASIC_ACCOUNT:
+//                        password = "test";
+//                        break;
+//                    case AccountType.FACEBOOK_ACCOUNT:
+//                    case AccountType.KAKAO_ACCOUNT:
+//                    case AccountType.GOOGLE_ACCOUNT:
+//                        token = "token";
+//                        Toast.makeText(getActivity().getApplicationContext(), "준비주ㅇ", Toast.LENGTH_LONG).show();
+//                        break;
+//
+//                }
                 // prepare call in Retrofit 2.0
                 Call<JsonObject> res = NetRetrofit.getInstance(getActivity().getApplicationContext()).getService().addUserInfo(new RequestSignUp(userId, name, birthday, botType, accountType, password, token));
                 res.enqueue(new Callback<JsonObject>() {
@@ -173,25 +177,27 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
                         if (response.body().get("status").getAsString().equals("Success")) {
                             // 회원가입 성공
-                            intent = new Intent(getActivity(), MainActivity.class);
 
                             Log.e(TAG, "id is "+  response.body().getAsJsonObject("user_info").get("id").getAsString());
                             CustomSharedPreference.getInstance(getContext(), "user_info")
                                     .savePreferences("id", response.body().getAsJsonObject("user_info").get("id").getAsString());
                             CustomSharedPreference.getInstance(getContext(), "user_info")
                                     .savePreferences("bot_type", response.body().getAsJsonObject("user_info").get("bot_type").getAsInt());
+                            registerFcmToken(response.body().getAsJsonObject("user_info").get("id").getAsString());
 
                         } else if (response.body().get("status").getAsString().equals("ExistUser")) {
                             // 존재하는 회원
                             Toast.makeText(getContext(), "이미 존재하는 회원입니다.", Toast.LENGTH_LONG).show();
                             intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         } else {
                             // 회원가입 실패
                             Toast.makeText(getContext(), "회원가입에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
                             intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
-                        startActivity(intent);
-                        getActivity().finish();
                     }
 
                     @Override
@@ -249,6 +255,36 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         }
     }
 
+    private void registerFcmToken(String accountId){
+        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        final RequestRegisterToken param = new RequestRegisterToken(Integer.parseInt(accountId), refreshedToken);
+
+        Call<JsonObject> res = NetRetrofit.getInstance(getContext()).getService().registerFcmToken(param);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.body().has("status")){
+                    if(response.body().get("status").getAsString().equals("Success")){
+                        Log.i(TAG, "새로운 토큰 등록에 성공하였습니다.\n"+ param.toString());
+                        CustomSharedPreference.getInstance(getActivity(), "user_info").savePreferences("fcm_token", refreshedToken);
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+
+                    }else{
+                        Log.e(TAG, "서버의 문제로 토큰 등록에 실패하였습니다.");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                if(t!=null){
+                    Toast.makeText(getContext(), "네트워크에 문제가 발생하여 해당 기기 토큰을 저장하지 못하였습니다.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
     private void changeVisibleImage(int index) {
         for (int i = 0; i < 4; i++) {
             getView().findViewById(selectDot[i]).setVisibility(View.INVISIBLE);

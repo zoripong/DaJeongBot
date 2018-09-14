@@ -64,17 +64,29 @@ public class ChangeBotActivity extends AppCompatActivity {
             switch(v.getId()){
                 case R.id.ivBot1:
                     ivBot1.setImageResource(R.drawable.selected_bot1_ic);
+                    ivBot2.setImageResource(R.drawable.ic_char2);
+                    ivBot3.setImageResource(R.drawable.ic_char3);
+                    ivBot4.setImageResource(R.drawable.ic_char4);
                     check=0;
                     break;
                 case R.id.ivBot2:
+                    ivBot1.setImageResource(R.drawable.ic_char1);
                     ivBot2.setImageResource(R.drawable.selected_bot2_ic);
+                    ivBot4.setImageResource(R.drawable.ic_char4);
+                    ivBot4.setImageResource(R.drawable.ic_char4);
                     check=1;
                     break;
                 case R.id.ivBot3:
+                    ivBot1.setImageResource(R.drawable.ic_char1);
+                    ivBot2.setImageResource(R.drawable.ic_char2);
                     ivBot3.setImageResource(R.drawable.selected_bot3_ic);
+                    ivBot4.setImageResource(R.drawable.ic_char4);
                     check=2;
                     break;
                 case R.id.ivBot4:
+                    ivBot1.setImageResource(R.drawable.ic_char1);
+                    ivBot2.setImageResource(R.drawable.ic_char2);
+                    ivBot3.setImageResource(R.drawable.ic_char3);
                     ivBot4.setImageResource(R.drawable.selected_bot4_ic);
                     check=3;
                     break;
