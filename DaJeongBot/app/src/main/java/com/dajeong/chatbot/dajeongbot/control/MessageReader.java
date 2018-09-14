@@ -51,6 +51,7 @@ public class MessageReader {
         ArrayList<Memory> memories = new ArrayList<>();
         try {
             carouselList = new JSONArray(json.get("carousel_list").getAsString());
+            Log.e(TAG, "랄랄랄"+carouselList.toString());
             for(int j = 0; j<carouselList.length(); j++){
                 memories.add(new Memory(carouselList.getJSONObject(j).getInt("id"),
                         carouselList.getJSONObject(j).getString("event_image"),
@@ -61,7 +62,7 @@ public class MessageReader {
             memories.add(new Memory(-1,"","이제 궁금한게 없어!", "", ""));
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "carousel_list 를 파싱하는데 문제가 생겼습니다..");
+            Log.e(TAG, "carousel_list 를 파싱하는데 문제가 생겼습니다.."+e.toString());
 
         }
         Log.e(TAG, "carousel_list 의 길이는 : "+memories.size());

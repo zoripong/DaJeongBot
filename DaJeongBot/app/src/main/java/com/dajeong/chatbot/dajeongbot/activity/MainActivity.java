@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,7 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+// TODO: 어떻게하는거지? 튜토리얼 띄우기
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity  {
     private final String TAG = "MainActivity";
@@ -65,14 +66,13 @@ public class MainActivity extends AppCompatActivity  {
     private int mAccountId;
     private boolean mIsLoad;
     private boolean mMoreChat;
-    private int mChatType; // TODO DEBUG
+    private int mChatType;
     private int mSelectIndex;
 
     private JsonObject mJsonResponse;
     private HashMap<String, Integer> mStringNodeTypeMap;
 
-    private CustomSharedPreference spm;
-    
+    private CustomSharedPreference spm; // TODO : FIX...
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity  {
                 }
             }
         });
-
 
 
         findViewById(R.id.btnSend).setOnClickListener(new View.OnClickListener() {
@@ -245,6 +244,10 @@ public class MainActivity extends AppCompatActivity  {
         mStringNodeTypeMap.put("slot", NodeType.SLOT_NODE);
         mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
 
+
+        //FIXME
+        findViewById(R.id.ivAddImage).setVisibility(View.GONE);
+        findViewById(R.id.ivAddChat).setVisibility(View.GONE);
     }
 
 
@@ -416,8 +419,6 @@ public class MainActivity extends AppCompatActivity  {
                                         mChatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
 
                                         MessageReceiver.getInstance().receiveSlotMessage(result, mChats, mBotChar);
-                                        //TODO: EditText disable
-//                                        mEtMessage.setEnabled(false);
                                         break;
 
                                 }
@@ -465,6 +466,18 @@ public class MainActivity extends AppCompatActivity  {
         return mSelectIndex;
     }
 
+    public void setSendEditText(boolean status){
+        mEtMessage.setEnabled(status);
+        if(status){
+            mEtMessage.setHint("메세지를 입력해주세요!");
+        }else{
+            mEtMessage.setHint("챗봇 메세지의 버튼을 이용해주세요!");
+        }
+    }
+
+    public void setChatType(int chatType){
+        this.mChatType = chatType;
+    }
     public void setJsonResponse(JsonObject jsonObject){
         this.mJsonResponse = jsonObject;
     }

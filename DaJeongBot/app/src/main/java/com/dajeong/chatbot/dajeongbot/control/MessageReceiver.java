@@ -40,7 +40,6 @@ public class MessageReceiver {
             // carousel item
             Log.e(TAG, "추억회상");
 
-            // TODO : 버튼 클릭시 데이터 요청
             String timestamp = String.valueOf(result.get("time").getAsLong());
             JsonArray messages = result.getAsJsonArray("content");
             JsonArray events = result.getAsJsonArray("events");
@@ -51,6 +50,7 @@ public class MessageReceiver {
                     mChats.addLast(new Chat(NodeType.SPEAK_NODE, result.get("chat_type").getAsInt(), mBotChar, messages.get(i).getAsString(), timestamp));
                 }else{
                     if(events.size() > 0){
+                        Log.e(TAG, "어라?" + events.toString());
                         ArrayList<Memory> memories = new ArrayList<>();
                         for(int j = 0; j<events.size(); j++){
                             Log.e(TAG, "event"+j);
@@ -131,7 +131,6 @@ public class MessageReceiver {
             }
 
             if(options.size() > 0){
-                //TODO : EditText enable
                 ArrayList<Slot> slotArrayList = new ArrayList<>();
                 for(int j = 0; j<options.size(); j++){
                     JsonObject slotJson = options.get(j).getAsJsonObject();

@@ -55,6 +55,7 @@ public class ChangeBotActivity extends AppCompatActivity {
         findViewById(R.id.ivBot3).setOnClickListener(onClickListener);
         findViewById(R.id.ivBot4).setOnClickListener(onClickListener);
         findViewById(R.id.tvBotChange).setOnClickListener(onClickListener);
+
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
