@@ -216,7 +216,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    // FIXME : token 여러개 들어가는거..ㅠㅠ
     private class NetworkCall extends AsyncTask<Call, Void, String> {
 
         @Override
@@ -228,15 +227,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                /* FIXME : What is it????
-                OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://backend.example.com")
-                        .client(client)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                */
                 return response.body().toString();
             } catch (IOException e) {
                 Log.e(TAG, e.toString());
@@ -456,8 +447,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveUserInfo(final JSONObject userJson) throws JSONException {
-        //Todo : test
-
         // 로그인 정보 저장
         final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 

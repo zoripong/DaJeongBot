@@ -58,7 +58,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                 .getStringPreferences("fcm_token");
 
         // 회원정보가 있을 경우
-        if(accountId != null && accountId.equals("")){
+        if(accountId != null && !accountId.equals("")){
             final RequestUpdateToken param = new RequestUpdateToken(Integer.parseInt(accountId), fcmToken, token);
             Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().updateFcmToken(param);
             res.enqueue(new Callback<JsonObject>() {

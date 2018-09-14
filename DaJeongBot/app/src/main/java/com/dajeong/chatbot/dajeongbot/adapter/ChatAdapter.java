@@ -54,7 +54,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LinkedList<Chat> mChats;
     private Context mContext;
     private FragmentManager mFragmentManager;
-//        HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
+    //        HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
     private View vBot;
     private View vUser;
     private View vSlot;
@@ -122,10 +122,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotSlotHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
                 chatBotSlotHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
                 chatBotSlotHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
-
+//                Log.e(TAG, chat.getContent()+"slot의 채트 타입은 :" + chat.getChatType());
                 if (!chatBotSlotHolder.hasBtn) {
                     chatBotSlotHolder.setHasBtn(true);
-                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList());
+                    createSlotBtns(chatBotSlotHolder.mRootLayout, chat.getSlotList(), chat.getChatType());
                 }
 
                 break;
@@ -173,13 +173,49 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         Toast.makeText(mContext, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId()+"/"+memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), Toast.LENGTH_LONG).show();
                         int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
                         String content = memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent();
-                        int chatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
+                        int chatType = ChatType.MEMORY_CHAT;
                         long time = System.currentTimeMillis();
                         int isBot = 0;
                         ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
-                        ((MainActivity)mContext).setJsonResponse(new JsonParser().parse("{\"select_idx\":"+((MainActivity)mContext).getSelectIndex()+"}").getAsJsonObject());
+                        /*
+                        StringBuffer events = new StringBuffer();
+                        for(int i = 0; i<chat.getCarouselList().size(); i++){
+                            events.append("{");
+                            events.append("\"id\": ");
+                            events.append(chat.getCarouselList().get(i).getEventId());
+                            events.append(",");
+
+                            events.append("\"event_image\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getImage()+"\"");
+                            events.append(",");
+
+                            events.append("\"event_detail\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getContent()+"\"");
+                            events.append(",");
+
+                            events.append("\"detail\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getDetail()+"\"");
+                            events.append(",");
+
+                            events.append("\"review\": ");
+                            events.append("\""+chat.getCarouselList().get(i).getReview()+"\"");
+                            events.append("},");
+                        }
+
+                        String param = "{" +
+                                "\"select_idx\": "+ ((MainActivity)mContext).getSelectIndex() + "," +
+                                "\"events\": ["+ events.toString() +
+                                "]}";
+
+                        */
+                        String param = "{" +
+                                "\"select_idx\": "+ ((MainActivity)mContext).getSelectIndex()  +
+                                "}";
+
+                        Log.e(TAG, param);
+                        ((MainActivity)mContext).setJsonResponse(new JsonParser().parse(param).getAsJsonObject());
                         ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, -1, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, ChatType.MEMORY_CHAT, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
                         notifyDataSetChanged();
 
                     }
@@ -252,7 +288,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mChats.size();
     }
 
-    private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList) {
+    private void createSlotBtns(LinearLayout layout, final ArrayList<Slot>slotArrayList, final int chatType) {
         Log.e(TAG, "createSlotBtns : "+ slotArrayList.size());
         Log.e(TAG, "slotArrayList.toString(): " + slotArrayList.toString());
         for (int i = 0; i < slotArrayList.size(); i++) {
@@ -286,9 +322,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View view) {
 //                    Toast.makeText(mContext, myButton.getText().toString(), Toast.LENGTH_LONG).show();
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
-                    ((MainActivity) mContext).sendMessage(accountId, slotArrayList.get(finalI).getValue(), ChatType.REGISTER_CHAT, String.valueOf(System.currentTimeMillis()), 0);
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, -1, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
-                    notifyDataSetChanged(); // TODO : chat type debug
+//                     chattype == > ChatType.REGISTER_CHAT or ChatType.QUESTION_SCHEDULE_SELECT_CHAT
+                    ((MainActivity) mContext)
+                            .sendMessage(accountId,
+                                    slotArrayList.get(finalI).getValue()+":"+slotArrayList.get(finalI).getLabel(),
+                                    ChatType.QUESTION_SCHEDULE_SELECT_CHAT,
+                                    String.valueOf(System.currentTimeMillis()),
+                                    0);
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, chatType, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
+                    notifyDataSetChanged();
                 }
             });
         }
@@ -363,6 +405,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mVpimage = itemView.findViewById(R.id.vp);
             mBtNext = itemView.findViewById(R.id.btn_carousel_next);
             mBtPrevious = itemView.findViewById(R.id.btn_carousel_previous);
+            mBtPrevious.setVisibility(View.INVISIBLE);
             mTvTime = itemView.findViewById(R.id.tvTime);
             mLiNext = itemView.findViewById(R.id.linear_next);
             mLiPrevious = itemView.findViewById(R.id.linear_previous);
@@ -432,7 +475,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatBotImageHolder.this.itemView)
                     .load(imgUrl)
-                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
+                    .thumbnail(Glide.with(ChatBotImageHolder.this.itemView).load(R.raw.img_loading))
+                    //.apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
     }
@@ -452,7 +496,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatUserImageHolder.this.itemView)
                     .load(imgUrl)
-                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
+                    .thumbnail(Glide.with(ChatUserImageHolder.this.itemView).load(R.raw.img_loading))
+//                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
     }
@@ -477,8 +522,5 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
 
-    }
-    private static float dpFrompx(final Context context,final float px){
-        return px / context.getResources().getDisplayMetrics().density;
     }
 }

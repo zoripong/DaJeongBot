@@ -2,6 +2,7 @@ package com.dajeong.chatbot.dajeongbot.control;
 
 import android.util.Log;
 
+import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
@@ -51,9 +52,13 @@ public class MessageReader {
         try {
             carouselList = new JSONArray(json.get("carousel_list").getAsString());
             for(int j = 0; j<carouselList.length(); j++){
-                memories.add(new Memory(carouselList.getJSONObject(j).getInt("id"), null,
-                        carouselList.getJSONObject(j).getString("schedule_where")+"에서"+carouselList.getJSONObject(j).getString("schedule_what")));
+                memories.add(new Memory(carouselList.getJSONObject(j).getInt("id"),
+                        carouselList.getJSONObject(j).getString("event_image"),
+                        carouselList.getJSONObject(j).getString("event_detail"),
+                        carouselList.getJSONObject(j).getString("detail"),
+                        carouselList.getJSONObject(j).getString("review")));
             }
+            memories.add(new Memory(-1,"","이제 궁금한게 없어!", "", ""));
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "carousel_list 를 파싱하는데 문제가 생겼습니다..");
@@ -62,10 +67,10 @@ public class MessageReader {
         Log.e(TAG, "carousel_list 의 길이는 : "+memories.size());
 
         if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 0){
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
+            mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, json.get("chat_type").getAsInt(), null, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
         }
         else if(Integer.parseInt(String.valueOf(json.get("isBot"))) == 1) {
-            mChats.addFirst(new Chat(json.get("node_type").getAsInt(), json.get("chat_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
+            mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, json.get("chat_type").getAsInt(), mBotChar, json.get("content").getAsString(), json.get("time").getAsString(), null, memories));
         }
     }
 

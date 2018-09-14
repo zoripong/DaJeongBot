@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +50,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-// TODO : 중간에 네트워크 연결되었을 경우
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity  {
     private final String TAG = "MainActivity";
@@ -114,9 +117,12 @@ public class MainActivity extends AppCompatActivity  {
                     long time = System.currentTimeMillis();
                     int isBot = 0;
 
+                    if(mChatType == ChatType.QUESTION_SCHEDULE_REPLY_CHAT){
+                        content = String.valueOf(mSelectIndex)+":"+content;
+                    }
                     sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
-
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString(), String.valueOf(System.currentTimeMillis())));
+//                    runLayoutAnimation(mRvChatList);
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, mChatType, null, mEtMessage.getText().toString() , String.valueOf(System.currentTimeMillis())));
                     mChatAdapter.notifyDataSetChanged();
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                     mEtMessage.setText("");
@@ -164,6 +170,14 @@ public class MainActivity extends AppCompatActivity  {
         startActivity(new Intent(this, TutorialActivity.class));
 
     }
+//    private void runLayoutAnimation(RecyclerView recyclerView){
+//        final Context context = mEtMessage.getContext();
+//        final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
+//
+//        recyclerView.setLayoutAnimation(controller);
+//        recyclerView.getAdapter().notifyDataSetChanged();
+//        recyclerView.scheduleLayoutAnimation();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -388,7 +402,7 @@ public class MainActivity extends AppCompatActivity  {
                                         // TODO TEST
                                         MessageReceiver.getInstance().receiveCarouselMessage(result, mChats, mBotChar);
                                         break;
-                                    case ChatType.QUESTION_SCHEDULE_SELECT_CHAT:
+                                    case ChatType.QUESTION_SCHEDULE_SELECT_CHAT: // 4
                                         // 선택한 일정에 대해 후기를 남겨야 함
                                         // reply_message_for_select_review 를 통해 데이터가 넘어옴
                                         mSelectIndex = result.get("events").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsInt();
@@ -396,13 +410,14 @@ public class MainActivity extends AppCompatActivity  {
                                         mChatType = ChatType.QUESTION_SCHEDULE_REPLY_CHAT;
                                         MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
-                                    case ChatType.QUESTION_SCHEDULE_REPLY_CHAT:
+                                    case ChatType.QUESTION_SCHEDULE_REPLY_CHAT: // 5
                                         // reply_message_for_reply_review 를 통해 데이터가 넘어옴
                                         // 일정을 선택해야 함
                                         mChatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
-                                        MessageReceiver.getInstance().receiveCarouselMessage(result, mChats, mBotChar);
+
+                                        MessageReceiver.getInstance().receiveSlotMessage(result, mChats, mBotChar);
                                         //TODO: EditText disable
-                                        mEtMessage.setEnabled(false);
+//                                        mEtMessage.setEnabled(false);
                                         break;
 
                                 }
@@ -419,7 +434,7 @@ public class MainActivity extends AppCompatActivity  {
                     mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
                 }else{
                     Toast.makeText(getApplicationContext(), "서버에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "a" + response.body().toString());
+//                    Log.e(TAG, "a" + response.body().toString());
                 }
             }
             @Override
