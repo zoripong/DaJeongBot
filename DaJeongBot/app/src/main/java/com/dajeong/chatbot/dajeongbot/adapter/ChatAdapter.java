@@ -19,10 +19,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatHolderType;
@@ -156,7 +154,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatBotCarouselHolder.mVpimage.setAdapter(carouselPagerAdapter);// viewpager 에 adapter 달아주기
                 chatBotCarouselHolder.mTvSchedule.setText("1번째 일정");
                 chatBotCarouselHolder.mBtText.setText(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent());
-
                 chatBotCarouselHolder.mLiPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
                 chatBotCarouselHolder.mLiNext.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
                 chatBotCarouselHolder.mBtPrevious.setOnClickListener(chatBotCarouselHolder.CarouselBtnHandler);
@@ -196,7 +193,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         ((MainActivity)mContext).setJsonResponse(new JsonParser().parse(param).getAsJsonObject());
                         ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
 
-                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, ChatType.MEMORY_CHAT, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
 
                         notifyDataSetChanged();
                     }
@@ -310,7 +307,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     ChatType.QUESTION_SCHEDULE_SELECT_CHAT,
                                     String.valueOf(System.currentTimeMillis()),
                                     0);
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, chatType, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
+                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
                     notifyDataSetChanged();
                 }
             });
@@ -408,7 +405,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Button mBtText;
         ViewPager mVpimage;
         TextView mTvTime;
-        Button mBtNext, mBtPrevious; // layout view_item_carousel.xmlousel.xml
+        Button mBtNext, mBtPrevious;
+        ImageView mIvImage;// layout view_item_carousel.xmlousel.xml
         LinearLayout mLiPrevious, mLiNext;
         ArrayList<Memory> memories;
         int count = 0;
@@ -425,6 +423,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTvTime = itemView.findViewById(R.id.tvTime);
             mLiNext = itemView.findViewById(R.id.linear_next);
             mLiPrevious = itemView.findViewById(R.id.linear_previous);
+            mIvImage = itemView.findViewById(R.id.ivCarousel);
         }
 
         void setMemories(ArrayList<Memory> memories){

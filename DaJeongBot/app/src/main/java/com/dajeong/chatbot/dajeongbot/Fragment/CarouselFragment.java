@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.model.Memory;
 
@@ -53,8 +54,10 @@ public class CarouselFragment extends Fragment {
 
         mIvContent = rootView.findViewById(R.id.ivCarousel);
 
-        mIvContent.setImageResource(Content);
-
+//        mIvContent.setImageResource(Content);
+        Glide.with(rootView)
+                .load("https://s-i.huffpost.com/gen/5177890/thumbs/o-APPLE-570.jpg?3")
+                .into(mIvContent);
         return rootView;
     }
 }
