@@ -44,4 +44,11 @@
         is along the major axis (that is the screen is landscape).  This may
         be either a fraction or a dimension. -->
     <item type="dimen" name="dialog_min_width_major">90%</item>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
 </resources>

@@ -91,6 +91,9 @@ dependencies {
 
     //tutorial circle
     implementation  'com.romandanylyk:pageindicatorview:1.0.1'
+
+    //bottom dialog
+    implementation 'com.orhanobut:dialogplus:1.11@aar'
 }
 apply plugin: 'com.google.gms.google-services'
 GoogleServicesPlugin.config.disableVersionCheck = true

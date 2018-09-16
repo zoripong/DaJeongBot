@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.dajeong.chatbot.dajeongbot.alias.NodeType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.control.MessageReader;
 import com.dajeong.chatbot.dajeongbot.control.MessageReceiver;
+import com.dajeong.chatbot.dajeongbot.customize.AutoDialog;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
@@ -46,8 +48,10 @@ import retrofit2.Response;
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity  {
     private final String TAG = "MainActivity";
+
+    protected static Context mContext;
     //component
-    private EditText mEtMessage;
+    protected EditText mEtMessage;
     // recycler view
     private LinkedList<Chat> mChats;
     private RecyclerView mRvChatList;
@@ -101,25 +105,7 @@ public class MainActivity extends AppCompatActivity  {
         findViewById(R.id.btnSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mEtMessage.getText() != null && !mEtMessage.getText().toString().replace(" ", "").equals("")) {
-                    // TODO : 추가 할 때 애니메이션
-                    int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
-                    String content = String.valueOf(mEtMessage.getText());
-                    int chatType = mChatType;
-                    long time = System.currentTimeMillis();
-                    int isBot = 0;
-
-                    if(mChatType == ChatType.QUESTION_SCHEDULE_REPLY_CHAT){
-                        content = String.valueOf(mSelectIndex)+":"+content;
-                    }
-                    sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
-//                    runLayoutAnimation(mRvChatList);
-                    mChats.add(new Chat(NodeType.SPEAK_NODE, null, mEtMessage.getText().toString() , String.valueOf(System.currentTimeMillis())));
-                    mChatAdapter.notifyDataSetChanged();
-                    mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
-                    mEtMessage.setText("");
-                }
-
+                clickSendMessage(mEtMessage.getText().toString());
             }
 
 
@@ -132,8 +118,7 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {
 //                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
 //                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "아주 잠시만 기다려주세요! 더 원활한 대화를 위해 자동완성 기능을 제공해드릴게요!", Toast.LENGTH_LONG).show();
-
+                new AutoDialog(MainActivity.this);
             }
         });
 
@@ -151,6 +136,28 @@ public class MainActivity extends AppCompatActivity  {
         this.setFinishOnTouchOutside(false);
     }
 
+    public void clickSendMessage(String message){
+        String getMessage=message;
+        Log.e(TAG,"입혁된 메시지 : "+getMessage);
+        if (getMessage != null && !getMessage.replace(" ", "").equals("")) {
+            // TODO : 추가 할 때 애니메이션
+            int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
+            String content = String.valueOf(getMessage);
+            int chatType = mChatType;
+            long time = System.currentTimeMillis();
+            int isBot = 0;
+
+            if(mChatType == ChatType.QUESTION_SCHEDULE_REPLY_CHAT){
+                content = String.valueOf(mSelectIndex)+":"+content;
+            }
+            sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
+//                    runLayoutAnimation(mRvChatList);
+            mChats.add(new Chat(NodeType.SPEAK_NODE, null, getMessage , String.valueOf(System.currentTimeMillis())));
+            mChatAdapter.notifyDataSetChanged();
+            mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+            mEtMessage.setText("");
+        }
+    }
     private void showTutorial() { //dialog로 띄움
 
         spm = new CustomSharedPreference(this);
@@ -225,6 +232,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void init() {
+        mContext=this;
         mEtMessage = findViewById(R.id.etMessage);
         mChats = new LinkedList<>();
         mRvChatList = findViewById(R.id.rvChatList);
