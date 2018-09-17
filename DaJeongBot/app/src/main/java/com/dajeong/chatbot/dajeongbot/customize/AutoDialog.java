@@ -27,10 +27,15 @@ public class AutoDialog extends MainActivity implements View.OnClickListener{
     EditText message;
     String inputMessage;
     public AutoDialog(Context context) {
+
         dialog = new Dialog(context, R.style.DialogTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_auto_complete);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow()
+                .getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         dialog.show();
 
         ImageView scheduleAdd = (ImageView) dialog.findViewById(R.id.ivScheduleAdd);

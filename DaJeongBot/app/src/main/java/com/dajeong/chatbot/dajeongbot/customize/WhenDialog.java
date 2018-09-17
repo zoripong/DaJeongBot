@@ -24,6 +24,7 @@ public class WhenDialog extends MainActivity implements View.OnClickListener{
         dialog.setContentView(R.layout.dialog_auto_when);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.getWindow().setDimAmount(0.0f);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         dialog.show();
 
         ImageView closeBtn = (ImageView) dialog.findViewById(R.id.ivWhenCloseBtn);
