@@ -8,7 +8,7 @@
     android:layout_gravity="bottom">
 
     <ImageView
-        android:id="@+id/ivWhereCloseBtn"
+        android:id="@+id/ivWhatCloseBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginBottom="12dp"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/etWhereMessage"
+        android:id="@+id/etWhatMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -36,24 +36,24 @@
         android:paddingTop="5dp"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/etWhereText"
-        app:layout_constraintStart_toEndOf="@+id/ivWhereCloseBtn"
+        app:layout_constraintEnd_toStartOf="@+id/etWhatText"
+        app:layout_constraintStart_toEndOf="@+id/ivWhatCloseBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/etWhereText"
+        android:id="@+id/etWhatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="에서 하는거야!"
+        android:text="을(를) 하는거야!"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnWhereSend"
+        app:layout_constraintEnd_toStartOf="@+id/btnWhatSend"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/btnWhereSend"
+        android:id="@+id/btnWhatSend"
         android:layout_width="45dp"
         android:layout_height="30dp"
         android:layout_marginBottom="12dp"

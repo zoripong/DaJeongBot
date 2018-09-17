@@ -43,11 +43,12 @@ public class WhenDialog extends MainActivity implements View.OnClickListener{
                 dialog.dismiss();
                 break;
             case R.id.btnWhenSend :
-                inputMessage=messageY.getText().toString()+"년"+messageM.getText().toString()+"월"+messageD.getText().toString()+"일에 하는거야";
+                inputMessage=messageY.getText().toString()+"년 "+messageM.getText().toString()+"월 "+messageD.getText().toString()+"일이야!";
                 if (messageY.getText() != null && !messageY.getText().toString().replace(" ", "").equals("")&&messageM.getText() != null && !messageM.getText().toString().replace(" ", "").equals("")&&
                         messageD.getText() != null && !messageD.getText().toString().replace(" ", "").equals("")) {
                     ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
                     dialog.dismiss();
+                    new WhatDialog();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "날짜를 입력해주세요!", Toast.LENGTH_LONG).show();
