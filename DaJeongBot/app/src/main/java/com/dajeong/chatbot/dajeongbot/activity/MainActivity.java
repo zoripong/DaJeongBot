@@ -1,5 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity  {
     protected static Context mContext;
     //component
     protected EditText mEtMessage;
+    private TextView botName;
     // recycler view
     private LinkedList<Chat> mChats;
     private RecyclerView mRvChatList;
@@ -69,6 +76,10 @@ public class MainActivity extends AppCompatActivity  {
     private HashMap<String, Integer> mStringNodeTypeMap;
 
     private CustomSharedPreference spm; // TODO : FIX...
+
+
+    boolean dragFlag=false;
+    boolean firstDragFlag=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +108,25 @@ public class MainActivity extends AppCompatActivity  {
                         showProgressBar();
                         getMoreMessage();
                     }
+                }
+
+                //위로 스크롤시 이름이 없어지고 아래로 스크롤하면 다시 이름 생김
+                if (dy > 0 && botName.getVisibility() != View.VISIBLE) {
+//                    Animation animation = new AlphaAnimation(0, 1); //이거는 사르륵 효과
+//                    animation.setDuration(500);
+                    Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                            0.0f, Animation.RELATIVE_TO_PARENT, -0.5f, Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animation.setDuration(500);
+                    botName.setVisibility(View.VISIBLE);
+                    botName.setAnimation(animation);
+                } else if (dy < 0 && botName.getVisibility() == View.VISIBLE) {
+//                    Animation animation = new AlphaAnimation(1, 0);
+//                    animation.setDuration(500);
+                    Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                            0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, -1.0f);
+                    animation.setDuration(1500);
+                    botName.setVisibility(View.GONE);
+                    botName.setAnimation(animation);
                 }
             }
         });
@@ -295,7 +325,7 @@ public class MainActivity extends AppCompatActivity  {
                     charImage=R.drawable.ic_char1;
                     break;
         }
-        TextView botName = (TextView) findViewById(R.id.tvbotName);
+        botName = (TextView) findViewById(R.id.tvbotName);
         botName.setText(charNames[charType]);
         return new Character(charNames[charType], charImage);
     }
