@@ -77,9 +77,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private CustomSharedPreference spm; // TODO : FIX...
 
-
-    boolean dragFlag=false;
-    boolean firstDragFlag=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

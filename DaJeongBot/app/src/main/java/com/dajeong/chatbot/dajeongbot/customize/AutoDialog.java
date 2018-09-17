@@ -61,6 +61,10 @@ public class AutoDialog extends MainActivity implements View.OnClickListener{
                 new WhereDialog();
                 break;
             case R.id.ivRecall :
+                inputMessage="나 궁금한 날 있어!";
+                ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
+                dialog.dismiss();
+                new WhenQuestionDialog();
                 break;
             case R.id.ivCloseBtn :
                 dialog.dismiss();

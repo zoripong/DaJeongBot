@@ -26,7 +26,6 @@
         android:layout_marginBottom="12dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_edittext"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLines="5"
@@ -37,8 +36,7 @@
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/etWhereText"
-        app:layout_constraintStart_toEndOf="@+id/ivWhereCloseBtn"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ivWhereCloseBtn" />
 
     <TextView
         android:id="@+id/etWhereText"
