@@ -20,9 +20,9 @@
             android:layout_centerVertical="true"/>
 
         <ImageView
-            android:layout_width="85dp"
+            android:layout_width="70dp"
             android:layout_height="32dp"
-            android:background="@drawable/ic_logo_title"
+            android:background="@drawable/logo_type"
             android:layout_centerHorizontal="true"/>
 
         <ImageView
