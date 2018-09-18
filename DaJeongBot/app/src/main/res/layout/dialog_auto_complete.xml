@@ -113,7 +113,7 @@
         android:id="@+id/btnDSend"
         android:layout_width="45dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="9.5dp"
         android:layout_marginRight="12dp"
         android:background="@android:color/transparent"
         android:padding="2.5dp"

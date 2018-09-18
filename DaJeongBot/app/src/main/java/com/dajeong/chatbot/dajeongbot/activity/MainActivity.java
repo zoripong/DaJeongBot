@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +22,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +46,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.SocketTimeoutException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -52,12 +58,30 @@ import retrofit2.Response;
 
 // TODO: 어떻게하는거지? 튜토리얼 띄우기
 // 메인 채팅 화면 activity
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = "MainActivity";
 
     protected static Context mContext;
     //component
     protected EditText mEtMessage;
+
+    //자동완성
+    private ConstraintLayout mainBottom;
+    //언제
+    private ImageView whenCloseBtn;
+    private ImageView whenBtnSend;
+    private EditText messageY;
+    private EditText messageM;
+    private EditText messageD;
+
+    //어디서 무엇을
+    private EditText whereWhatMessage;
+    private ImageButton btnWhereWhatSend;
+    private int checkWhere=-1; //무엇을을 입력했는지 확인
+    private TextView whereWhatText;
+
+    //추억회상
+    private boolean checkRecall=false;
     private TextView botName;
     // recycler view
     private LinkedList<Chat> mChats;
@@ -81,10 +105,11 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mainBottom=(ConstraintLayout) findViewById(R.id.main_bottom);
         onNewIntent(getIntent());
 
         init();
+        bottominit();
 //        test();
         getMessage();
         showProgressBar();
@@ -139,12 +164,9 @@ public class MainActivity extends AppCompatActivity  {
         });
 
 
-        // FIXME
         findViewById(R.id.ivAddChat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-//                startActivity(intent);
                 new AutoDialog(MainActivity.this);
             }
         });
@@ -165,7 +187,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void clickSendMessage(String message){
         String getMessage=message;
-        Log.e(TAG,"입혁된 메시지 : "+getMessage);
+        Log.e(TAG,"입력된 메시지 : "+getMessage);
         if (getMessage != null && !getMessage.replace(" ", "").equals("")) {
             // TODO : 추가 할 때 애니메이션
             int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
@@ -280,7 +302,26 @@ public class MainActivity extends AppCompatActivity  {
 
 
     }
+    private void bottominit(){
+        //언제
 
+        whenCloseBtn = (ImageView) findViewById(R.id.ivWhenCloseBtn);
+        messageY = (EditText) findViewById(R.id.etYear);
+        messageM = (EditText) findViewById(R.id.etMonth);
+        messageD = (EditText) findViewById(R.id.etDay);
+        whenBtnSend = (ImageView) findViewById(R.id.btnWhenSend);
+
+        //어디서 //무엇을
+        whereWhatMessage = (EditText) findViewById(R.id.etWhereWhatMessage);
+        btnWhereWhatSend = (ImageButton) findViewById(R.id.btnWhereWhatSend);
+        whereWhatText= (TextView) findViewById(R.id.etWhereWhatText);
+        whenCloseBtn.setOnClickListener(this);
+        whenBtnSend.setOnClickListener(this);
+        btnWhereWhatSend.setOnClickListener(this);
+
+
+
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -514,5 +555,108 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void test(){
         mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
+    }
+
+    public void addAutoSchedule(){
+        findViewById(R.id.auto_when).setVisibility(View.VISIBLE);
+        findViewById(R.id.year_constraint).setVisibility(View.VISIBLE);
+        messageY.setText("");
+        messageM.setText("");
+        messageD.setText("");
+        findViewById(R.id.whereWhat_constraint).setVisibility(View.GONE);
+    }
+    public void showWhatMessage(){
+        findViewById(R.id.year_constraint).setVisibility(View.GONE);
+        findViewById(R.id.whereWhat_constraint).setVisibility(View.VISIBLE);
+        whereWhatMessage.requestFocus();
+    }
+    public void addAutoRecall(){
+        checkRecall=true;
+        addAutoSchedule();
+    }
+    public void onClick(View view) {
+        String inputMessage;
+        switch (view.getId()) {
+            case R.id.ivWhenCloseBtn:
+                findViewById(R.id.auto_when).setVisibility(View.GONE);
+                break;
+            case R.id.btnWhenSend:
+                if (isNumeric(messageY.getText().toString()) && isNumeric(messageM.getText().toString()) && isNumeric(messageD.getText().toString())) {
+                    int inputY = Integer.parseInt(messageY.getText().toString());
+                    StringBuilder inputM = new StringBuilder(messageM.getText().toString());
+                    if (messageM.getText().toString().charAt(0) == '0') {
+                        inputM.deleteCharAt(0);
+                    }
+                    StringBuilder inputD = new StringBuilder(messageD.getText().toString());
+                    if (messageD.getText().toString().charAt(0) == '0') {
+                        inputD.deleteCharAt(0);
+                    }
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar c1 = Calendar.getInstance();
+                    String strToday = sdf.format(c1.getTime());
+
+                    Calendar inputDate = Calendar.getInstance();
+                    inputDate.set(Calendar.YEAR,inputY);
+                    inputDate.set(Calendar.MONTH,Integer.parseInt(inputM.toString())-1);
+                    inputDate.set(Calendar.DAY_OF_MONTH,Integer.parseInt(inputD.toString())-1);
+                     int result=c1.compareTo(inputDate);
+
+                    if(checkRecall==false) {
+                        if (inputY >= 2000 && inputY < 3000 && result==-1 &&
+                                Integer.parseInt(inputM.toString()) >= 1 && Integer.parseInt(inputM.toString()) <= 12 &&
+                                Integer.parseInt(inputD.toString()) >= 1 && Integer.parseInt(inputD.toString()) <= 31) {
+                            inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString() + "일이야!";
+                            ((MainActivity) MainActivity.mContext).clickSendMessage(inputMessage);
+                            showWhatMessage();
+                        } else {
+                            Toast.makeText(mContext, "오늘 또는 앞으로의 날짜를 입력해주세요!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else { //추억 회상인 경우
+                        if (inputY >= 2000 && inputY < 3000 && result==1 &&
+                                Integer.parseInt(inputM.toString()) >= 1 && Integer.parseInt(inputM.toString()) <= 12 &&
+                                Integer.parseInt(inputD.toString()) >= 1 && Integer.parseInt(inputD.toString()) <= 31) {
+                            inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString() + "일이야!";
+                            ((MainActivity)mContext).clickSendMessage(inputMessage);
+                            findViewById(R.id.year_constraint).setVisibility(View.GONE);
+                            findViewById(R.id.whereWhat_constraint).setVisibility(View.GONE);
+                            findViewById(R.id.auto_when).setVisibility(View.GONE);
+                            checkRecall=false;
+                        }else {
+                            Toast.makeText(mContext, "지나간 날짜를 입력해주세요!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }else {
+                    Toast.makeText(mContext, "올바른 날짜를 입력해주세요!", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.btnWhereWhatSend :
+                if (whereWhatMessage.getText() != null && !whereWhatMessage.getText().toString().replace(" ", "").equals("")) {
+                    checkWhere++;
+                    if(checkWhere==1) { //어디서를 입력하고 무엇을도 입력한 경우 일정 등록 완료
+                        inputMessage=whereWhatMessage.getText().toString()+"을(를) 하는거야!";
+                        ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
+                        whereWhatMessage.setText("");
+                        findViewById(R.id.year_constraint).setVisibility(View.GONE);
+                        findViewById(R.id.whereWhat_constraint).setVisibility(View.GONE);
+                        findViewById(R.id.auto_when).setVisibility(View.GONE);
+                        checkWhere=-1;
+                    }
+                    else if(checkWhere==0){
+                        inputMessage=whereWhatMessage.getText().toString()+"에서 하는거야!";
+                        ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
+                        whereWhatMessage.setText("");
+                        whereWhatText.setText("을(를)하는거야!");
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "메시지를 입력해주세요!", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+    public static boolean isNumeric(String maybeNumeric) {
+        return maybeNumeric != null && maybeNumeric.matches("[0-9]+");
     }
 }
