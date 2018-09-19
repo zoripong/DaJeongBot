@@ -14,6 +14,7 @@
         android:padding="40dp"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/dialogText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="로그아웃 하시겠습니까?"
