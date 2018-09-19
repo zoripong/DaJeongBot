@@ -301,10 +301,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    Toast.makeText(mContext, myButton.getText().toString(), Toast.LENGTH_LONG).show();
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
 //                     chattype == > ChatType.REGISTER_CHAT or ChatType.QUESTION_SCHEDULE_SELECT_CHAT
+                    Log.e(TAG, "그래.. 넌 뭐니..?"+chatType);
                     ((MainActivity) mContext)
                             .sendMessage(accountId,
                                     slotArrayList.get(finalI).getValue()+":"+slotArrayList.get(finalI).getLabel(),
-                                    ChatType.QUESTION_SCHEDULE_SELECT_CHAT,
+                                    chatType,
                                     String.valueOf(System.currentTimeMillis()),
                                     0);
                     mChats.add(new Chat(NodeType.SPEAK_NODE, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));

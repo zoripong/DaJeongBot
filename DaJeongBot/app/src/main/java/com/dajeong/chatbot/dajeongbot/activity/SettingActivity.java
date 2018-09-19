@@ -50,8 +50,10 @@ public class SettingActivity extends AppCompatActivity {
         findViewById(R.id.LiChangeTime).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingActivity.this, ChangeTimeActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(SettingActivity.this, ChangeTimeActivity.class);
+//                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "당신이 알람을 받기 원하는 시간을 지정할 수 있도록 금방 돌아올게요!", Toast.LENGTH_SHORT).show();
+
             }
         });
 
