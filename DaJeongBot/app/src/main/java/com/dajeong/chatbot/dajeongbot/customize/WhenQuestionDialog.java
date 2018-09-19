@@ -1,7 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.customize;
 
 import android.app.Dialog;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,7 +24,7 @@ public class WhenQuestionDialog extends MainActivity implements View.OnClickList
         dialog = new Dialog(mContext, R.style.DialogTheme);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_auto_when);
+        dialog.setContentView(R.layout.main_auto_bottom);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.getWindow().setDimAmount(0.0f);
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
@@ -71,7 +70,7 @@ public class WhenQuestionDialog extends MainActivity implements View.OnClickList
                             Integer.parseInt(inputM.toString()) <= Integer.parseInt(mMonth) && Integer.parseInt(inputM.toString()) >= 1 &&
                             Integer.parseInt(inputD.toString()) < Integer.parseInt(mDate) && Integer.parseInt(inputD.toString()) >= 1) {
                         inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString() + "일이야!";
-                        ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
+                        ((MainActivity)mContext).clickSendMessage(inputMessage);
                         dialog.dismiss();
                     }else {
                         Toast.makeText(mContext, "지나간 날짜를 입력해주세요!", Toast.LENGTH_LONG).show();

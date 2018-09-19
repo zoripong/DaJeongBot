@@ -92,8 +92,10 @@ dependencies {
     //tutorial circle
     implementation  'com.romandanylyk:pageindicatorview:1.0.1'
 
-    //bottom dialog
-    implementation 'com.orhanobut:dialogplus:1.11@aar'
+    //swipe
+    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 }
 apply plugin: 'com.google.gms.google-services'
 GoogleServicesPlugin.config.disableVersionCheck = true
