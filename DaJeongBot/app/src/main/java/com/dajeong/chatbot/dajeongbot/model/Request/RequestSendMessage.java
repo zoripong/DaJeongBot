@@ -68,4 +68,18 @@ public class RequestSendMessage {
     public JsonObject getResponse() {
         return response;
     }
+
+    @Override
+    public String toString() {
+        return "RequestSendMessage{" +
+                "accountId=" + accountId +
+                ", content='" + content + '\'' +
+                ", nodeType=" + nodeType +
+                ", chatType=" + chatType +
+                ", botType=" + botType +
+                ", time='" + time + '\'' +
+                ", isBot=" + isBot +
+                ", response=" + response +
+                '}';
+    }
 }
