@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,27 +18,38 @@ import android.widget.Toast;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl;
 import com.dajeong.chatbot.dajeongbot.activity.CalendarActivity;
+import com.dajeong.chatbot.dajeongbot.activity.ChangeBotActivity;
 import com.dajeong.chatbot.dajeongbot.activity.SettingActivity;
-import com.dajeong.chatbot.dajeongbot.customize.LogoutDialog;
-import com.dajeong.chatbot.dajeongbot.customize.ScheduleDeleteDialog;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.decorators.EventDecorator;
 import com.dajeong.chatbot.dajeongbot.model.Event;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.gson.JsonObject;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Vector;
-import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.androidanimations.library.Techniques;
-public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHolder> {
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHolder> {
+    private final String TAG = "EventAdapter";
     private Vector<Event> mEvents;
 
     private Context mContext;
     private ArrayList<Event> EventInfoArrayList;
 
     //protected SwipeItemRecyclerMangerImpl mItemManger = new SwipeItemRecyclerMangerImpl(this);
+
+    private int position = 0;
 
     public EventAdapter(Context context, ArrayList<Event> objects) {
         this.mContext = context;
@@ -71,6 +81,7 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
     @Override
     public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.swipe_row_item, parent, false);
+
         return new SimpleViewHolder(view);
     }
 
@@ -80,16 +91,16 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
         SimpleViewHolder myViewHolder = (SimpleViewHolder) viewHolder;
         switch (viewHolder.getItemViewType()){
             case 0: //내용
-                myViewHolder.tvScheduleWhen.setText(EventInfoArrayList.get(position).scheduleWhen);
-                myViewHolder.tvScheduleWhere.setText(EventInfoArrayList.get(position).scheduleWhere);
-                myViewHolder.tvScheduleWhat.setText(EventInfoArrayList.get(position).scheduleWhat);
+                myViewHolder.tvScheduleWhen.setText(EventInfoArrayList.get(position).getScheduleWhen());
+                myViewHolder.tvScheduleWhere.setText(EventInfoArrayList.get(position).getScheduleWhere());
+                myViewHolder.tvScheduleWhat.setText(EventInfoArrayList.get(position).getScheduleWhat());
                 myViewHolder.ivEventImage.setVisibility(View.GONE);
                 break;
             case 1: //내용+사진
-                myViewHolder.tvScheduleWhen.setText(EventInfoArrayList.get(position).scheduleWhen);
-                myViewHolder.tvScheduleWhere.setText(EventInfoArrayList.get(position).scheduleWhere);
-                myViewHolder.tvScheduleWhat.setText(EventInfoArrayList.get(position).scheduleWhat);
-                myViewHolder.ivEventImage.setImageResource(EventInfoArrayList.get(position).drawableId);
+                myViewHolder.tvScheduleWhen.setText(EventInfoArrayList.get(position).getScheduleWhen());
+                myViewHolder.tvScheduleWhere.setText(EventInfoArrayList.get(position).getScheduleWhere());
+                myViewHolder.tvScheduleWhat.setText(EventInfoArrayList.get(position).getScheduleWhat());
+                myViewHolder.ivEventImage.setImageResource(EventInfoArrayList.get(position).getDrawableId());
                 break;
             default:
                 return;
@@ -134,6 +145,8 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        //this.position = position;
+                        deleteSchedule(position); //서버에 선택한 일정 삭제하기
                         mItemManger.removeShownLayouts(viewHolder.swipeLayout);
                         EventInfoArrayList.remove(position);
                         notifyItemRemoved(position);
@@ -152,9 +165,38 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
 
             }
         });
-        //mItemManger.bind(viewHolder.itemView, position);
         mItemManger.bindView (viewHolder.itemView, position);
     }
+
+
+    private void deleteSchedule(int position){
+        final String eventId=Integer.toString(EventInfoArrayList.get(position).getEventId());
+        if(eventId!=null){
+            Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().removeEvent(Integer.parseInt(eventId));
+            res.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    if (response.body().has("status")) {
+                        if (response.body().get("status").getAsString().equals("Success")) {
+                            Log.e(TAG, "일정 삭제 성공");
+                            Toast.makeText(getApplicationContext(), "성공적으로 일정을 삭제했습니다", Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.e(TAG, "서버의 문제로 일정 삭제에 실패하였습니다.");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    if (t != null) {
+                        Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 일정을 삭제하지 못하였습니다.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+
+    }
+
 
 
     @Override
