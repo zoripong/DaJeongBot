@@ -3,13 +3,36 @@ package com.dajeong.chatbot.dajeongbot.model;
 
 public class Event {
 
-    public int EventId;
-    public String eventTitle;
-    public String scheduleWhat;
-    public String scheduleWhen;
-    public String scheduleWhere;
-    public int drawableId;
+    private int EventId;
+    private String eventTitle;
+    private String scheduleWhat;
+    private String scheduleWhen;
+    private String scheduleWhere;
+    private int drawableId;
 
+    public int getEventId() {
+        return EventId;
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    public String getScheduleWhat() {
+        return scheduleWhat;
+    }
+
+    public String getScheduleWhen() {
+        return scheduleWhen;
+    }
+
+    public String getScheduleWhere() {
+        return scheduleWhere;
+    }
+
+    public int getDrawableId() {
+        return drawableId;
+    }
 
     public Event(int EventId, String scheduleWhat, String scheduleWhen, String scheduleWhere, int drawableId) {
         this.scheduleWhat = scheduleWhat;

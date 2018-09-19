@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_bottom"
+    android:layout_gravity="bottom"
+    android:visibility="visible"
+    android:background="#FFF">
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="12dp"
+        android:background="#dcdcdc"
+        app:layout_constraintBottom_toTopOf="@+id/etMessage"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/ivAddChat"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="12dp"
+        android:contentDescription="@string/todo2"
+        android:padding="2.5dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivAddImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/todo"
+        android:padding="2.5dp"
+        android:src="@drawable/ic_add_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivAddChat" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="11dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint="Aa"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="5"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSend"
+        app:layout_constraintStart_toEndOf="@+id/ivAddImage"/>
+
+    <ImageButton
+        android:id="@+id/btnSend"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="9.5dp"
+        android:layout_marginRight="12dp"
+        android:background="@android:color/transparent"
+        android:padding="2.5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_add_chat"
+        android:text="@string/send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

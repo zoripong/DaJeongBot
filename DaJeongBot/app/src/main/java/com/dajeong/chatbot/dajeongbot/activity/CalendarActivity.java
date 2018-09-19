@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.DividerItemDecoration;
 import com.dajeong.chatbot.dajeongbot.adapter.EventAdapter;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.decorators.EventDecorator;
@@ -45,6 +46,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
 // 캘린더 activity
 public class CalendarActivity extends AppCompatActivity implements OnDateSelectedListener{
@@ -170,7 +173,7 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         selectDay.setText("");
         getSchedule(); //선택한 날짜의 일정 가져오기
 
-        mEventAdapter = new EventAdapter(mEvents);
+        mEventAdapter = new EventAdapter(this,mEvents);
         mRvEventList.setAdapter(mEventAdapter);
     }
 
@@ -228,9 +231,36 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         Log.e(TAG,"shot_Day >> "+shot_Day);
         selectDay.setText(shot_Day);
 
-        mEventAdapter = new EventAdapter(mEvents);
+        // Layout Managers:
+        mRvEventList.setLayoutManager(new LinearLayoutManager(this));
+
+        // Item Decorator:
+        //mRvEventList.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
+        mRvEventList.setItemAnimator(new FadeInLeftAnimator());
+        mEventAdapter = new EventAdapter(this,mEvents);
         mRvEventList.setAdapter(mEventAdapter);
+        mRvEventList.setOnScrollListener(onScrollListener);
+
+
+
     }
+
+    /**
+     * Substitute for our onScrollListener for RecyclerView
+     */
+    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            Log.e("ListView", "onScrollStateChanged");
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            // Could hide open views here if you wanted. //
+        }
+    };
 
     private  void getEventList(){
         mAccountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));

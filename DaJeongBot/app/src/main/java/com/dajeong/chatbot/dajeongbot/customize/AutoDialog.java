@@ -2,13 +2,18 @@ package com.dajeong.chatbot.dajeongbot.customize;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.R;
@@ -57,10 +62,14 @@ public class AutoDialog extends MainActivity implements View.OnClickListener{
             case R.id.ivScheduleAdd :
                 inputMessage="나 일정 있어!";
                 ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
+                ((MainActivity)MainActivity.mContext).addAutoSchedule();
                 dialog.dismiss();
-                new WhereDialog();
                 break;
             case R.id.ivRecall :
+                inputMessage="나 궁금한 날 있어!";
+                ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
+                ((MainActivity)MainActivity.mContext).addAutoRecall();
+                dialog.dismiss();
                 break;
             case R.id.ivCloseBtn :
                 dialog.dismiss();
@@ -68,15 +77,14 @@ public class AutoDialog extends MainActivity implements View.OnClickListener{
             case R.id.btnDSend :
                 inputMessage=message.getText().toString();
                 if (message.getText() != null && !message.getText().toString().replace(" ", "").equals("")) {
-
                     ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
                     dialog.dismiss();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "메시지를 입력해주세요!", Toast.LENGTH_LONG).show();
-
                 }
                 break;
         }
     }
+
 }

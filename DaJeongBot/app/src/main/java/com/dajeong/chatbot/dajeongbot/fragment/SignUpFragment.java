@@ -107,9 +107,9 @@ public class SignUpFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Month = monthSpinner.getSelectedItem().toString();
                 Log.e("UserMonth", Month);
-                isMonthSelect = !isFirstSelect;
-                isFirstSelect = false;
-                checkIsEnabled(daySpinner);
+//                isMonthSelect = !isFirstSelect;
+//                isFirstSelect = false;
+//                checkIsEnabled(daySpinner);
                 dayList.clear();
                 if (Month.equals("4") || Month.equals("6") || Month.equals("9") || Month.equals("11")) {
                     setBirthdayList(30, dayList, dayAdapter);
@@ -124,7 +124,7 @@ public class SignUpFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                daySpinner.getSelectedView();
+//                daySpinner.getSelectedView();
             }
         });
         daySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -190,10 +190,11 @@ public class SignUpFragment extends Fragment {
             inputPw.setText("");
             inputPw.requestFocus();
             return false;
-        } else if (!(isMonthSelect)){
-            Toast.makeText(getActivity(),"Birthday를 확인해주세요",Toast.LENGTH_SHORT).show();
-            return false;
         }
+//        else if (!(isMonthSelect)){
+//            Toast.makeText(getActivity(),"Birthday를 확인해주세요",Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         else
             return true;
     }

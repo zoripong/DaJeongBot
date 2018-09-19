@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    swipe:leftEdgeSwipeOffset="0dp"
+    swipe:rightEdgeSwipeOffset="0dp"
+    android:background="#fff18e">
+
+    <!--Bottom View For Right to Left-->
+
+    <LinearLayout
+        android:id="@+id/bottom_wrapper"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/tvEdit"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="Edit"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center_vertical|center"/>
+
+        <TextView
+            android:id="@+id/tvDelete"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="@color/colorAccent"
+            android:layout_gravity="center_vertical|center"/>
+    </LinearLayout>
+
+
+
+    <!-- Top View,  Row itemView of RecyclerView -->
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF">
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/ivEventImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            swipe:layout_constraintEnd_toStartOf="@+id/ivEventImage"
+            swipe:layout_constraintStart_toStartOf="parent"
+            swipe:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ImageView"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/schedule_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivWhen"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="11dp"
+                android:src="@drawable/ic_when"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvScheduleWhen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="언제"
+                android:textColor="#6a6a6a" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/ivEventImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+            swipe:layout_constraintEnd_toStartOf="@+id/ivEventImage"
+            swipe:layout_constraintStart_toStartOf="parent"
+            swipe:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+            <ImageView
+                android:id="@+id/ivWhere"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="11dp"
+                android:src="@drawable/ic_where" />
+
+            <TextView
+                android:id="@+id/tvScheduleWhere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="어디서"
+                android:textColor="#6a6a6a" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            swipe:layout_constraintBottom_toBottomOf="parent"
+            swipe:layout_constraintEnd_toEndOf="parent"
+            swipe:layout_constraintStart_toStartOf="parent"
+            swipe:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+            <ImageView
+                android:id="@+id/ivWhat"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="11dp"
+                android:src="@drawable/ic_what" />
+
+            <TextView
+                android:id="@+id/tvScheduleWhat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="무엇을"
+                android:textColor="#6a6a6a" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/ivEventImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            swipe:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+            swipe:layout_constraintEnd_toEndOf="parent"
+            swipe:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</com.daimajia.swipe.SwipeLayout>
+

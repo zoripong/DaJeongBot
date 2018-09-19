@@ -54,6 +54,10 @@ public interface RetrofitService {
     @GET("events/dates/{account_id}")
     Call<ArrayList<String>> getDatesHavingEvent(@Path("account_id") int accountId);
 
+    // 일정 삭제
+    @DELETE("events/{event_id}")
+    Call<JsonObject> removeEvent(@Path("event_id")int eventId);
+
     // fcm 토큰 등록
     @Headers("Content-Type: application/json")
     @POST("me/tokens")
