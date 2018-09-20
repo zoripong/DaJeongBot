@@ -57,8 +57,8 @@ public class ChangeTimeActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChangeTimeActivity.this, SettingActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ChangeTimeActivity.this, SettingActivity.class);
+//                startActivity(intent);
                 finish();
             }
         });

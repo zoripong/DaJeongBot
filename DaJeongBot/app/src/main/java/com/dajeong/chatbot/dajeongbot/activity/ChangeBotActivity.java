@@ -120,8 +120,8 @@ public class ChangeBotActivity extends AppCompatActivity {
                                     .savePreferences("bot_type",check);
                             int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
                             Log.e(TAG,"바뀐 봇 타입 : "+charType);
-                            Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
-                            startActivity(intent);
+//                            Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
+//                            startActivity(intent);
                             finish();
                         } else {
                             Log.e(TAG, "서버의 문제로 챗봇 변경에 실패하였습니다.");
@@ -165,8 +165,8 @@ public class ChangeBotActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
+//                startActivity(intent);
                 finish();
             }
         });

@@ -109,8 +109,8 @@ public class SettingActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SettingActivity.this, com.dajeong.chatbot.dajeongbot.activity.MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(SettingActivity.this, com.dajeong.chatbot.dajeongbot.activity.MainActivity.class);
+//                startActivity(intent);
                 finish();
             }
         });

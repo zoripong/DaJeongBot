@@ -259,8 +259,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,3000);
+                //startActivity(intent);
+                //finish();
             }
         });
 
@@ -269,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
 
@@ -279,6 +280,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return true;
     }
+
+    // CalendarActivity 에서 처리된 결과를 받는 메소드
+    // 처리된 결과 코드 (resultCode) 가 RESULT_OK 이면 requestCode 를 판별해 결과 처리를 진행한다.
+    // CalculateActivity 에서 처리 결과가 담겨온 데이터를 TextView 에 보여준다.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+            // MainActivity 에서 요청할 때 보낸 요청 코드 (3000)
+                case 3000:
+                    Log.e(TAG,"이벤트 ID : "+data.getStringExtra("result"));
+                    break;
+            }
+        }
+        else{
+            Log.e(TAG,"이벤트 ID 못 구함");
+        }
+    }
+
 
     private void init() {
         mContext=this;

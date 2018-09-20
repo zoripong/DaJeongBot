@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.dajeong.chatbot.dajeongbot.activity.CalendarActivity;
 import com.dajeong.chatbot.dajeongbot.activity.ChangeBotActivity;
+import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.activity.SettingActivity;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.decorators.EventDecorator;
@@ -38,19 +40,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHolder> {
     private final String TAG = "EventAdapter";
-    private Vector<Event> mEvents;
 
     private Context mContext;
     private ArrayList<Event> EventInfoArrayList;
 
-    //protected SwipeItemRecyclerMangerImpl mItemManger = new SwipeItemRecyclerMangerImpl(this);
-
-    private int position = 0;
-
+    public String eventId;
     public EventAdapter(Context context, ArrayList<Event> objects) {
         this.mContext = context;
         this.EventInfoArrayList = objects;
@@ -118,6 +117,47 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                 Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
             }
         });
+        viewHolder.tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(mContext);
+                dialog.setContentView(R.layout.dialog_logout);
+                DisplayMetrics dm = mContext.getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
+                int width = (int)(dm.widthPixels*0.8f);
+                WindowManager.LayoutParams wm = dialog.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
+                wm.copyFrom(dialog.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
+                wm.width = width;
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                TextView deleteBtn = (TextView) dialog.findViewById(R.id.tvOk);
+                TextView dialogText = (TextView) dialog.findViewById(R.id.dialogText);
+                TextView cancleBtn = (TextView) dialog.findViewById(R.id.tvCancle);
+                deleteBtn.setText("수정");
+                dialogText.setText("일정을 수정하시겠습니까?");
+
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        eventId=Integer.toString(EventInfoArrayList.get(position).getEventId());
+
+                        Intent intent = new Intent();
+                        intent.putExtra("result",eventId);
+                        ((Activity)mContext).setResult(RESULT_OK,intent);
+                        ((Activity)mContext).finish();
+                    }
+                });
+
+                cancleBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+
+            }
+        });
         viewHolder.tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,8 +168,6 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                 dialog.setContentView(R.layout.dialog_logout);
                 DisplayMetrics dm = mContext.getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
                 int width = (int)(dm.widthPixels*0.8f); //디바이스 화면 너비
-                //int height = dm.heightPixels; //디바이스 화면 높이
-
                 WindowManager.LayoutParams wm = dialog.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
                 wm.copyFrom(dialog.getWindow().getAttributes());  //여기서 설정한값을 그대로 다이얼로그에 넣겠다는의미
                 wm.width = width;
@@ -162,7 +200,6 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                     }
                 });
                 dialog.show();
-
             }
         });
         mItemManger.bindView (viewHolder.itemView, position);
@@ -170,7 +207,7 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
 
 
     private void deleteSchedule(int position){
-        final String eventId=Integer.toString(EventInfoArrayList.get(position).getEventId());
+        eventId=Integer.toString(EventInfoArrayList.get(position).getEventId());
         if(eventId!=null){
             Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().removeEvent(Integer.parseInt(eventId));
             res.enqueue(new Callback<JsonObject>() {
