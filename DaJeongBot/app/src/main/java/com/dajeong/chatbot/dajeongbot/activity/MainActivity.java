@@ -21,6 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -122,7 +124,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRvChatList.setAdapter(mChatAdapter);
         // TODO : TEST
 //        mRvChatList.setItemAnimator(new DefaultItemAnimator());
+        Context context = mRvChatList.getContext();
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
 
+        mRvChatList.setLayoutAnimation(controller);
+        mRvChatList.getAdapter().notifyDataSetChanged();
+        mRvChatList.scheduleLayoutAnimation();
 
         mRvChatList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
