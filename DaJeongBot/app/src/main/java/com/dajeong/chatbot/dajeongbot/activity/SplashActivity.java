@@ -74,7 +74,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void checkInternetStatus() {
-        Log.e(TAG, "야호");
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()

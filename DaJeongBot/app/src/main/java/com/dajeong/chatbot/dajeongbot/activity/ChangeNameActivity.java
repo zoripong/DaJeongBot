@@ -72,8 +72,8 @@ public class ChangeNameActivity extends AppCompatActivity {
                         if (response.body().get("status").getAsString().equals("Success")) {
                             Log.e(TAG, "이름변경 성공");
                             Toast.makeText(getApplicationContext(), "성공적으로 이름을 변경했습니다", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(ChangeNameActivity.this, SettingActivity.class);
-                            startActivity(intent);
+//                            Intent intent = new Intent(ChangeNameActivity.this, SettingActivity.class);
+//                            startActivity(intent);
                             finish();
                         } else {
                             Log.e(TAG, "서버의 문제로 이름 변경에 실패하였습니다.");

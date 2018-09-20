@@ -114,13 +114,10 @@ public class MessageReceiver {
             String timestamp = String.valueOf(jsonArray.get(i).getAsJsonObject().get("timestamp").getAsLong());
             String nodeType = jsonArray.get(i).getAsJsonObject().get("nodeType").getAsString();
 
-            Log.e(TAG, "node type is " + nodeType);
             JsonArray options = jsonArray.get(i).getAsJsonObject().getAsJsonArray("optionList");
 
             if(!jsonArray.get(i).getAsJsonObject().get("imgRoute").isJsonNull()){
                 String imgUrl = jsonArray.get(i).getAsJsonObject().get("imgRoute").getAsString();
-                Log.e(TAG, "here"+ i +":" + imgUrl);
-                Log.e(TAG, "here"+ i +":" + jsonArray.get(i).getAsJsonObject().toString());
                 if(!imgUrl.equals(""))
                     mChats.addLast(new Chat(NodeType.IMAGE_NODE, mBotChar, imgUrl, timestamp));
 

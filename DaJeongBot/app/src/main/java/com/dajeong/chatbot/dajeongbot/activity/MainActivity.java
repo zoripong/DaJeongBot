@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void clickSendMessage(String message){
         String getMessage=message;
-        Log.e(TAG,"입력된 메시지 : "+getMessage);
+//        Log.e(TAG,"입력된 메시지 : "+getMessage);
         if (getMessage != null && !getMessage.replace(" ", "").equals("")) {
             // TODO : 추가 할 때 애니메이션
             int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
@@ -270,8 +270,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,3000);
+                //startActivity(intent);
+                //finish();
             }
         });
 
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
-                finish();
+               // finish();
             }
         });
 
@@ -290,6 +291,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return true;
     }
+
+    // CalendarActivity 에서 처리된 결과를 받는 메소드
+    // 처리된 결과 코드 (resultCode) 가 RESULT_OK 이면 requestCode 를 판별해 결과 처리를 진행한다.
+    // CalculateActivity 에서 처리 결과가 담겨온 데이터를 TextView 에 보여준다.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+            // MainActivity 에서 요청할 때 보낸 요청 코드 (3000)
+                case 3000:
+                    Log.e(TAG,"이벤트 ID : "+data.getStringExtra("result"));
+                    break;
+            }
+        }
+        else{
+            Log.e(TAG,"이벤트 ID 못 구함");
+        }
+    }
+
 
     private void init() {
         mContext=this;
@@ -356,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String charNames[] = {"다정군", "다정냥", "다정곰", "다정뭉"};
         int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
         int charImage;
-        Log.e(TAG,"CharType >>"+charType);
+//        Log.e(TAG,"CharType >>"+charType);
         switch (charType){
             case 0:
                 charImage=R.drawable.ic_char1;
@@ -453,18 +473,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
         int botType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
+        RequestSendMessage param = new RequestSendMessage(accountId, content,0, chatType, botType, time, isBot, mJsonResponse);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
-                .sendMessage(new RequestSendMessage(accountId, content,0, chatType, botType, time, isBot, mJsonResponse));
-
+                .sendMessage(param);
+        Log.e(TAG, "<REQUEST>"+param.toString());
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 //                Log.e(TAG, String.valueOf(response));
                 //TODO : 대화 하다가 앱 종료시 이어서 가능하도록
                 if(response.body() != null){
-                    Log.e(TAG, String.valueOf(response.body()));
+                    Log.e(TAG, "RESPONSE" + String.valueOf(response.body().toString()));
 
                     if(response.body().has("status")){
 
@@ -479,6 +500,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 JsonObject result = response.body().getAsJsonObject("result");
                                 mJsonResponse = result;
                                 // receive
+
                                 mChatType = result.get("chat_type").getAsInt();
                                 switch (result.get("chat_type").getAsInt()){
                                     case ChatType.BASIC_CHAT:

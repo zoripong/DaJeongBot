@@ -127,10 +127,16 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         getToday();
         getEventList();
 
-//        mEventAdapter = new EventAdapter(mEvents);
-//        mRvEventList.setAdapter(mEventAdapter);
-//        Log.e(TAG,"mEvents size >>"+mEventAdapter.getItemCount());
     }
+
+//    public void returnEventId(String eventId){
+//        Log.e("이벤트 아이디 얻기 성공",eventId);
+//        Intent resultIntent = new Intent(CalendarActivity.this, MainActivity.class);
+//        String n=eventId;
+//        resultIntent.putExtra("result",n);
+//        setResult(RESULT_OK,resultIntent);
+//        finish();
+//    }
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -203,8 +209,8 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(CalendarActivity.this, MainActivity.class);
+//                startActivity(intent);
                 finish();
             }
         });

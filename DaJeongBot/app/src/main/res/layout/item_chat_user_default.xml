@@ -1,42 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/chat_root"
     android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginLeft="50dp"
+    android:gravity="right"
 >
-    <TextView
-        android:id="@+id/tvContentUser"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_weight="1"
-        android:background="@drawable/chatbot_tv_me_custom"
-        android:paddingBottom="7dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="7dp"
-        android:text="여기는 내용이 들어갈거에요"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivSenderProfile"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="270dp"
-        />
-
     <TextView
         android:id="@+id/tvTimeUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_weight="1"
         android:text="10:10"
         android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tvContentUser" />
+        android:layout_gravity="bottom"/>
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvContentUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/chatbot_tv_me_custom"
+        android:paddingBottom="7dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7dp"
+        android:text="여기는 내용sdfsdfsdfsfsdfsdsdfsdsdfsdfsdf"
+        />
+</LinearLayout>
