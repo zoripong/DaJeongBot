@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
@@ -180,12 +182,20 @@ public class LoginActivity extends AppCompatActivity {
                 String id = String.valueOf(mEtUserId.getText());
                 String pw = String.valueOf(mEtUserPw.getText());
 
-                if((!id.isEmpty())&&(!pw.isEmpty())){
+                if(id.isEmpty()){
+                    YoYo.with(Techniques.Shake).playOn(mEtUserId);
+                    Toast.makeText(getApplicationContext(), "이메일을 입력해주세요", Toast.LENGTH_LONG).show();
+                }
+                else if(pw.isEmpty()){
+                    YoYo.with(Techniques.Shake).playOn(mEtUserPw);
+                    Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show();
+                }
+                else if((!id.isEmpty())&&(!pw.isEmpty())){
                     findViewById(R.id.pgb).setVisibility(View.VISIBLE);
                     Call<ArrayList<JsonObject>> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserInfo(AccountType.BASIC_ACCOUNT, id, pw);
                         new NetworkCall().execute(res);
                 }else{
-                    Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "입력해주세요.", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -269,6 +279,8 @@ public class LoginActivity extends AppCompatActivity {
                     saveUserInfo(response.getJSONObject("user_info"));
 
                 }else if(response.getString("status").equals("NOT EXIST")){
+                    YoYo.with(Techniques.Shake).playOn(mEtUserId);
+                    YoYo.with(Techniques.Shake).playOn(mEtUserPw);
                     Toast.makeText(getApplicationContext(), "일치하는 회원이 없습니다.", Toast.LENGTH_SHORT).show();
                 }else if(response.getString("status").equals("NEW_API_USER")){
 
