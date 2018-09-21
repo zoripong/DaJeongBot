@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -146,7 +148,6 @@ public class SignUpFragment extends Fragment {
                 effectivenessCheck();
 
                 if (effectivenessCheck() == true) {
-
                     Log.e("UserEmail", inputEmail.getText().toString());
                     Log.e("UserPw", inputPw.getText().toString());
                     Log.e("UserYear", Year);
@@ -181,12 +182,14 @@ public class SignUpFragment extends Fragment {
         if (inputEmail.getText().toString().compareToIgnoreCase("") == 0 ||
                 !Patterns.EMAIL_ADDRESS.matcher(inputEmail.getText().toString()).matches()) {
             Toast.makeText(getActivity(), "Email형식을 맞추어주세요.", Toast.LENGTH_SHORT).show();
+            YoYo.with(Techniques.Shake).playOn(inputEmail);
             inputEmail.setText("");
             inputEmail.requestFocus();
             return false;
         } else if (inputPw.getText().toString().compareToIgnoreCase("") == 0 ||
                 !Pattern.matches("^[A-Za-z0-9]*.{8,16}$", inputPw.getText().toString())) {
             Toast.makeText(getActivity(), "Password를 확인해주세요", Toast.LENGTH_SHORT).show();
+            YoYo.with(Techniques.Shake).playOn(inputPw);
             inputPw.setText("");
             inputPw.requestFocus();
             return false;

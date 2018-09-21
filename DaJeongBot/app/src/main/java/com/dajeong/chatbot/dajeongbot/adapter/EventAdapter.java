@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
@@ -155,6 +157,8 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                         dialog.dismiss();
                     }
                 });
+                dialog.getWindow()
+                        .getAttributes().windowAnimations = R.style.AlphaDialogAnimation;
                 dialog.show();
 
             }

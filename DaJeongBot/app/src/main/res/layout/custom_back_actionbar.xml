@@ -13,9 +13,13 @@
         <ImageView
             android:id="@+id/ivBack"
             android:layout_alignParentLeft="true"
-            android:layout_width="20dp"
-            android:layout_height="19dp"
-            android:background="@drawable/ic_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:paddingTop="15.5dp"
+            android:paddingBottom="15.5dp"
+            android:paddingRight="30dp"
+            android:src="@drawable/ic_back"
+            android:background="?selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"/>
         <TextView
             android:id="@+id/tvCurrentScreen"

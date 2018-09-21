@@ -5,4 +5,5 @@
     <color name="colorAccent">#a239bc</color>
     <color name="chatMe">#ffe73d</color>
     <color name="transparent">#00000000</color>
+    <color name="colorRipple">#A9A9F5</color>
 </resources>

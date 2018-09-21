@@ -59,6 +59,8 @@ public class LogoutDialog {
         dlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         // 커스텀 다이얼로그를 노출한다.
+        dlg.getWindow()
+                .getAttributes().windowAnimations = R.style.AlphaDialogAnimation;
         dlg.show();
 
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
