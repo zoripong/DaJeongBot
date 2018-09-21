@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +58,8 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
 
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
         SwipeLayout swipeLayout;
-        TextView tvDelete;
-        TextView tvEdit;
+        LinearLayout LiDelete;
+        LinearLayout LiEdit;
         TextView tvScheduleWhen;
         TextView tvScheduleWhere;
         TextView tvScheduleWhat;
@@ -67,8 +68,8 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
         public SimpleViewHolder(View itemView) {
             super(itemView);
             swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe);
-            tvDelete = (TextView) itemView.findViewById(R.id.tvDelete);
-            tvEdit = (TextView) itemView.findViewById(R.id.tvEdit);
+            LiDelete = (LinearLayout) itemView.findViewById(R.id.LiDelete);
+            LiEdit = (LinearLayout) itemView.findViewById(R.id.LiEdit);
             tvScheduleWhen = itemView.findViewById(R.id.tvScheduleWhen);
             tvScheduleWhere = itemView.findViewById(R.id.tvScheduleWhere);
             tvScheduleWhat = itemView.findViewById(R.id.tvScheduleWhat);
@@ -117,7 +118,7 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                 Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
             }
         });
-        viewHolder.tvEdit.setOnClickListener(new View.OnClickListener() {
+        viewHolder.LiEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(mContext);
@@ -158,7 +159,7 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
 
             }
         });
-        viewHolder.tvDelete.setOnClickListener(new View.OnClickListener() {
+        viewHolder.LiDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //지우기 버튼을 클릭하면 다이얼로그를 띄움
