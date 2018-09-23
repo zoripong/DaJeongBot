@@ -302,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // MainActivity 에서 요청할 때 보낸 요청 코드 (3000)
                 case 3000:
                     Log.e(TAG,"이벤트 ID : "+data.getStringExtra("result"));
+                    sendMessage(mAccountId, data.getStringExtra("result"), ChatType.UPDATE_SCHEDULE_BY_CALENDAR, String.valueOf(System.currentTimeMillis()), 0);
                     break;
             }
         }
