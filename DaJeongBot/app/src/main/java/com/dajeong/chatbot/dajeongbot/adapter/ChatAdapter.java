@@ -42,6 +42,7 @@ import java.util.Locale;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
+    private int BUTTON_ID = 8000;
     private LinkedList<Chat> mChats;
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -88,11 +89,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        final Chat chat = mChats.get(position);
+        final Chat chat = mChats.get(holder.getAdapterPosition());
 //        Log.e(TAG, "view type is "+holder.getItemViewType() + "/" +chat.getContent());
 
         boolean buttonEnable = false;
-        if(position==mChats.size()-1){
+        if(holder.getAdapterPosition()==mChats.size()-1){
             switch (holder.getItemViewType()) {
                 case ChatHolderType.CHAT_BOT_HOLDER: //ChatBotHolder
                 case ChatHolderType.CHAT_USER_HOLDER: //chatUserHolder
@@ -290,8 +291,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 myButton.setBackground(mContext.getResources().getDrawable(R.drawable.chatbot_tv_slot_custom));
             }
-
-            myButton.setId(i);
+            BUTTON_ID++;
+            myButton.setId(BUTTON_ID);
             //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
 

@@ -8,5 +8,5 @@ public interface ChatType {
     int QUESTION_SCHEDULE_SELECT_CHAT = 4;
     int QUESTION_SCHEDULE_REPLY_CHAT = 5;
     int UPDATE_SCHEDULE_BY_CALENDAR = 6;
- 
+
 }
