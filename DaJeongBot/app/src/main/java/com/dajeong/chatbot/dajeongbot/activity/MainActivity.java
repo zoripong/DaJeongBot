@@ -633,18 +633,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Calendar inputDate = Calendar.getInstance();
                     inputDate.set(Calendar.YEAR,inputY);
                     inputDate.set(Calendar.MONTH,Integer.parseInt(inputM.toString())-1);
-                    inputDate.set(Calendar.DAY_OF_MONTH,Integer.parseInt(inputD.toString())-1);
+                    inputDate.set(Calendar.DAY_OF_MONTH,Integer.parseInt(inputD.toString()));
+                    String strInputToday = sdf.format(inputDate.getTime());
+
                      int result=c1.compareTo(inputDate);
 
                     if(checkRecall==false) {
                         if (inputY >= 2000 && inputY < 3000 && result==-1 &&
                                 Integer.parseInt(inputM.toString()) >= 1 && Integer.parseInt(inputM.toString()) <= 12 &&
-                                Integer.parseInt(inputD.toString()) >= 1 && Integer.parseInt(inputD.toString()) <= 31) {
+                                Integer.parseInt(inputD.toString()) >= 1 && Integer.parseInt(inputD.toString()) <= 31 || result==0 ) {
                             inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString() + "일이야!";
                             ((MainActivity) MainActivity.mContext).clickSendMessage(inputMessage);
                             showWhatMessage();
                         } else {
                             Toast.makeText(mContext, "오늘 또는 앞으로의 날짜를 입력해주세요!", Toast.LENGTH_LONG).show();
+                            Log.e("날짜ㅏ",Integer.toString(result)+"들어간 날짜 : "+strInputToday+"오늘날짜:"+strToday);
                         }
                     }
                     else { //추억 회상인 경우
