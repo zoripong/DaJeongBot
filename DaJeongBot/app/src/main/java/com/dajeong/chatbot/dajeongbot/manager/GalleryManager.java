@@ -82,7 +82,7 @@ public class GalleryManager {
 
         while (cursor.moveToNext()) {
             GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
-//            Log.e(TAG, galleryImage.toString());
+            Log.e(TAG, "이유리"+galleryImage.toString());
             photoList.add(galleryImage);
 
         }

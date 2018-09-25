@@ -26,6 +26,7 @@ import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatHolderType;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
+import com.dajeong.chatbot.dajeongbot.control.AWSMobileController;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.fragment.CarouselFragment;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
@@ -488,16 +489,27 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView mIvSenderProfile;
         ImageView mIvImage;
         TextView mTvTime;
-
+        String filePath;
         public ChatBotImageHolder(View itemView) {
             super(itemView);
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             mIvImage = itemView.findViewById(R.id.ivBotImage);
             mTvTime = itemView.findViewById(R.id.tvTime);
+            itemView.findViewById(R.id.ivDownload).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(filePath!= null){
+                        Log.e(TAG, filePath+"다운로드");
+                        AWSMobileController.getInstance(mContext).downloadWithTransferUtility(filePath);
+                    }
+                }
+            });
         }
 
         @SuppressLint("ResourceType")
         private void showImage(String imgUrl) {
+            filePath= imgUrl;
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatBotImageHolder.this.itemView)
                     .load(imgUrl)
@@ -510,15 +522,26 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private class ChatUserImageHolder extends RecyclerView.ViewHolder {
         ImageView mIvImage;
         TextView mTvTime;
+        String filePath;
 
         public ChatUserImageHolder(View itemView) {
             super(itemView);
             mIvImage = itemView.findViewById(R.id.ivUserImage);
             mTvTime = itemView.findViewById(R.id.tvTimeUser);
+            itemView.findViewById(R.id.ivDownload).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(filePath!= null){
+                    Log.e(TAG, filePath+"다운로드");
+                        AWSMobileController.getInstance(mContext).downloadWithTransferUtility(filePath);
+                    }
+                }
+            });
         }
 
         @SuppressLint("ResourceType")
         private void showImage(String imgUrl) {
+            filePath = imgUrl;
             DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(mIvImage);
             Glide.with(ChatUserImageHolder.this.itemView)
                     .load(imgUrl)
