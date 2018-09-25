@@ -132,13 +132,13 @@ public class EventAdapter extends RecyclerSwipeAdapter<EventAdapter.SimpleViewHo
                 wm.width = width;
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                TextView deleteBtn = (TextView) dialog.findViewById(R.id.tvOk);
+                TextView updateBtn = (TextView) dialog.findViewById(R.id.tvOk);
                 TextView dialogText = (TextView) dialog.findViewById(R.id.dialogText);
                 TextView cancleBtn = (TextView) dialog.findViewById(R.id.tvCancle);
-                deleteBtn.setText("수정");
+                updateBtn.setText("수정");
                 dialogText.setText("일정을 수정하시겠습니까?");
 
-                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                updateBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();

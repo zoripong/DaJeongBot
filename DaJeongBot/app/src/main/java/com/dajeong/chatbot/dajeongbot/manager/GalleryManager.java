@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.dajeong.chatbot.dajeongbot.model.GalleryImage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class GalleryManager {
 
         while (cursor.moveToNext()) {
 
-            GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
+            GalleryImage galleryImage = new GalleryImage( cursor.getString(columnIndexData),false);
             photoList.add(galleryImage);
         }
 
@@ -81,8 +82,9 @@ public class GalleryManager {
 
         while (cursor.moveToNext()) {
             GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
-            Log.e(TAG, galleryImage.toString());
+//            Log.e(TAG, galleryImage.toString());
             photoList.add(galleryImage);
+
         }
         cursor.close();
         return photoList;

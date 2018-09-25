@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.AWSStartupHandler;
+import com.amazonaws.mobile.client.AWSStartupResult;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseInstanceIDService;
@@ -39,6 +42,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // 액션바 없애기
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
@@ -49,11 +53,12 @@ public class SplashActivity extends AppCompatActivity {
         checkInternetStatus();
     }
 
-    public void test(){
+
+    private void test(){
         Log.e(TAG, "firebase device token is :" + FirebaseInstanceId.getInstance().getToken());
     }
 
-    public void startApp(){
+    private void startApp(){
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

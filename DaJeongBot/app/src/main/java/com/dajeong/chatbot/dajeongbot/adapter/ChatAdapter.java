@@ -192,7 +192,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                         ((MainActivity)mContext).setSelectIndex(memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getEventId());
                         ((MainActivity)mContext).setJsonResponse(new JsonParser().parse(param).getAsJsonObject());
-                        ((MainActivity)mContext).sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
+                        ((MainActivity)mContext).sendMessage(accountId, content, NodeType.SPEAK_NODE, chatType, String.valueOf(time), isBot);
 
                         mChats.addLast(new Chat(NodeType.SPEAK_NODE, null, memories.get(chatBotCarouselHolder.mVpimage.getCurrentItem()).getContent(), String.valueOf(System.currentTimeMillis())));
 
@@ -306,6 +306,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((MainActivity) mContext)
                             .sendMessage(accountId,
                                     slotArrayList.get(finalI).getValue()+":"+slotArrayList.get(finalI).getLabel(),
+                                    NodeType.SPEAK_NODE,
                                     chatType,
                                     String.valueOf(System.currentTimeMillis()),
                                     0);
@@ -513,7 +514,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ChatUserImageHolder(View itemView) {
             super(itemView);
             mIvImage = itemView.findViewById(R.id.ivUserImage);
-            mTvTime = itemView.findViewById(R.id.tvTime);
+            mTvTime = itemView.findViewById(R.id.tvTimeUser);
         }
 
         @SuppressLint("ResourceType")

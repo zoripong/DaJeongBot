@@ -137,7 +137,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<GalleryRecycler
 
         final GalleryImage galleryImage = mPhotoList.get(position);
 
-        Log.e(TAG, "Recycler : "+galleryImage.getImgPath());
+//        Log.e(TAG, "Recycler : "+galleryImage.getImgPath());
 
         Glide.with(mActivity)
                 .load(galleryImage.getImgPath())
@@ -170,7 +170,7 @@ public class GalleryRecyclerAdapter extends RecyclerView.Adapter<GalleryRecycler
                 dialog.setContentView(R.layout.dialog_image_preview);
 
                preView = dialog.findViewById(R.id.preview_iv);
-                Log.e(TAG, "Dialog : "+galleryImage.getImgPath());
+//                Log.e(TAG, "Dialog : "+galleryImage.getImgPath());
 
                 final LinearLayout root = dialog.findViewById(R.id.root);
 

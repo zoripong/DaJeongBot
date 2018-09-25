@@ -1,6 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -132,7 +133,6 @@ public class AddPhotoActivity extends AppCompatActivity {
     private void init() {
         //갤러리 리사이클러뷰 초기화
         mGalleryManager = new GalleryManager(getApplicationContext());
-       // int dates[] = convertDate(dateList.get(mPosition));
         galleryImages =  mGalleryManager.getDatePhotoPathList();
         initRecyclerGallery();
         galleryRecycler.setLayoutManager(new GridLayoutManager(this, 4));
@@ -158,14 +158,9 @@ public class AddPhotoActivity extends AppCompatActivity {
             Log.e(TAG, ">>> selectedPhotoList   :  " + selectedPhotoList.get(i).getImgPath());
         }
 
-//        Intent intent = new Intent(this, AddPhotoDetailActivity.class);
-//        intent.putExtra(INTENT_PHOTO_EXTRA, (Serializable) selectedPhotoList);
-//        intent.putExtra("BOOK_CODE", mBookCode);
-//        intent.putExtra("DATE", mPeriod);
-////        intent.putExtra("SELECT_DATE", dateList.get(mPosition));
-//
-//        startActivity(intent);
-
+        Intent intent = new Intent();
+        intent.putExtra(INTENT_PHOTO_EXTRA, (Serializable) selectedPhotoList);
+        setResult(RESULT_OK,intent);
         finish();
 
     }

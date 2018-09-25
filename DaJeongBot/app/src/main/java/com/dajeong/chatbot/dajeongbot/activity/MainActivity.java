@@ -1,25 +1,19 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -33,12 +27,14 @@ import android.widget.Toast;
 import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
+import com.dajeong.chatbot.dajeongbot.control.AWSMobileController;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.control.MessageReader;
 import com.dajeong.chatbot.dajeongbot.control.MessageReceiver;
 import com.dajeong.chatbot.dajeongbot.customize.AutoDialog;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
+import com.dajeong.chatbot.dajeongbot.model.GalleryImage;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -47,7 +43,9 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Node;
 
+import java.io.File;
 import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +61,7 @@ import retrofit2.Response;
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = "MainActivity";
+
 
     protected static Context mContext;
     //component
@@ -102,18 +101,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private JsonObject mJsonResponse;
     private HashMap<String, Integer> mStringNodeTypeMap;
 
-    private CustomSharedPreference spm; // TODO : FIX...
+    private AWSMobileController mAWSctlr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainBottom=(ConstraintLayout) findViewById(R.id.main_bottom);
         onNewIntent(getIntent());
 
         init();
         bottominit();
-//        test();
         getMessage();
         showProgressBar();
 
@@ -122,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRvChatList.setLayoutManager(layoutManager);
 
         mRvChatList.setAdapter(mChatAdapter);
-        // TODO : TEST
-//        mRvChatList.setItemAnimator(new DefaultItemAnimator());
         Context context = mRvChatList.getContext();
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
 
@@ -185,9 +180,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.ivAddImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
-//                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "아주 잠시만 기다려주세요! 더 생생한 기억을 위해 이미지 저장 기능을 제공해드릴게요!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
+                startActivityForResult(intent,4000);
 
             }
         });
@@ -210,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(mChatType == ChatType.QUESTION_SCHEDULE_REPLY_CHAT){
                 content = String.valueOf(mSelectIndex)+":"+content;
             }
-            sendMessage(accountId, content, chatType, String.valueOf(time), isBot);
+            sendMessage(accountId, content, NodeType.SPEAK_NODE, chatType, String.valueOf(time), isBot);
 //                    runLayoutAnimation(mRvChatList);
             mChats.add(new Chat(NodeType.SPEAK_NODE, null, getMessage , String.valueOf(System.currentTimeMillis())));
             mChatAdapter.notifyDataSetChanged();
@@ -219,18 +213,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     private void showTutorial() { //dialog로 띄움
-
-        spm = new CustomSharedPreference(this);
         //spm.removePreferences("SHOW_TUTORIAL");
-        if(spm.retrieveBoolean("SHOW_TUTORIAL")){
-            //Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+        if(CustomSharedPreference.getInstance(mContext, "MyPrefs").getBoolPreferences("SHOW_TUTORIAL")){
+            //Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.getBoolPreferences("SHOW_TUTORIAL"));
             return;
         }
         else{
-//            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.retrieveBoolean("SHOW_TUTORIAL"));
+//            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.getBoolPreferences("SHOW_TUTORIAL"));
         }
 
-        spm.savePreferences("SHOW_TUTORIAL", true);
+        CustomSharedPreference.getInstance(mContext, "MyPrefs").savePreferences("SHOW_TUTORIAL", true);
         //spm.removePreferences("SHOW_TUTORIAL");
         startActivity(new Intent(this, TutorialActivity.class));
 
@@ -271,8 +263,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
                 startActivityForResult(intent,3000);
-                //startActivity(intent);
-                //finish();
             }
         });
 
@@ -281,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
-               // finish();
             }
         });
 
@@ -300,20 +289,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(resultCode == RESULT_OK){
             switch (requestCode){
             // MainActivity 에서 요청할 때 보낸 요청 코드 (3000)
-                case 3000:
+                case 3000: // 캘린더
                     Log.e(TAG,"이벤트 ID : "+data.getStringExtra("result"));
-                    sendMessage(mAccountId, data.getStringExtra("result"), ChatType.UPDATE_SCHEDULE_BY_CALENDAR, String.valueOf(System.currentTimeMillis()), 0);
+                    sendMessage(mAccountId, data.getStringExtra("result"), NodeType.SPEAK_NODE, ChatType.UPDATE_SCHEDULE_BY_CALENDAR, String.valueOf(System.currentTimeMillis()), 0);
+                    break;
+                case 4000: // 이미지
+                    String INTENT_PHOTO_EXTRA = "INTENT_PHOTO_EXTRA";
+                    ArrayList<GalleryImage> selectedList = (ArrayList<GalleryImage>) data.getSerializableExtra(INTENT_PHOTO_EXTRA);
+                    Log.e(TAG, "전송된 이미지 사이즈 : "+selectedList.size());
+                    for(GalleryImage image : selectedList){
+                        AWSMobileController.getInstance(MainActivity.this).uploadWithTransferUtility(mAccountId, new File(image.getImgPath()));
+                    }
+                    mChatAdapter.notifyDataSetChanged();
+
                     break;
             }
-        }
-        else{
-            Log.e(TAG,"이벤트 ID 못 구함");
         }
     }
 
 
     private void init() {
         mContext=this;
+        mainBottom=(ConstraintLayout) findViewById(R.id.main_bottom);
         mEtMessage = findViewById(R.id.etMessage);
         mChats = new LinkedList<>();
         mRvChatList = findViewById(R.id.rvChatList);
@@ -331,6 +328,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStringNodeTypeMap.put("speak", NodeType.SPEAK_NODE);
         mStringNodeTypeMap.put("slot", NodeType.SLOT_NODE);
         mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
+
+        mAWSctlr = AWSMobileController.getInstance(this);
 
 
     }
@@ -472,9 +471,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         hideProgressBar();
     }
 
-    public void sendMessage(int accountId, String content, int chatType, String time, int isBot) {
+    public void sendMessage(int accountId, String content, int nodeType, int chatType, String time, int isBot) {
         int botType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
-        RequestSendMessage param = new RequestSendMessage(accountId, content,0, chatType, botType, time, isBot, mJsonResponse);
+        RequestSendMessage param = new RequestSendMessage(accountId, content,nodeType, chatType, botType, time, isBot, mJsonResponse);
         Call<JsonObject> res = NetRetrofit
                 .getInstance(getApplicationContext())
                 .getService()
@@ -692,6 +691,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
         }
+    }
+    public void addUserImageChat(String path){
+        String time = String.valueOf(System.currentTimeMillis());
+        mChats.addLast(new Chat(NodeType.IMAGE_NODE, null, path, time));
+        mChatAdapter.notifyDataSetChanged();
+        sendMessage(mAccountId, path, NodeType.IMAGE_NODE, ChatType.BASIC_CHAT, time, 0 );
+        //sendMessage(int accountId, String content, int chatType, String time, int isBot)
     }
     public static boolean isNumeric(String maybeNumeric) {
         return maybeNumeric != null && maybeNumeric.matches("[0-9]+");

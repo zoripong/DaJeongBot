@@ -69,10 +69,13 @@ dependencies {
     // google oauth
     implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
 
-    // constraing layout
+    // constraint layout
     implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha2'
 
-
+    // for aws s3
+    implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.6.+@aar') { transitive = true }
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.7.2'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.7.2'
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
