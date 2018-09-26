@@ -58,9 +58,11 @@ public class ChangeTimeActivity extends AppCompatActivity {
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");
 
+        etAlarm=(EditText) findViewById(R.id.etScheduleAlarm);
+        etTime=(EditText) findViewById(R.id.etQuestionTime);
         getUserTime(Integer.parseInt(accountId));
 
-        etAlarm=(EditText) findViewById(R.id.etScheduleAlarm);
+
         etAlarm.setInputType(InputType.TYPE_NULL);
         etAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +90,6 @@ public class ChangeTimeActivity extends AppCompatActivity {
             }
         });
 
-        etTime=(EditText) findViewById(R.id.etQuestionTime);
         etTime.setInputType(InputType.TYPE_NULL);
         etTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +140,7 @@ public class ChangeTimeActivity extends AppCompatActivity {
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     if (response.body().has("status")) {
                         if (response.body().get("status").getAsString().equals("Success")) {
-                            Log.e(TAG, "시간 변경 성공");
+                            Log.e(TAG, "바뀐 시간 ->"+etAlarm.getText().toString()+"and "+etTime.getText().toString());
                             Toast.makeText(getApplicationContext(), "성공적으로 시간을 변경했습니다", Toast.LENGTH_LONG).show();
                             finish();
                         } else {
@@ -171,6 +172,8 @@ public class ChangeTimeActivity extends AppCompatActivity {
                         JsonObject data = body.get("data").getAsJsonObject();
                         Log.e(TAG, "일정 알림 시간 : "+data.get("notify_time").getAsString());
                         Log.e(TAG, "일정 질문 시간 : "+data.get("ask_time").getAsString());
+                        etAlarm.setText(data.get("notify_time").getAsString());
+                        etTime.setText(data.get("ask_time").getAsString());
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();

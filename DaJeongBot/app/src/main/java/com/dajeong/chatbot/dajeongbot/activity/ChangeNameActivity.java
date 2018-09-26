@@ -46,9 +46,8 @@ public class ChangeNameActivity extends AppCompatActivity {
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");
 
-        getUserName(Integer.parseInt(accountId));
-
         editName = findViewById(R.id.editName);
+        getUserName(Integer.parseInt(accountId));
 
         findViewById(R.id.tvNameChange).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +73,7 @@ public class ChangeNameActivity extends AppCompatActivity {
                    if(body.has("status") && "Success".equals(body.get("status").getAsString())){
                         JsonObject data = body.get("data").getAsJsonObject();
                         Log.e(TAG, "사용자 이름은 : "+data.get("name").getAsString());
+                        editName.setText(data.get("name").getAsString());
                    }
                 }else{
                     Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
