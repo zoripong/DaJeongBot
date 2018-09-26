@@ -108,6 +108,40 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/LiReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_ripple_effect"
+            android:clickable="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LiChangeTime">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ebebeb"></LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/reset_ic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="데이터 초기화"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/LiLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -115,8 +149,9 @@
             android:clickable="true"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LiChangeTime">
+            app:layout_constraintTop_toBottomOf="@+id/LiReset">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -157,6 +192,7 @@
             android:orientation="horizontal"
             android:padding="15dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/LiLogout">
 
@@ -174,32 +210,6 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/LiReset"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/list_ripple_effect"
-            android:clickable="true"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LiShowTutorial">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/help_ic" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:text="데이터 초기화"
-                android:textSize="14sp" />
-        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>
