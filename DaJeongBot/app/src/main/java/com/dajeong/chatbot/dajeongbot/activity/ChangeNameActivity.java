@@ -19,6 +19,7 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.api.client.json.Json;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -61,12 +62,17 @@ public class ChangeNameActivity extends AppCompatActivity {
     }
 
     private void getUserName(int accountId){
-        // TODO:이율앙
         Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserName(accountId);
         res.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
+                if(response.body() != null){
+                    JsonObject body = response.body();
+                   if(body.has("status") && "Success".equals(body.get("status").getAsString())){
+                        JsonObject data = body.get("data").getAsJsonObject();
+                        Log.e(TAG, "사용자 이름은 : "+data.get("name").getAsString());
+                   }
+                }
             }
 
             @Override
