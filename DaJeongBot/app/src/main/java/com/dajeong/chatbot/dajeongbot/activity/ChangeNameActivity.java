@@ -19,6 +19,7 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.api.client.json.Json;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -41,7 +42,13 @@ public class ChangeNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
 
-        editName = (EditText)findViewById(R.id.editName);
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
+
+        getUserName(Integer.parseInt(accountId));
+
+        editName = findViewById(R.id.editName);
 
         findViewById(R.id.tvNameChange).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +64,31 @@ public class ChangeNameActivity extends AppCompatActivity {
         });
     }
 
-    public  void  updateName() {
+    private void getUserName(int accountId){
+        Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserName(accountId);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.body() != null){
+                    JsonObject body = response.body();
+                   if(body.has("status") && "Success".equals(body.get("status").getAsString())){
+                        JsonObject data = body.get("data").getAsJsonObject();
+                        Log.e(TAG, "사용자 이름은 : "+data.get("name").getAsString());
+                   }
+                }else{
+                    Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+    }
+    private void updateName() {
         String accountId = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");

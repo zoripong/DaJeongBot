@@ -331,8 +331,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAWSctlr = AWSMobileController.getInstance(this);
 
-
     }
+
     private void bottominit(){
         //언제
 
@@ -375,25 +375,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Character setBot(){
         String charNames[] = {"다정군", "다정냥", "다정곰", "다정뭉"};
         int charType = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
-        int charImage;
-//        Log.e(TAG,"CharType >>"+charType);
-        switch (charType){
-            case 0:
-                charImage=R.drawable.ic_char1;
-                break;
-            case 1:
-                charImage=R.drawable.ic_char2;
-                break;
-            case 2:
-                charImage=R.drawable.ic_char3;
-                break;
-            case 3:
-                charImage=R.drawable.ic_char4;
-                break;
-                default:
-                    charImage=R.drawable.ic_char1;
-                    break;
-        }
+        int charImage = R.drawable.ic_char1 + (charType%4);
         botName = (TextView) findViewById(R.id.tvbotName);
         botName.setText(charNames[charType]);
         return new Character(charNames[charType], charImage);

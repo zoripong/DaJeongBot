@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+<<<<<<< HEAD
 import android.text.InputType;
+=======
+>>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,17 +20,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+<<<<<<< HEAD
 import android.widget.TimePicker;
+=======
+>>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+<<<<<<< HEAD
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateTime;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 
+=======
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.gson.JsonObject;
+
+>>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +63,7 @@ public class ChangeTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_time);
 
+<<<<<<< HEAD
         etAlarm=(EditText) findViewById(R.id.etScheduleAlarm);
         etAlarm.setInputType(InputType.TYPE_NULL);
         etAlarm.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +161,39 @@ public class ChangeTimeActivity extends AppCompatActivity {
             });
 
         }
+=======
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
+
+        getUserTime(Integer.parseInt(accountId));
+    }
+
+    private void getUserTime(int accountId){
+        Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserTimes(accountId);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.body() != null){
+                    JsonObject body = response.body();
+                    if(body.has("status") && "Success".equals(body.get("status").getAsString())){
+                        JsonObject data = body.get("data").getAsJsonObject();
+                        Log.e(TAG, "일정 알림 시간 : "+data.get("notify_time").getAsString());
+                        Log.e(TAG, "일정 질문 시간 : "+data.get("ask_time").getAsString());
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+>>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
     }
 
     @Override
