@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-<<<<<<< HEAD
 import android.text.InputType;
-=======
->>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,26 +17,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-<<<<<<< HEAD
 import android.widget.TimePicker;
-=======
->>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
-<<<<<<< HEAD
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateTime;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 
-=======
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
->>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,7 +54,12 @@ public class ChangeTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_time);
 
-<<<<<<< HEAD
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
+
+        getUserTime(Integer.parseInt(accountId));
+
         etAlarm=(EditText) findViewById(R.id.etScheduleAlarm);
         etAlarm.setInputType(InputType.TYPE_NULL);
         etAlarm.setOnClickListener(new View.OnClickListener() {
@@ -161,12 +157,7 @@ public class ChangeTimeActivity extends AppCompatActivity {
             });
 
         }
-=======
-        String accountId = CustomSharedPreference
-                .getInstance(getApplicationContext(), "user_info")
-                .getStringPreferences("id");
 
-        getUserTime(Integer.parseInt(accountId));
     }
 
     private void getUserTime(int accountId){
@@ -193,7 +184,6 @@ public class ChangeTimeActivity extends AppCompatActivity {
                 finish();
             }
         });
->>>>>>> 0c10fe689feea3f820090442cb0859fba57a805d
     }
 
     @Override
