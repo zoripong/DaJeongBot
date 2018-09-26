@@ -111,6 +111,7 @@ public class GalleryManager {
         Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.Media.DATE_TAKEN + " DESC");
         int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
 
+<<<<<<< HEAD
         if(diriectoryName.equals("모든 사진")){
             while (cursor.moveToNext()) {
                 GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
@@ -127,6 +128,12 @@ public class GalleryManager {
         }
 
 
+=======
+        while (cursor.moveToNext()) {
+            GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
+            Log.e(TAG, "이유리"+galleryImage.toString());
+            photoList.add(galleryImage);
+>>>>>>> a2c65bd1a39fa7cca5b44c072e85aab029561e30
 
         }
         cursor.close();
