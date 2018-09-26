@@ -42,10 +42,13 @@ public class ChangeNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
 
-        // TODO:이율앙
-        getUserName(0);
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
 
-        editName = (EditText)findViewById(R.id.editName);
+        getUserName(Integer.parseInt(accountId));
+
+        editName = findViewById(R.id.editName);
 
         findViewById(R.id.tvNameChange).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,12 +75,16 @@ public class ChangeNameActivity extends AppCompatActivity {
                         JsonObject data = body.get("data").getAsJsonObject();
                         Log.e(TAG, "사용자 이름은 : "+data.get("name").getAsString());
                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }

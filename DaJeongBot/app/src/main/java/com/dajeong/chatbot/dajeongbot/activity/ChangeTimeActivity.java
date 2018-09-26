@@ -7,12 +7,21 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChangeTimeActivity extends AppCompatActivity {
     private final String TAG = "ChangeTimeActivity";
@@ -30,6 +39,37 @@ public class ChangeTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_time);
 
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
+
+        getUserTime(Integer.parseInt(accountId));
+    }
+
+    private void getUserTime(int accountId){
+        Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserTimes(accountId);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.body() != null){
+                    JsonObject body = response.body();
+                    if(body.has("status") && "Success".equals(body.get("status").getAsString())){
+                        JsonObject data = body.get("data").getAsJsonObject();
+                        Log.e(TAG, "일정 알림 시간 : "+data.get("notify_time").getAsString());
+                        Log.e(TAG, "일정 질문 시간 : "+data.get("ask_time").getAsString());
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
     }
 
     @Override
