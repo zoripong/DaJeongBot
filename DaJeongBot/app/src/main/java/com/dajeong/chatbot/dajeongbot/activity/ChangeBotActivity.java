@@ -28,12 +28,12 @@ import retrofit2.Response;
 
 public class ChangeBotActivity extends AppCompatActivity {
     private final String TAG = "ChangeBotActivity";
-    ImageView ivBot1;
-    ImageView ivBot2;
-    ImageView ivBot3;
-    ImageView ivBot4;
+    private ImageView ivBot1;
+    private ImageView ivBot2;
+    private ImageView ivBot3;
+    private ImageView ivBot4;
     //    TextView tvBotChange;
-    int check=-1; //어떤 캐릭터를 선택했는지 값 저장
+    private int check=-1; //어떤 캐릭터를 선택했는지 값 저장
     /*
     * {
       "account_id": 32,
@@ -44,6 +44,8 @@ public class ChangeBotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_bot);
+
+        getUserBot();
 
         //각각 캐릭터 아이콘을 클릭한 경우
         ivBot1 = (ImageView) findViewById(R.id.ivBot1);
@@ -56,6 +58,11 @@ public class ChangeBotActivity extends AppCompatActivity {
         findViewById(R.id.ivBot4).setOnClickListener(onClickListener);
         findViewById(R.id.tvBotChange).setOnClickListener(onClickListener);
 
+    }
+
+    private void getUserBot(){
+        int bot = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
+        Log.e(TAG, "봇,, : "+bot);
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -102,7 +109,8 @@ public class ChangeBotActivity extends AppCompatActivity {
         }
     };
 
-    public  void  updateBotType() {
+
+    public void updateBotType() {
         String accountId = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");
