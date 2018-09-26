@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
@@ -44,5 +45,12 @@ public class ImageDetailActivity extends AppCompatActivity {
                 .into(imageViewTarget);
 
         ((TextView)findViewById(R.id.tvTime)).setText(sendTime);
+
+        findViewById(R.id.ivSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "잠시만 기다려주세요! 저장을 위해 준비중이랍니다 :)", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
