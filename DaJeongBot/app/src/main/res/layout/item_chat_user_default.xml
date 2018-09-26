@@ -7,7 +7,7 @@
     android:id="@+id/chat_root"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-    android:layout_marginLeft="50dp"
+    android:layout_marginLeft="20dp"
     android:gravity="right"
 >
     <TextView

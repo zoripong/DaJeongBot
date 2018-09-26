@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/cl_root"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
-
-    <ImageView
-        android:id="@+id/ivSenderProfile"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="TODO"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="5dp" />
-<LinearLayout
-    android:id="@+id/liContent"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:id="@+id/cl_root"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginRight="20dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivSenderProfile"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="TODO"
+            tools:layout_editor_absoluteY="5dp"/>
+    </LinearLayout>
+
+<LinearLayout
+    android:id="@+id/liContent"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
     android:background="@drawable/chatbot_tv_custom"
     android:layout_marginStart="8dp"
-    android:orientation="vertical"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintStart_toEndOf="@+id/ivSenderProfile"
-    app:layout_constraintTop_toTopOf="parent">
+    android:orientation="vertical">
     <TextView
         android:id="@+id/tvContent"
         android:layout_width="wrap_content"
@@ -38,7 +36,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="7dp"
-        android:text="자세한 일정이 있어?"
+        android:text="앗 큰일날 뻔 했다... 혹시 자세한 일정이 있어?"
         />
     <LinearLayout
         android:id="@+id/ll_dynamic_btns"
@@ -65,19 +63,19 @@
     </LinearLayout>
 
 </LinearLayout>
+    <LinearLayout
+        android:layout_width="62dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="오후 88:444"
+            android:textSize="11sp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="bottom|left"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="10:10"
-        android:textSize="11sp"
-        app:layout_constraintStart_toEndOf="@+id/liContent"
-        tools:layout_editor_absoluteY="41dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:paddingBottom="8dp"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
