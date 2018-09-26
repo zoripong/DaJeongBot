@@ -33,19 +33,19 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:paddingTop="7dp"
-            android:text="여기는 내용이들이들어가야dsfsdfssdsdfsdfsdfsdfdfdssdfsfsdfsd"
+            android:text="여기는 내용이들이들어가야안녕친구들"
             android:layout_gravity="center_vertical"
             />
     </LinearLayout>
     <LinearLayout
-        android:layout_width="60dp"
+        android:layout_width="62dp"
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/tvTime"
-            android:layout_width="55dp"
+            android:layout_width="62dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="오전 10:10"
+            android:text="오후 88:44"
             android:textSize="11sp"
             android:paddingBottom="8dp"
             android:layout_gravity="bottom|left"/>
