@@ -41,6 +41,9 @@ public class ChangeNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
 
+        // TODO:이율앙
+        getUserName(0);
+
         editName = (EditText)findViewById(R.id.editName);
 
         findViewById(R.id.tvNameChange).setOnClickListener(new View.OnClickListener() {
@@ -57,7 +60,22 @@ public class ChangeNameActivity extends AppCompatActivity {
         });
     }
 
-    public  void  updateName() {
+    private void getUserName(int accountId){
+        // TODO:이율앙
+        Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().getUserName(accountId);
+        res.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+    private void updateName() {
         String accountId = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");
