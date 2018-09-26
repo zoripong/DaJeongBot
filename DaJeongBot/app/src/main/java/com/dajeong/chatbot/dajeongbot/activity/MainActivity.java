@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFabDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                mRvChatList.smoothScrollToPosition(mChatAdapter.getItemCount() - 1);
                 mFabDown.hide();
             }
         });
