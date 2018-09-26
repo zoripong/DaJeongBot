@@ -89,7 +89,7 @@ public interface RetrofitService {
     Call<JsonObject> getUserTimes(@Path("account_id")int accountId);
 
     // 데이터 초기화
-    @DELETE("all/{account_id}")
+    @DELETE("me/all/{account_id}")
     Call<JsonObject> resetData(@Path("account_id")int accountId);
 
 }

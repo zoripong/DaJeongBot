@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected static Context mContext;
     //component
     protected EditText mEtMessage;
+    private FloatingActionButton mFabDown;
 
     //자동완성
     private ConstraintLayout mainBottom;
@@ -119,12 +121,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRvChatList.setLayoutManager(layoutManager);
 
         mRvChatList.setAdapter(mChatAdapter);
-        Context context = mRvChatList.getContext();
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
+//        Context context = mRvChatList.getContext();
+//        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
 
-        mRvChatList.setLayoutAnimation(controller);
-        mRvChatList.getAdapter().notifyDataSetChanged();
-        mRvChatList.scheduleLayoutAnimation();
+//        mRvChatList.setLayoutAnimation(controller);
+//        mRvChatList.getAdapter().notifyDataSetChanged();
+//        mRvChatList.scheduleLayoutAnimation();
+
+
 
         mRvChatList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -137,6 +141,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         getMoreMessage();
                     }
                 }
+                if(mRvChatList.canScrollVertically(0)){
+                    // fab가 보여야하는데 안보일때
+                    if(!mFabDown.isShown()){
+                        mFabDown.show();
+                    }
+                    Log.e(TAG, "Bottom nono");
+
+                }else{
+                    if(mFabDown.isShown()){
+                        mFabDown.hide();
+                    }
+                }
+
 
                 //위로 스크롤시 이름이 없어지고 아래로 스크롤하면 다시 이름 생김
                 if (dy > 0 && botName.getVisibility() != View.VISIBLE) {
@@ -183,6 +200,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
                 startActivityForResult(intent,4000);
 
+            }
+        });
+
+        mFabDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                mFabDown.hide();
             }
         });
 
@@ -270,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,5000);
             }
         });
 
@@ -303,6 +328,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mChatAdapter.notifyDataSetChanged();
 
                     break;
+                case 5000: // 세팅 - 초기화
+                    String INTENT_RESET = "INTENT_RESET";
+                    if(data.getIntExtra(INTENT_RESET, -1) == 0){
+                        mChats.clear();
+                        mChatAdapter.notifyDataSetChanged();
+                    }
+                    break;
             }
         }
     }
@@ -312,6 +344,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mContext=this;
         mainBottom=(ConstraintLayout) findViewById(R.id.main_bottom);
         mEtMessage = findViewById(R.id.etMessage);
+        mFabDown = findViewById(R.id.fabBottom);
+
+
         mChats = new LinkedList<>();
         mRvChatList = findViewById(R.id.rvChatList);
         mChatAdapter = new ChatAdapter(getSupportFragmentManager(), mChats, MainActivity.this);
@@ -387,8 +422,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
                 controlJsonObj(response);
-                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                // FIXME
+//                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() );
                 mIsLoad = true;
+
             }
 
             @Override
@@ -625,7 +662,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (inputY >= 2000 && inputY < 3000 && result==-1 &&
                                 Integer.parseInt(inputM.toString()) >= 1 && Integer.parseInt(inputM.toString()) <= 12 &&
                                 Integer.parseInt(inputD.toString()) >= 1 && Integer.parseInt(inputD.toString()) <= 31 || result==0 ) {
-                            inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString() + "일이야!";
+                            inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString();
                             ((MainActivity) MainActivity.mContext).clickSendMessage(inputMessage);
                             showWhatMessage();
                         } else {
@@ -637,7 +674,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (inputY >= 2000 && inputY < 3000 && result==1 &&
                                 Integer.parseInt(inputM.toString()) >= 1 && Integer.parseInt(inputM.toString()) <= 12 &&
                                 Integer.parseInt(inputD.toString()) >= 1 && Integer.parseInt(inputD.toString()) <= 31) {
-                            inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString() + "일이야!";
+                            inputMessage = messageY.getText().toString() + "년 " + messageM.getText().toString() + "월 " + messageD.getText().toString();
                             ((MainActivity)mContext).clickSendMessage(inputMessage);
                             findViewById(R.id.year_constraint).setVisibility(View.GONE);
                             findViewById(R.id.whereWhat_constraint).setVisibility(View.GONE);
@@ -655,7 +692,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (whereWhatMessage.getText() != null && !whereWhatMessage.getText().toString().replace(" ", "").equals("")) {
                     checkWhere++;
                     if(checkWhere==1) { //어디서를 입력하고 무엇을도 입력한 경우 일정 등록 완료
-                        inputMessage=whereWhatMessage.getText().toString()+"을(를) 하는거야!";
+                        inputMessage=whereWhatMessage.getText().toString();
                         ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
                         whereWhatMessage.setText("");
                         findViewById(R.id.year_constraint).setVisibility(View.GONE);
@@ -664,7 +701,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         checkWhere=-1;
                     }
                     else if(checkWhere==0){
-                        inputMessage=whereWhatMessage.getText().toString()+"에서 하는거야!";
+                        inputMessage=whereWhatMessage.getText().toString();
                         ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
                         whereWhatMessage.setText("");
                         whereWhatText.setText("을(를)하는거야!");

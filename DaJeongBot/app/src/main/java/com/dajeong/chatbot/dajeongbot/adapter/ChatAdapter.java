@@ -42,12 +42,16 @@ import com.google.gson.JsonParser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
     private int BUTTON_ID = 8000;
+
+    private HashSet<Button> buttons;
     private LinkedList<Chat> mChats;
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -63,6 +67,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mFragmentManager = fragmentManager;
         this.mChats = chats;
         this.mContext = context;
+        buttons = new HashSet<>();
     }
 
     @NonNull
@@ -94,16 +99,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        final Chat chat = mChats.get(holder.getAdapterPosition());
+        final Chat chat = mChats.get(position);
 //        Log.e(TAG, "view type is "+holder.getItemViewType() + "/" +chat.getContent());
 
         boolean buttonEnable = false;
-        if(holder.getAdapterPosition()==mChats.size()-1){
+        if(position==mChats.size()-1){
             switch (holder.getItemViewType()) {
-                case ChatHolderType.CHAT_BOT_HOLDER: //ChatBotHolder
-                case ChatHolderType.CHAT_USER_HOLDER: //chatUserHolder
-                case ChatHolderType.CHAT_BOT_IMAGE_HOLDER: // chatBotImageHolder
-                case ChatHolderType.CHAT_USER_IMAGE_HOLDER: // chatUserImageHolder
+                case ChatHolderType.CHAT_BOT_HOLDER:
+                case ChatHolderType.CHAT_USER_HOLDER:
+                case ChatHolderType.CHAT_BOT_IMAGE_HOLDER:
+                case ChatHolderType.CHAT_USER_IMAGE_HOLDER:
 //                    Toast.makeText(mContext, "ET enable", Toast.LENGTH_LONG).show();
 //                    Toast.makeText(mContext, "버튼 비활성화", Toast.LENGTH_LONG).show();;
                     ((MainActivity)mContext).setSendEditText(true);
@@ -274,9 +279,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void createSlotButtons(LinearLayout layout, final ArrayList<Slot>slotArrayList, final int chatType, boolean status) {
         Log.e(TAG, "createSlotButtons : "+ slotArrayList.size());
         Log.e(TAG, "slotArrayList.toString(): " + slotArrayList.toString());
+
         for (int i = 0; i < slotArrayList.size(); i++) {
             //{'value': 'yes', 'id': '1', 'type': 'btn', 'label': '응'}
             final Button myButton = new Button(mContext);
+            buttons.add(myButton);
             int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, mContext.getResources().getDisplayMetrics());
             // 가로, 세로, 마진
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
@@ -284,6 +291,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myButton.setLayoutParams(lp);
             myButton.setText(slotArrayList.get(i).getLabel());
             myButton.setEnabled(status);
+
+
 
             // 스타일 지정
             TypedValue typedValue = new TypedValue();
@@ -320,6 +329,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         }
+
+        Iterator<Button> iterator = buttons.iterator();
+        while(iterator.hasNext()){
+            Log.e(TAG, "id : "+iterator.next().getId());
+        }
+
     }
 
     private String createResponseJson(ArrayList<Memory> memories){
