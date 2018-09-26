@@ -119,12 +119,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRvChatList.setLayoutManager(layoutManager);
 
         mRvChatList.setAdapter(mChatAdapter);
-        Context context = mRvChatList.getContext();
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
+//        Context context = mRvChatList.getContext();
+//        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
 
-        mRvChatList.setLayoutAnimation(controller);
-        mRvChatList.getAdapter().notifyDataSetChanged();
-        mRvChatList.scheduleLayoutAnimation();
+//        mRvChatList.setLayoutAnimation(controller);
+//        mRvChatList.getAdapter().notifyDataSetChanged();
+//        mRvChatList.scheduleLayoutAnimation();
 
         mRvChatList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
