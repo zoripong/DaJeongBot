@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+                mFabDown.hide();
             }
         });
 
@@ -422,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
                 controlJsonObj(response);
                 // FIXME
-                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 10);
+//                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() );
                 mIsLoad = true;
 
             }
