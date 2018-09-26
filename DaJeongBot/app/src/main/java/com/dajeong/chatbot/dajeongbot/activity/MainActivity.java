@@ -611,6 +611,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String inputMessage;
         switch (view.getId()) {
             case R.id.ivWhenCloseBtn:
+                inputMessage="취소할래";
+                ((MainActivity)MainActivity.mContext).clickSendMessage(inputMessage);
                 findViewById(R.id.auto_when).setVisibility(View.GONE);
                 break;
             case R.id.btnWhenSend:

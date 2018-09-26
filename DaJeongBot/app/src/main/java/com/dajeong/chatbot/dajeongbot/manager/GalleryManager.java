@@ -29,36 +29,35 @@ public class GalleryManager {
      *
      * @return
      */
-    public List<GalleryImage> getAllPhotoPathList() {
+//    public List<GalleryImage> getAllPhotoPathList() {
+//
+//        ArrayList<GalleryImage> photoList = new ArrayList<>();
+//
+//        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//
+//        String[] projection = {
+//                MediaStore.MediaColumns.DATA,
+//                MediaStore.Images.Media.DATE_ADDED
+//        };
+//
+//        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
+//
+//        int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+//
+//        while (cursor.moveToNext()) {
+//
+//            GalleryImage galleryImage = new GalleryImage( cursor.getString(columnIndexData),false);
+//            photoList.add(galleryImage);
+//        }
+//
+//        cursor.close();
+//
+//        return photoList;
+//    }
 
-        ArrayList<GalleryImage> photoList = new ArrayList<>();
 
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-        String[] projection = {
-                MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.DATE_ADDED
-        };
-
-        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
-
-        int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
-        while (cursor.moveToNext()) {
-
-            GalleryImage galleryImage = new GalleryImage( cursor.getString(columnIndexData),false);
-            photoList.add(galleryImage);
-        }
-
-        cursor.close();
-
-        return photoList;
-    }
-
-
-    // 이건 필요없지롱
     /**
-     * 날짜별 갤러리 이미지 반환
+     * 갤러리 이미지 반환
      */
     public List<GalleryImage> getDatePhotoPathList() {
 
@@ -83,6 +82,7 @@ public class GalleryManager {
         while (cursor.moveToNext()) {
             GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
 //            Log.e(TAG, galleryImage.toString());
+
             photoList.add(galleryImage);
 
         }
@@ -91,4 +91,45 @@ public class GalleryManager {
     }
 
 
+    public List<GalleryImage> getDirectoryPhotoPathList(String diriectoryName) {
+
+
+
+        String completePath = Environment.getExternalStorageDirectory() + "/";
+
+        ArrayList<GalleryImage> photoList = new ArrayList<>();
+
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = {
+                MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+        };
+
+
+        //이미지를 사진 찍은 날짜대로 (최신순으로) 정렬
+        Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.Media.DATE_TAKEN + " DESC");
+        int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+
+        if(diriectoryName.equals("모든 사진")){
+            while (cursor.moveToNext()) {
+                GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
+                photoList.add(galleryImage);
+
+            }
+        }
+        else{
+            while (cursor.moveToNext()) {
+                GalleryImage galleryImage = new GalleryImage(cursor.getString(columnIndexData),false);
+                if(galleryImage.toString().contains("/"+diriectoryName+"/")){
+                    photoList.add(galleryImage);
+                }
+        }
+
+
+
+        }
+        cursor.close();
+        return photoList;
+    }
 }

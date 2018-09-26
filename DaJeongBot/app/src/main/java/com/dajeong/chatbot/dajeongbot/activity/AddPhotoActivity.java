@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -12,13 +13,21 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import com.dajeong.chatbot.dajeongbot.adapter.GalleryRecyclerAdapter;
@@ -43,6 +52,7 @@ public class AddPhotoActivity extends AppCompatActivity {
     private String mPeriod;
 
     private ArrayList<String> dateList;
+    private ArrayList<String> directoryList;
 
     private RecyclerView thumbnailRecycler;
     private ArrayList<GalleryImage> thumbnailImages;
@@ -51,15 +61,14 @@ public class AddPhotoActivity extends AppCompatActivity {
     private int mPosition;
     private List<GalleryImage> galleryImages;
 
+    private Spinner mDateSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 액션바 없애기
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_add_photo);
-
-//        Intent intent = getIntent();
-//        mBookCode = intent.getStringExtra("BOOK_CODE");
-//        mPeriod = intent.getStringExtra("DATE");
-
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -125,6 +134,8 @@ public class AddPhotoActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     /**
@@ -134,6 +145,66 @@ public class AddPhotoActivity extends AppCompatActivity {
         //갤러리 리사이클러뷰 초기화
         mGalleryManager = new GalleryManager(getApplicationContext());
         galleryImages =  mGalleryManager.getDatePhotoPathList();
+        //이미지 폴더 얻기
+        dateList = new ArrayList<>();
+        dateList.add("모든 사진");
+        for (int i = 0; i < galleryImages.size(); i++) {
+            String directory=galleryImages.get(i).getImgPath();
+            int index=directory.lastIndexOf("/");
+            directory=directory.substring(0,index);
+            index=directory.lastIndexOf("/");
+            directory=directory.substring(index+1);
+            dateList.add(directory);
+        }
+        //중복제거
+        directoryList = new ArrayList<String>();
+        for (int i = 0; i < dateList.size(); i++) {
+            if (!directoryList.contains(dateList.get(i))) {
+                directoryList.add(dateList.get(i));
+            }
+        }
+
+        mDateSpinner = findViewById(R.id.folder_spinner);
+        //스피너 창 크기 조절
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(mDateSpinner);
+
+            popupWindow.setHeight(1100);
+        }
+        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
+        String stringArray[] = new String[directoryList.size()];
+        stringArray = directoryList.toArray(stringArray);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                R.layout.spinner_textview_align, stringArray);
+        adapter.setDropDownViewResource(R.layout.spinner_textview_align);
+        adapter.notifyDataSetChanged();
+        mDateSpinner.setSelection(0);
+        mDateSpinner.setAdapter(adapter);
+
+        mDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) view).setTextColor(getResources().getColor(R.color.colorAccent));
+                mPosition = i;
+                mDateSpinner.setSelection(mPosition);
+                String directoryName = directoryList.get(mPosition);
+                galleryImages = mGalleryManager.getDirectoryPhotoPathList(directoryName);
+                initRecyclerGallery();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+
         initRecyclerGallery();
         galleryRecycler.setLayoutManager(new GridLayoutManager(this, 4));
         galleryRecycler.setItemAnimator(new DefaultItemAnimator());

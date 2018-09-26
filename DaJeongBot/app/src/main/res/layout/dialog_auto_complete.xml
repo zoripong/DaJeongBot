@@ -69,25 +69,13 @@
         android:id="@+id/ivCloseBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="9.5dp"
         android:layout_marginStart="12dp"
         android:contentDescription="@string/todo2"
         android:padding="2.5dp"
         android:src="@drawable/cancle_add_ic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivAddDImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@string/todo"
-        android:padding="2.5dp"
-        android:src="@drawable/ic_add_img"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivCloseBtn" />
 
     <EditText
         android:id="@+id/etDMessage"
@@ -107,7 +95,7 @@
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnDSend"
-        app:layout_constraintStart_toEndOf="@+id/ivAddDImage" />
+        app:layout_constraintStart_toEndOf="@+id/ivCloseBtn" />
 
     <ImageButton
         android:id="@+id/btnDSend"

@@ -13,7 +13,7 @@
         android:id="@+id/ivWhenCloseBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="9.5dp"
         android:layout_marginStart="12dp"
         android:contentDescription="@string/todo2"
         android:padding="2.5dp"
