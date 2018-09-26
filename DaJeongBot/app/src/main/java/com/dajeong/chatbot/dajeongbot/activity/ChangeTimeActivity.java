@@ -1,5 +1,7 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,15 +9,25 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateTime;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.gson.JsonObject;
+
+import java.util.Calendar;
+
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
@@ -25,7 +37,10 @@ import retrofit2.Response;
 
 public class ChangeTimeActivity extends AppCompatActivity {
     private final String TAG = "ChangeTimeActivity";
-
+    EditText etAlarm;
+    EditText etTime;
+    TextView mUpdateTime;
+    TimePickerDialog picker;
     /*
     * {
       "account_id": 32,
@@ -43,7 +58,107 @@ public class ChangeTimeActivity extends AppCompatActivity {
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");
 
+        etAlarm=(EditText) findViewById(R.id.etScheduleAlarm);
+        etTime=(EditText) findViewById(R.id.etQuestionTime);
         getUserTime(Integer.parseInt(accountId));
+
+
+        etAlarm.setInputType(InputType.TYPE_NULL);
+        etAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int hour = cldr.get(Calendar.HOUR_OF_DAY);
+                int minutes = cldr.get(Calendar.MINUTE);
+                // time picker dialog
+                TimePickerDialog Tp = new TimePickerDialog(ChangeTimeActivity.this,R.style.TimePickerDialog, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String sHourOfDay=Integer.toString(hourOfDay);
+                        String sMinute=Integer.toString(minute);
+                        if(hourOfDay<10){
+                            sHourOfDay="0"+Integer.toString(hourOfDay);
+                        }
+                        if(minute<10){
+                            sMinute="0"+Integer.toString(minute);
+                        }
+                        etAlarm.setText(sHourOfDay+ ":" +sMinute);
+
+                    }
+                },hour,minutes,false);
+                Tp.show();
+            }
+        });
+
+        etTime.setInputType(InputType.TYPE_NULL);
+        etTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                int hour = cldr.get(Calendar.HOUR_OF_DAY);
+                int minutes = cldr.get(Calendar.MINUTE);
+                // time picker dialog
+                TimePickerDialog Tp = new TimePickerDialog(ChangeTimeActivity.this,R.style.TimePickerDialog, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String sHourOfDay=Integer.toString(hourOfDay);
+                        String sMinute=Integer.toString(minute);
+                        if(hourOfDay<10){
+                            sHourOfDay="0"+Integer.toString(hourOfDay);
+                        }
+                        if(minute<10){
+                            sMinute="0"+Integer.toString(minute);
+                        }
+                        etTime.setText(sHourOfDay+ ":" +sMinute);
+
+                    }
+                },hour,minutes,false);
+                Tp.show();
+            }
+        });
+
+        mUpdateTime=(TextView) findViewById(R.id.tvUpdateTime);
+        mUpdateTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateTime();
+            }
+        });
+    }
+
+    public  void  updateTime() {
+        String accountId = CustomSharedPreference
+                .getInstance(getApplicationContext(), "user_info")
+                .getStringPreferences("id");
+        String newNotifyTime=etAlarm.getText().toString();
+        String newAskTime=etTime.getText().toString();
+        if (!(accountId == null && accountId.equals(""))) {
+            final RequestUpdateTime param = new RequestUpdateTime(Integer.parseInt(accountId),newNotifyTime,newAskTime);
+            Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().updateTimes(param);
+            res.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    if (response.body().has("status")) {
+                        if (response.body().get("status").getAsString().equals("Success")) {
+                            Log.e(TAG, "바뀐 시간 ->"+etAlarm.getText().toString()+"and "+etTime.getText().toString());
+                            Toast.makeText(getApplicationContext(), "성공적으로 시간을 변경했습니다", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Log.e(TAG, "서버의 문제로 시간 변경에 실패하였습니다.");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    if (t != null) {
+                        Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 시간을 변경하지 못하였습니다.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+        }
+
     }
 
     private void getUserTime(int accountId){
@@ -57,6 +172,8 @@ public class ChangeTimeActivity extends AppCompatActivity {
                         JsonObject data = body.get("data").getAsJsonObject();
                         Log.e(TAG, "일정 알림 시간 : "+data.get("notify_time").getAsString());
                         Log.e(TAG, "일정 질문 시간 : "+data.get("ask_time").getAsString());
+                        etAlarm.setText(data.get("notify_time").getAsString());
+                        etTime.setText(data.get("ask_time").getAsString());
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "서버와의 연결에 문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
@@ -97,8 +214,6 @@ public class ChangeTimeActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(ChangeTimeActivity.this, SettingActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });

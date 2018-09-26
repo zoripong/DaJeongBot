@@ -20,7 +20,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
 
-        Intent intent = getIntent();    
+        Intent intent = getIntent();
         String filePath = intent.getStringExtra("IMAGE_SRC");
         String sendTime = intent.getStringExtra("SEND_TIME");
 

@@ -59,4 +59,11 @@
         <item name="android:windowEnterAnimation">@anim/alpha_fadein</item>
         <item name="android:windowExitAnimation">@anim/alpha_fadeout</item>
     </style>
+
+    <style name="TimePickerDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+    </style>
 </resources>

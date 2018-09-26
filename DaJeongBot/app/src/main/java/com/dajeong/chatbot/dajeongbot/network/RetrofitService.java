@@ -34,9 +34,6 @@ public interface RetrofitService {
     Call<JsonObject> addUserInfo(@Body RequestSignUp params);
 
     // 채팅
-    @GET("messages/welcome/{account_id}")
-    Call<JsonObject> getMessagesForNewUser(@Path("account_id") int accountId);
-
     @GET("messages/{account_id}")
     Call<ArrayList<JsonObject>> getMessages(@Path("account_id") int accountId);
 

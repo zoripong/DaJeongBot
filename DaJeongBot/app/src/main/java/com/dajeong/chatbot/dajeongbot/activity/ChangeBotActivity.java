@@ -45,13 +45,14 @@ public class ChangeBotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_bot);
 
-        getUserBot();
-
         //각각 캐릭터 아이콘을 클릭한 경우
         ivBot1 = (ImageView) findViewById(R.id.ivBot1);
         ivBot2 = (ImageView) findViewById(R.id.ivBot2);
         ivBot3 = (ImageView) findViewById(R.id.ivBot3);
         ivBot4 = (ImageView) findViewById(R.id.ivBot4);
+
+        getUserBot();
+
         findViewById(R.id.ivBot1).setOnClickListener(onClickListener);
         findViewById(R.id.ivBot2).setOnClickListener(onClickListener);
         findViewById(R.id.ivBot3).setOnClickListener(onClickListener);
@@ -63,6 +64,36 @@ public class ChangeBotActivity extends AppCompatActivity {
     private void getUserBot(){
         int bot = CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getIntPreferences("bot_type");
         Log.e(TAG, "봇,, : "+bot);
+        switch(bot){
+            case 0:
+                ivBot1.setImageResource(R.drawable.selected_bot1_ic);
+                ivBot2.setImageResource(R.drawable.ic_char2);
+                ivBot3.setImageResource(R.drawable.ic_char3);
+                ivBot4.setImageResource(R.drawable.ic_char4);
+                check=0;
+                break;
+            case 1:
+                ivBot1.setImageResource(R.drawable.ic_char1);
+                ivBot2.setImageResource(R.drawable.selected_bot2_ic);
+                ivBot3.setImageResource(R.drawable.ic_char3);
+                ivBot4.setImageResource(R.drawable.ic_char4);
+                check=1;
+                break;
+            case 2:
+                ivBot1.setImageResource(R.drawable.ic_char1);
+                ivBot2.setImageResource(R.drawable.ic_char2);
+                ivBot3.setImageResource(R.drawable.selected_bot3_ic);
+                ivBot4.setImageResource(R.drawable.ic_char4);
+                check=2;
+                break;
+            case 3:
+                ivBot1.setImageResource(R.drawable.ic_char1);
+                ivBot2.setImageResource(R.drawable.ic_char2);
+                ivBot3.setImageResource(R.drawable.ic_char3);
+                ivBot4.setImageResource(R.drawable.selected_bot4_ic);
+                check=3;
+                break;
+        }
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -79,7 +110,7 @@ public class ChangeBotActivity extends AppCompatActivity {
                 case R.id.ivBot2:
                     ivBot1.setImageResource(R.drawable.ic_char1);
                     ivBot2.setImageResource(R.drawable.selected_bot2_ic);
-                    ivBot4.setImageResource(R.drawable.ic_char4);
+                    ivBot3.setImageResource(R.drawable.ic_char3);
                     ivBot4.setImageResource(R.drawable.ic_char4);
                     check=1;
                     break;
