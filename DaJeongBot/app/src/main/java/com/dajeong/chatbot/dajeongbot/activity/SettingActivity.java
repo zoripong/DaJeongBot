@@ -22,6 +22,8 @@ import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
+import java.io.Serializable;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,13 +74,14 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-//        findViewById(R.id.LiReset).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ResetDialog customDialog = new ResetDialog(SettingActivity.this);
-//                customDialog.callFunction();
-//            }
-//        });
+        findViewById(R.id.LiReset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResetDialog customDialog = new ResetDialog(SettingActivity.this);
+                customDialog.callFunction();
+
+            }
+        });
     }
 
     /*

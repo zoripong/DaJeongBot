@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.customize;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,10 +28,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ResetDialog {
     private final String TAG = "LogoutDialog";
+    private final String INTENT_RESET = "INTENT_RESET";
+
     private Context context;
 
     public ResetDialog(Context context) {
@@ -82,10 +86,18 @@ public class ResetDialog {
                 if (response.body().has("status")) {
                     if (response.body().get("status").getAsString().equals("Success")) {
                         Toast.makeText(getApplicationContext(), "성공적으로 데이터를 초기화했습니다.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.putExtra(INTENT_RESET, 0);
+                        ((Activity)context).setResult(RESULT_OK,intent);
+
+                        dlg.dismiss();
+                        ((Activity)context).finish();
+
+
                     } else {
                         Log.e(TAG, "서버의 문제로 일정 삭제에 실패하였습니다.");
+                        dlg.dismiss();
                     }
-                    dlg.dismiss();
 
                 }
             }
