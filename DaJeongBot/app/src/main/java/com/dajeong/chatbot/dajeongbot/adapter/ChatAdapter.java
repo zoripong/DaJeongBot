@@ -2,8 +2,10 @@ package com.dajeong.chatbot.dajeongbot.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,9 +21,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.dajeong.chatbot.dajeongbot.activity.ImageDetailActivity;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatHolderType;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
@@ -492,13 +496,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String filePath;
         public ChatBotImageHolder(View itemView) {
             super(itemView);
+            itemView.findViewById(R.id.cl_root).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, ImageDetailActivity.class);
+                    intent.putExtra("IMAGE_SRC", filePath);
+                    intent.putExtra("SEND_TIME", mTvTime.getText().toString());
+                    mContext.startActivity(intent);
+                }
+            });
             mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
             mIvImage = itemView.findViewById(R.id.ivBotImage);
             mTvTime = itemView.findViewById(R.id.tvTime);
+            itemView.findViewById(R.id.ivDownload).setVisibility(View.GONE);
             itemView.findViewById(R.id.ivDownload).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     if(filePath!= null){
                         Log.e(TAG, filePath+"다운로드");
                         AWSMobileController.getInstance(mContext).downloadWithTransferUtility(filePath);
@@ -526,8 +539,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public ChatUserImageHolder(View itemView) {
             super(itemView);
+            itemView.findViewById(R.id.chat_root).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, ImageDetailActivity.class);
+                    intent.putExtra("IMAGE_SRC", filePath);
+                    intent.putExtra("SEND_TIME", mTvTime.getText().toString());
+                    mContext.startActivity(intent);
+                }
+            });
+
             mIvImage = itemView.findViewById(R.id.ivUserImage);
             mTvTime = itemView.findViewById(R.id.tvTimeUser);
+            itemView.findViewById(R.id.ivDownload).setVisibility(View.GONE);
             itemView.findViewById(R.id.ivDownload).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
