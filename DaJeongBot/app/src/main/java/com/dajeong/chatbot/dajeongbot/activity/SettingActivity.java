@@ -72,13 +72,13 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.LiReset).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ResetDialog customDialog = new ResetDialog(SettingActivity.this);
-                customDialog.callFunction();
-            }
-        });
+//        findViewById(R.id.LiReset).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ResetDialog customDialog = new ResetDialog(SettingActivity.this);
+//                customDialog.callFunction();
+//            }
+//        });
     }
 
     /*

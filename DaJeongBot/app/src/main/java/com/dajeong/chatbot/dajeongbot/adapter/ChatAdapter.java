@@ -94,11 +94,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        final Chat chat = mChats.get(holder.getAdapterPosition());
+        final Chat chat = mChats.get(position);
 //        Log.e(TAG, "view type is "+holder.getItemViewType() + "/" +chat.getContent());
 
         boolean buttonEnable = false;
-        if(holder.getAdapterPosition()==mChats.size()-1){
+        if(position==mChats.size()-1){
             switch (holder.getItemViewType()) {
                 case ChatHolderType.CHAT_BOT_HOLDER: //ChatBotHolder
                 case ChatHolderType.CHAT_USER_HOLDER: //chatUserHolder
