@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.customize.LogoutDialog;
+import com.dajeong.chatbot.dajeongbot.customize.ResetDialog;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
@@ -50,9 +51,9 @@ public class SettingActivity extends AppCompatActivity {
         findViewById(R.id.LiChangeTime).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(SettingActivity.this, ChangeTimeActivity.class);
-//                startActivity(intent);
-                Toast.makeText(getApplicationContext(), "당신이 알람을 받기 원하는 시간을 지정할 수 있도록 금방 돌아올게요!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SettingActivity.this, ChangeTimeActivity.class);
+                startActivity(intent);
+              //  Toast.makeText(getApplicationContext(), "당신이 알람을 받기 원하는 시간을 지정할 수 있도록 금방 돌아올게요!", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -69,6 +70,14 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //logout();
                 LogoutDialog customDialog = new LogoutDialog(SettingActivity.this);
+                customDialog.callFunction();
+            }
+        });
+
+        findViewById(R.id.LiReset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResetDialog customDialog = new ResetDialog(SettingActivity.this);
                 customDialog.callFunction();
             }
         });

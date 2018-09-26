@@ -99,7 +99,7 @@ public class GalleryManager {
                     photoList.add(galleryImage);
                 }
         }
-        
+
 
         }
         cursor.close();
