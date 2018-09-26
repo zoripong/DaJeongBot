@@ -80,7 +80,6 @@ public interface RetrofitService {
     @PUT("me/times")
     Call<JsonObject> updateTimes(@Body RequestUpdateTime params);
 
-    // TODO:이율앙
     // 이름 가져오기
     @GET("me/names/{account_id}")
     Call<JsonObject> getUserName(@Path("account_id")int accountId);
@@ -89,7 +88,8 @@ public interface RetrofitService {
     @GET("me/times/{account_id}")
     Call<JsonObject> getUserTimes(@Path("account_id")int accountId);
 
-
-
+    // 데이터 초기화
+    @DELETE("me/tokens/{account_id}")
+    Call<JsonObject> resetData(@Path("account_id")int accountId);
 
 }
