@@ -96,6 +96,7 @@ public class SettingActivity extends AppCompatActivity {
                         Intent intent = new Intent();
                         intent.putExtra(INTENT_UPDATE_BOT, returnValue);
                         setResult(RESULT_OK,intent);
+                        finish();
                     }
                 break;
             }
