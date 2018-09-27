@@ -75,7 +75,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SelectBotActivity" />
         <activity android:name=".activity.SignupActivity" />
         <activity android:name=".activity.CalendarActivity" />
         <activity android:name=".activity.SettingActivity" />

@@ -31,6 +31,8 @@ import retrofit2.Response;
 // setting activity ( 사용자 정보 수정 / 챗봇 선택 / 데이터 초기화 .. )
 public class SettingActivity extends AppCompatActivity {
     private final String TAG = "SettingActivity";
+    private final String INTENT_UPDATE_BOT = "INTENT_UPDATE_BOT";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this, ChangeBotActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 5000);
             }
         });
         findViewById(R.id.LiChangeTime).setOnClickListener(new View.OnClickListener() { //튜토리얼 보여줌
@@ -84,6 +86,21 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 5000:
+                    int returnValue = data.getIntExtra(INTENT_UPDATE_BOT, -1);
+                    if( returnValue != -1){
+                        Intent intent = new Intent();
+                        intent.putExtra(INTENT_UPDATE_BOT, returnValue);
+                        setResult(RESULT_OK,intent);
+                    }
+                break;
+            }
+        }
+    }
     /*
      * 서버에 저장된 fcm 토큰을 삭제합니다.
      * */

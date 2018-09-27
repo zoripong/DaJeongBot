@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
 
-
                 //위로 스크롤시 이름이 없어지고 아래로 스크롤하면 다시 이름 생김
                 if (dy > 0 && botName.getVisibility() != View.VISIBLE) {
 //                    Animation animation = new AlphaAnimation(0, 1); //이거는 사르륵 효과
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    runLayoutAnimation(mRvChatList);
             mChats.add(new Chat(NodeType.SPEAK_NODE, null, getMessage , String.valueOf(System.currentTimeMillis())));
             mChatAdapter.notifyDataSetChanged();
-            mRvChatList.scrollToPosition(mChatAdapter.getItemCount() - 1);
+            mRvChatList.smoothScrollToPosition(mChatAdapter.getItemCount() - 1);
             mEtMessage.setText("");
         }
     }
@@ -330,9 +329,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case 5000: // 세팅 - 초기화
                     String INTENT_RESET = "INTENT_RESET";
+                    String INTENT_UPDATE_BOT = "INTENT_UPDATE_BOT";
                     if(data.getIntExtra(INTENT_RESET, -1) == 0){
                         mChats.clear();
                         mChatAdapter.notifyDataSetChanged();
+                    }
+                    if( data.getIntExtra(INTENT_UPDATE_BOT, -1) != -1){
+                        mBotChar = setBot();
                     }
                     break;
             }

@@ -1,5 +1,6 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,6 +29,8 @@ import retrofit2.Response;
 
 public class ChangeBotActivity extends AppCompatActivity {
     private final String TAG = "ChangeBotActivity";
+    private final String INTENT_UPDATE_BOT = "INTENT_UPDATE_BOT";
+
     private ImageView ivBot1;
     private ImageView ivBot2;
     private ImageView ivBot3;
@@ -161,7 +164,12 @@ public class ChangeBotActivity extends AppCompatActivity {
                             Log.e(TAG,"바뀐 봇 타입 : "+charType);
 //                            Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
 //                            startActivity(intent);
+
+                            Intent intent = new Intent();
+                            intent.putExtra(INTENT_UPDATE_BOT, charType);
+                            setResult(RESULT_OK,intent);
                             finish();
+
                         } else {
                             Log.e(TAG, "서버의 문제로 챗봇 변경에 실패하였습니다.");
                         }
