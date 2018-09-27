@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.R;
@@ -56,8 +57,14 @@ public class CarouselFragment extends Fragment {
 
 //        mIvContent.setImageResource(Content);
         Glide.with(rootView)
-                .load("https://s-i.huffpost.com/gen/5177890/thumbs/o-APPLE-570.jpg?3")
+                .load(R.drawable.no_image)
                 .into(mIvContent);
+        mIvContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(rootView.getContext(), "잠시만요! 일정과 함께 사진을 저장할 수 있도록 금방 돌아올게요!", Toast.LENGTH_SHORT).show();
+            }
+        });
         return rootView;
     }
 }
