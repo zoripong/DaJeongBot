@@ -276,7 +276,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    private void createSlotButtons(LinearLayout layout, final ArrayList<Slot>slotArrayList, final int chatType, boolean status) {
+    private void createSlotButtons(LinearLayout layout, final ArrayList<Slot>slotArrayList, int chatType, boolean status) {
         Log.e(TAG, "createSlotButtons : "+ slotArrayList.size());
         Log.e(TAG, "slotArrayList.toString(): " + slotArrayList.toString());
 
@@ -309,19 +309,25 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myButton.setId(BUTTON_ID);
             //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
-
+            if(chatType == 5)
+                chatType = 4;
+            else if(chatType == 4)
+                chatType = 5;
             final int finalI = i;
+            final int finalChatType = chatType;
             myButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
 //                    Toast.makeText(mContext, myButton.getText().toString(), Toast.LENGTH_LONG).show();
                     int accountId = Integer.parseInt(CustomSharedPreference.getInstance(mContext, "user_info").getStringPreferences("id"));
 //                     chattype == > ChatType.REGISTER_CHAT or ChatType.QUESTION_SCHEDULE_SELECT_CHAT
-                    Log.e(TAG, "그래.. 넌 뭐니..?"+chatType);
+                    Log.e(TAG, "그래.. 넌 뭐니..?"+ finalChatType);
+
+
                     ((MainActivity) mContext)
                             .sendMessage(accountId,
                                     slotArrayList.get(finalI).getValue()+":"+slotArrayList.get(finalI).getLabel(),
                                     NodeType.SPEAK_NODE,
-                                    chatType,
+                                    finalChatType,
                                     String.valueOf(System.currentTimeMillis()),
                                     0);
                     mChats.add(new Chat(NodeType.SPEAK_NODE, null, slotArrayList.get(finalI).getLabel(), String.valueOf(System.currentTimeMillis())));
