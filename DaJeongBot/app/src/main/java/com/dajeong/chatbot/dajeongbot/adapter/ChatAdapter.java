@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -27,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.dajeong.chatbot.dajeongbot.activity.ImageDetailActivity;
 import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
+import com.dajeong.chatbot.dajeongbot.activity.SettingActivity;
+import com.dajeong.chatbot.dajeongbot.activity.TutorialActivity;
 import com.dajeong.chatbot.dajeongbot.alias.ChatHolderType;
 import com.dajeong.chatbot.dajeongbot.alias.ChatType;
 import com.dajeong.chatbot.dajeongbot.alias.NodeType;
@@ -39,6 +40,8 @@ import com.dajeong.chatbot.dajeongbot.model.Memory;
 import com.dajeong.chatbot.dajeongbot.model.Slot;
 import com.google.gson.JsonParser;
 
+import org.w3c.dom.Node;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,25 +53,27 @@ import java.util.Locale;
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final String TAG = "ChatAdapter";
     private int BUTTON_ID = 8000;
-
     private HashSet<Button> buttons;
+
     private LinkedList<Chat> mChats;
     private Context mContext;
     private FragmentManager mFragmentManager;
-    //        HashMap<Integer, Integer> mViewPagerState = new HashMap<>();
+
     private View vBot;
     private View vUser;
     private View vSlot;
     private View vCarousel;
     private View vBotImage;
     private View vUserImage;
+    private View vBotTutorial;
+
 
     public ChatAdapter(FragmentManager fragmentManager, LinkedList<Chat> chats, Context context) {
         this.mFragmentManager = fragmentManager;
         this.mChats = chats;
         this.mContext = context;
         buttons = new HashSet<>();
-    }
+ }
 
     @NonNull
     @Override
@@ -92,6 +97,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 5:
                 vUserImage = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_user_image, parent, false);
                 return new ChatUserImageHolder(vUserImage);
+            case 6:
+                vBotTutorial = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_bot_tutorial, parent, false);
+                return new ChatBotTutorialHolder(vBotTutorial);
             default:
                 return null;
         }
@@ -225,6 +233,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 chatUserImageHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
                 chatUserImageHolder.showImage(chat.getContent());
                 break;
+            case ChatHolderType.CHAT_BOT_TUTORIAL_HOLDER:
+                ChatBotTutorialHolder chatBotTutorialHolder = (ChatBotTutorialHolder) holder;
+                chatBotTutorialHolder.mTvContent.setText(chat.getContent());
+                chatBotTutorialHolder.mIvSenderProfile.setVisibility(View.VISIBLE);
+                chatBotTutorialHolder.mIvSenderProfile.setImageResource(chat.getSender().getProfile());
+                chatBotTutorialHolder.mTvTime.setText(new SimpleDateFormat("a HH:mm", Locale.KOREA).format(new Date(Long.parseLong(chat.getTime()))));
+                break;
             default:
 
         }
@@ -258,6 +273,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return ChatHolderType.CHAT_BOT_IMAGE_HOLDER;
             }
 
+            if(mChats.get(position).getNodeType() == NodeType.TUTORIAL_NODE){
+                return ChatHolderType.CHAT_BOT_TUTORIAL_HOLDER;
+            }
 
             return ChatHolderType.CHAT_BOT_HOLDER;
         } else {
@@ -292,8 +310,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myButton.setText(slotArrayList.get(i).getLabel());
             myButton.setEnabled(status);
 
-
-
             // 스타일 지정
             TypedValue typedValue = new TypedValue();
             mContext.getTheme().resolveAttribute(android.R.attr.borderlessButtonStyle, typedValue, true);
@@ -307,12 +323,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             BUTTON_ID++;
             myButton.setId(BUTTON_ID);
+
             //            LinearLayout layout = (LinearLayout) findViewById(R.id.myDynamicLayout);
             layout.addView(myButton);
+
             if(chatType == 5)
                 chatType = 4;
             else if(chatType == 4)
                 chatType = 5;
+
             final int finalI = i;
             final int finalChatType = chatType;
             myButton.setOnClickListener(new View.OnClickListener() {
@@ -335,12 +354,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         }
-
         Iterator<Button> iterator = buttons.iterator();
         while(iterator.hasNext()){
             Log.e(TAG, "id : "+iterator.next().getId());
         }
-
     }
 
     private String createResponseJson(ArrayList<Memory> memories){
@@ -572,6 +589,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             mIvImage = itemView.findViewById(R.id.ivUserImage);
             mTvTime = itemView.findViewById(R.id.tvTimeUser);
+
             itemView.findViewById(R.id.ivDownload).setVisibility(View.GONE);
             itemView.findViewById(R.id.ivDownload).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -594,6 +612,36 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    .apply(new RequestOptions().placeholder(R.raw.image_loading))
                     .into(imageViewTarget);
         }
+    }
+
+    private class ChatBotTutorialHolder extends RecyclerView.ViewHolder {
+        LinearLayout mRootLayout;
+        ImageView mIvSenderProfile;
+        TextView mTvTime;
+        TextView mTvContent;
+
+        ChatBotTutorialHolder(View itemView) {
+            super(itemView);
+            mRootLayout = itemView.findViewById(R.id.ll_dynamic_btns);
+            mIvSenderProfile = itemView.findViewById(R.id.ivSenderProfile);
+            mTvTime = itemView.findViewById(R.id.tvTime);
+            mTvContent = itemView.findViewById(R.id.tvContent);
+
+            itemView.findViewById(R.id.btnTutorial).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(new Intent(mContext, TutorialActivity.class));
+                }
+            });
+
+            itemView.findViewById(R.id.btnGuide).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "잠시만요! 금방 돌아올게요 :)", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     public class CarouselPagerAdapter extends FragmentPagerAdapter {

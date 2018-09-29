@@ -109,6 +109,7 @@ public class SettingActivity extends AppCompatActivity {
     public void releaseUserInfo(){
         CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
         Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
@@ -137,8 +138,6 @@ public class SettingActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(SettingActivity.this, com.dajeong.chatbot.dajeongbot.activity.MainActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });

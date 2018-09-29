@@ -16,8 +16,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,7 +42,6 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Node;
 
 import java.io.File;
 import java.net.SocketTimeoutException;
@@ -62,7 +59,6 @@ import retrofit2.Response;
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = "MainActivity";
-
 
     protected static Context mContext;
     //component
@@ -103,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private JsonObject mJsonResponse;
     private HashMap<String, Integer> mStringNodeTypeMap;
 
-    private AWSMobileController mAWSctlr;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,35 +106,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         onNewIntent(getIntent());
 
         init();
-        bottominit();
+        initBottom();
         getMessage();
         showProgressBar();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
         mRvChatList.setHasFixedSize(true);
         mRvChatList.setLayoutManager(layoutManager);
 
         mRvChatList.setAdapter(mChatAdapter);
-//        Context context = mRvChatList.getContext();
-//        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
-
-//        mRvChatList.setLayoutAnimation(controller);
-//        mRvChatList.getAdapter().notifyDataSetChanged();
-//        mRvChatList.scheduleLayoutAnimation();
-
-
 
         mRvChatList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!mRvChatList.canScrollVertically(-1)) {
-//                    Log.e(TAG, "OnScrolled : TOP");
                     if (mIsLoad && mMoreChat) {
                         showProgressBar();
                         getMoreMessage();
                     }
                 }
+
                 if(mRvChatList.canScrollVertically(0)){
                     // fab가 보여야하는데 안보일때
                     if(!mFabDown.isShown()){
@@ -198,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
                 startActivityForResult(intent,4000);
-
             }
         });
 
@@ -209,14 +195,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mFabDown.hide();
             }
         });
-
         showTutorial();
         this.setFinishOnTouchOutside(false);
     }
 
-    public void clickSendMessage(String message){
-        String getMessage=message;
-//        Log.e(TAG,"입력된 메시지 : "+getMessage);
+    public void clickSendMessage(String getMessage){
         if (getMessage != null && !getMessage.replace(" ", "").equals("")) {
             // TODO : 추가 할 때 애니메이션
             int accountId = Integer.parseInt(CustomSharedPreference.getInstance(getApplicationContext(), "user_info").getStringPreferences("id"));
@@ -229,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 content = String.valueOf(mSelectIndex)+":"+content;
             }
             sendMessage(accountId, content, NodeType.SPEAK_NODE, chatType, String.valueOf(time), isBot);
-//                    runLayoutAnimation(mRvChatList);
             mChats.add(new Chat(NodeType.SPEAK_NODE, null, getMessage , String.valueOf(System.currentTimeMillis())));
             mChatAdapter.notifyDataSetChanged();
             mRvChatList.smoothScrollToPosition(mChatAdapter.getItemCount() - 1);
@@ -237,28 +219,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
     private void showTutorial() { //dialog로 띄움
-        //spm.removePreferences("SHOW_TUTORIAL");
         if(CustomSharedPreference.getInstance(mContext, "MyPrefs").getBoolPreferences("SHOW_TUTORIAL")){
-            //Log.e(TAG,"이미 튜토리얼을 보여줌 ->"+spm.getBoolPreferences("SHOW_TUTORIAL"));
             return;
         }
-        else{
-//            Log.e(TAG,"튜토리얼 안 보여줌 ->"+spm.getBoolPreferences("SHOW_TUTORIAL"));
-        }
-
         CustomSharedPreference.getInstance(mContext, "MyPrefs").savePreferences("SHOW_TUTORIAL", true);
-        //spm.removePreferences("SHOW_TUTORIAL");
         startActivity(new Intent(this, TutorialActivity.class));
-
     }
-//    private void runLayoutAnimation(RecyclerView recyclerView){
-//        final Context context = mEtMessage.getContext();
-//        final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_animation_from_bottom);
-//
-//        recyclerView.setLayoutAnimation(controller);
-//        recyclerView.getAdapter().notifyDataSetChanged();
-//        recyclerView.scheduleLayoutAnimation();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -367,13 +333,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStringNodeTypeMap.put("slot", NodeType.SLOT_NODE);
         mStringNodeTypeMap.put("carousel", NodeType.CAROUSEL_NODE);
 
-        mAWSctlr = AWSMobileController.getInstance(this);
-
     }
 
-    private void bottominit(){
+    private void initBottom(){
         //언제
-
         whenCloseBtn = (ImageView) findViewById(R.id.ivWhenCloseBtn);
         messageY = (EditText) findViewById(R.id.etYear);
         messageM = (EditText) findViewById(R.id.etMonth);
@@ -387,9 +350,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         whenCloseBtn.setOnClickListener(this);
         whenBtnSend.setOnClickListener(this);
         btnWhereWhatSend.setOnClickListener(this);
-
-
-
     }
 
     @Override
@@ -425,10 +385,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
                 controlJsonObj(response);
-                // FIXME
-//                mRvChatList.scrollToPosition(mChatAdapter.getItemCount() );
+                mRvChatList.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRvChatList.smoothScrollToPosition(mChatAdapter.getItemCount() - 1);
+                    }
+                }, 1000);
+//                mRvChatList.scrollToPosition(mChatAdapter.getItemCount()-1);
                 mIsLoad = true;
-
             }
 
             @Override
@@ -449,7 +413,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         res.enqueue(new Callback<ArrayList<JsonObject>>() {
             @Override
             public void onResponse(Call<ArrayList<JsonObject>> call, Response<ArrayList<JsonObject>> response) {
+                int count = mChatAdapter.getItemCount()-1;
                 controlJsonObj(response);
+//                mRvChatList.smoothScrollToPosition(count);
+
             }
 
             @Override
@@ -488,9 +455,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             // 마지막 인덱스 저장
             CustomSharedPreference.getInstance(getApplicationContext(), "chat").savePreferences("last_index", (body.get(body.size()-1)).get("id").getAsInt());
-            mChatAdapter.notifyDataSetChanged();
         }
+        mChatAdapter.notifyDataSetChanged();
         hideProgressBar();
+
     }
 
     public void sendMessage(int accountId, String content, int nodeType, int chatType, String time, int isBot) {
@@ -522,14 +490,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 JsonObject result = response.body().getAsJsonObject("result");
                                 mJsonResponse = result;
                                 // receive
-
                                 mChatType = result.get("chat_type").getAsInt();
                                 switch (result.get("chat_type").getAsInt()){
                                     case ChatType.BASIC_CHAT:
                                         MessageReceiver.getInstance().receiveBasicMessage(result, mChats, mBotChar);
                                         break;
                                     case ChatType.MEMORY_CHAT:
-                                        // TODO TEST
                                         MessageReceiver.getInstance().receiveCarouselMessage(result, mChats, mBotChar);
                                         break;
                                     case ChatType.QUESTION_SCHEDULE_SELECT_CHAT: // 4
@@ -544,7 +510,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         // reply_message_for_reply_review 를 통해 데이터가 넘어옴
                                         // 일정을 선택해야 함
                                         mChatType = ChatType.QUESTION_SCHEDULE_SELECT_CHAT;
-
                                         MessageReceiver.getInstance().receiveSlotMessage(result, mChats, mBotChar);
                                         break;
 
@@ -608,10 +573,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setJsonResponse(JsonObject jsonObject){
         this.mJsonResponse = jsonObject;
     }
-    public void test(){
-        mChats.addFirst(new Chat(NodeType.CAROUSEL_NODE, mBotChar, "골라봐!", String.valueOf(System.currentTimeMillis())));
-    }
-
     public void addAutoSchedule(){
         findViewById(R.id.auto_when).setVisibility(View.VISIBLE);
         findViewById(R.id.year_constraint).setVisibility(View.VISIBLE);
