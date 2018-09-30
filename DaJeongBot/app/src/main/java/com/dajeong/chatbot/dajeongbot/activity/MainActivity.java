@@ -1,7 +1,9 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -31,6 +33,7 @@ import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.control.MessageReader;
 import com.dajeong.chatbot.dajeongbot.control.MessageReceiver;
 import com.dajeong.chatbot.dajeongbot.customize.AutoDialog;
+import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseMessagingService;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;
 import com.dajeong.chatbot.dajeongbot.model.GalleryImage;
@@ -40,6 +43,7 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +59,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-// TODO: 어떻게하는거지? 튜토리얼 띄우기
 // 메인 채팅 화면 activity
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = "MainActivity";
@@ -103,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerReceiver(myReceiver, new IntentFilter(MyFirebaseMessagingService.INTENT_FILTER));
+
         onNewIntent(getIntent());
 
         init();
@@ -133,8 +138,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(!mFabDown.isShown()){
                         mFabDown.show();
                     }
-                    Log.e(TAG, "Bottom nono");
-
                 }else{
                     if(mFabDown.isShown()){
                         mFabDown.hide();
@@ -362,11 +365,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(jsonObject.has("status")){
                 // FCM Message로 Open
             }
-            Toast.makeText(getApplicationContext(), jsonObject.getString("status"), Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        Log.e(TAG, notificationMessage);
     }
 
     @NonNull
@@ -686,5 +687,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public static boolean isNumeric(String maybeNumeric) {
         return maybeNumeric != null && maybeNumeric.matches("[0-9]+");
+    }
+    // fcm broadcast receiver
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            updateUi();
+            Log.e(TAG, "I can receive the fcm message!");
+            String notificationMessage = intent.getStringExtra("data");
+            Log.e(TAG, notificationMessage);
+            try {
+                JSONObject jsonObject = new JSONObject(notificationMessage);
+                if(jsonObject.has("result")){
+                    Log.e(TAG, "result");
+
+                    jsonObject = jsonObject.getJSONObject("result");
+                    JSONArray contents = jsonObject.getJSONArray("content");
+                    for(int i = 0; i<contents.length(); i++){
+                        Log.e(TAG, "content["+i+"] : "+ contents.getString(i));
+                        mChats.addLast(new Chat(NodeType.SPEAK_NODE, mBotChar,contents.getString(i), String.valueOf(System.currentTimeMillis())));
+                    }
+                    mChatAdapter.notifyDataSetChanged();
+                }else{
+                    Log.e(TAG, "result is no ");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(TAG, e.toString());
+            }
+
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(myReceiver);
     }
 }

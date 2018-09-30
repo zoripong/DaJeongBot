@@ -25,7 +25,6 @@ import com.google.gson.JsonObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-// TODO : 현재 닉네임 볼 수 있도록
 public class ChangeNameActivity extends AppCompatActivity {
     private final String TAG = "ChangeNameActivity";
     EditText editName;

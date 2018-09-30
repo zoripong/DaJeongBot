@@ -341,7 +341,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                     chattype == > ChatType.REGISTER_CHAT or ChatType.QUESTION_SCHEDULE_SELECT_CHAT
                     Log.e(TAG, "그래.. 넌 뭐니..?"+ finalChatType);
 
-
                     ((MainActivity) mContext)
                             .sendMessage(accountId,
                                     slotArrayList.get(finalI).getValue()+":"+slotArrayList.get(finalI).getLabel(),

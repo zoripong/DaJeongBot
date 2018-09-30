@@ -42,18 +42,6 @@ public class ThumbnailRecyclerAdapter extends RecyclerView.Adapter<ThumbnailRecy
     public void onBindViewHolder(final ImageViewHolder holder, final int position) {
         GalleryImage item = items.get(position);
 
-//        Glide.with(context)
-//                .load(item.getImgPath())
-//                .asBitmap()
-//                .thumbnail(0.4f)
-//                .centerCrop()
-//                .override(400,400)
-//                .into(new SimpleTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                        holder.imageView.setImageBitmap(resource);
-//                    }
-//                });
         Glide.with(context)
                 .load(item.getImgPath())
                 .thumbnail(0.4f)
