@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
-            android:src="@drawable/img_send_ic"
+            android:src="@drawable/ic_img_send"
             android:background="?selectableItemBackgroundBorderless"
             android:layout_centerVertical="true"/>
     </LinearLayout>

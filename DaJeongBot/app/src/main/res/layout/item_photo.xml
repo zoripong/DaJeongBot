@@ -22,7 +22,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/is_check"
+            android:background="@drawable/ic_check"
             android:layout_centerInParent="true"
             />
 

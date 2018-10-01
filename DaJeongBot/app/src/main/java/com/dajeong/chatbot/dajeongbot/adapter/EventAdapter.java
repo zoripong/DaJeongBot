@@ -17,27 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.dajeong.chatbot.dajeongbot.activity.CalendarActivity;
-import com.dajeong.chatbot.dajeongbot.activity.ChangeBotActivity;
-import com.dajeong.chatbot.dajeongbot.activity.MainActivity;
-import com.dajeong.chatbot.dajeongbot.activity.SettingActivity;
-import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.decorators.EventDecorator;
 import com.dajeong.chatbot.dajeongbot.model.Event;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Vector;
 
 import retrofit2.Call;
 import retrofit2.Callback;

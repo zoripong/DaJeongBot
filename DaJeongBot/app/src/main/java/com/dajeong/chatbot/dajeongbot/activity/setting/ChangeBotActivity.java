@@ -1,6 +1,5 @@
-package com.dajeong.chatbot.dajeongbot.activity;
+package com.dajeong.chatbot.dajeongbot.activity.setting;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateBot;
-import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
@@ -69,7 +67,7 @@ public class ChangeBotActivity extends AppCompatActivity {
         Log.e(TAG, "봇,, : "+bot);
         switch(bot){
             case 0:
-                ivBot1.setImageResource(R.drawable.selected_bot1_ic);
+                ivBot1.setImageResource(R.drawable.ic_selected_bot_01);
                 ivBot2.setImageResource(R.drawable.ic_char2);
                 ivBot3.setImageResource(R.drawable.ic_char3);
                 ivBot4.setImageResource(R.drawable.ic_char4);
@@ -77,7 +75,7 @@ public class ChangeBotActivity extends AppCompatActivity {
                 break;
             case 1:
                 ivBot1.setImageResource(R.drawable.ic_char1);
-                ivBot2.setImageResource(R.drawable.selected_bot2_ic);
+                ivBot2.setImageResource(R.drawable.ic_selected_bot_02);
                 ivBot3.setImageResource(R.drawable.ic_char3);
                 ivBot4.setImageResource(R.drawable.ic_char4);
                 check=1;
@@ -85,7 +83,7 @@ public class ChangeBotActivity extends AppCompatActivity {
             case 2:
                 ivBot1.setImageResource(R.drawable.ic_char1);
                 ivBot2.setImageResource(R.drawable.ic_char2);
-                ivBot3.setImageResource(R.drawable.selected_bot3_ic);
+                ivBot3.setImageResource(R.drawable.ic_selected_bot_03);
                 ivBot4.setImageResource(R.drawable.ic_char4);
                 check=2;
                 break;
@@ -93,7 +91,7 @@ public class ChangeBotActivity extends AppCompatActivity {
                 ivBot1.setImageResource(R.drawable.ic_char1);
                 ivBot2.setImageResource(R.drawable.ic_char2);
                 ivBot3.setImageResource(R.drawable.ic_char3);
-                ivBot4.setImageResource(R.drawable.selected_bot4_ic);
+                ivBot4.setImageResource(R.drawable.ic_selected_bot_04);
                 check=3;
                 break;
         }
@@ -104,7 +102,7 @@ public class ChangeBotActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()){
                 case R.id.ivBot1:
-                    ivBot1.setImageResource(R.drawable.selected_bot1_ic);
+                    ivBot1.setImageResource(R.drawable.ic_selected_bot_01);
                     ivBot2.setImageResource(R.drawable.ic_char2);
                     ivBot3.setImageResource(R.drawable.ic_char3);
                     ivBot4.setImageResource(R.drawable.ic_char4);
@@ -112,7 +110,7 @@ public class ChangeBotActivity extends AppCompatActivity {
                     break;
                 case R.id.ivBot2:
                     ivBot1.setImageResource(R.drawable.ic_char1);
-                    ivBot2.setImageResource(R.drawable.selected_bot2_ic);
+                    ivBot2.setImageResource(R.drawable.ic_selected_bot_02);
                     ivBot3.setImageResource(R.drawable.ic_char3);
                     ivBot4.setImageResource(R.drawable.ic_char4);
                     check=1;
@@ -120,7 +118,7 @@ public class ChangeBotActivity extends AppCompatActivity {
                 case R.id.ivBot3:
                     ivBot1.setImageResource(R.drawable.ic_char1);
                     ivBot2.setImageResource(R.drawable.ic_char2);
-                    ivBot3.setImageResource(R.drawable.selected_bot3_ic);
+                    ivBot3.setImageResource(R.drawable.ic_selected_bot_03);
                     ivBot4.setImageResource(R.drawable.ic_char4);
                     check=2;
                     break;
@@ -128,7 +126,7 @@ public class ChangeBotActivity extends AppCompatActivity {
                     ivBot1.setImageResource(R.drawable.ic_char1);
                     ivBot2.setImageResource(R.drawable.ic_char2);
                     ivBot3.setImageResource(R.drawable.ic_char3);
-                    ivBot4.setImageResource(R.drawable.selected_bot4_ic);
+                    ivBot4.setImageResource(R.drawable.ic_selected_bot_04);
                     check=3;
                     break;
                 case R.id.tvBotChange:
@@ -212,8 +210,6 @@ public class ChangeBotActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });

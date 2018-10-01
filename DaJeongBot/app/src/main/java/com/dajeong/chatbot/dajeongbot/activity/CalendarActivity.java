@@ -209,8 +209,6 @@ public class CalendarActivity extends AppCompatActivity implements OnDateSelecte
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(CalendarActivity.this, MainActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });

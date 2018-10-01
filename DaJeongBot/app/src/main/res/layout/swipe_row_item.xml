@@ -27,7 +27,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/schedule_edit_ic"/>
+                android:src="@drawable/ic_schedule_edit"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/schedule_delete_ic"/>
+                android:src="@drawable/ic_schedule_delete"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

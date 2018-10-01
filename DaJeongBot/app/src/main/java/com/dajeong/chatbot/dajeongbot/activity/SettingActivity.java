@@ -7,26 +7,20 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.dajeong.chatbot.dajeongbot.activity.setting.ChangeBotActivity;
+import com.dajeong.chatbot.dajeongbot.activity.setting.ChangeNameActivity;
+import com.dajeong.chatbot.dajeongbot.activity.setting.ChangePasswordActivity;
+import com.dajeong.chatbot.dajeongbot.activity.setting.ChangeTimeActivity;
+import com.dajeong.chatbot.dajeongbot.activity.setting.RequirementActivity;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.customize.LogoutDialog;
 import com.dajeong.chatbot.dajeongbot.customize.ResetDialog;
-import com.dajeong.chatbot.dajeongbot.model.request.RequestRegisterToken;
-import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
-import com.google.gson.JsonObject;
-
-import java.io.Serializable;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 // setting activity ( 사용자 정보 수정 / 챗봇 선택 / 데이터 초기화 .. )
 public class SettingActivity extends AppCompatActivity {
@@ -89,6 +83,14 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, RequirementActivity.class));
+            }
+        });
+
+        // CustomAccount 일 때에만
+        findViewById(R.id.LiPassword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, ChangePasswordActivity.class));
             }
         });
     }

@@ -1,8 +1,6 @@
-package com.dajeong.chatbot.dajeongbot.activity;
+package com.dajeong.chatbot.dajeongbot.activity.setting;
 
-import android.app.AlertDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -27,9 +24,6 @@ import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
-
-import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
-import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;

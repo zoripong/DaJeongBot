@@ -17,7 +17,7 @@
         android:layout_marginStart="12dp"
         android:contentDescription="@string/todo2"
         android:padding="2.5dp"
-        android:src="@drawable/cancle_add_ic"
+        android:src="@drawable/ic_cancle_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

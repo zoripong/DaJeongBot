@@ -73,7 +73,7 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toTopOf="@+id/main"
         app:layout_constraintEnd_toEndOf="@+id/tvbotName"
-        android:src="@drawable/ic_baseline_keyboard_arrow_down_24px"
+        android:src="@drawable/ic_keyboard_arrow_down_24px"
         app:backgroundTint="#4D000000"
         app:fabSize="mini"
         app:elevation="0dp"

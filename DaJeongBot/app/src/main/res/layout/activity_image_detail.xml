@@ -23,7 +23,7 @@
             android:layout_height="55dp"
             android:paddingBottom="13dp"
             android:paddingTop="13dp"
-            android:src="@drawable/ic_baseline_close_24px"
+            android:src="@drawable/ic_close_24px"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
@@ -52,7 +52,7 @@
             android:layout_height="50dp"
             android:paddingBottom="13dp"
             android:paddingTop="13dp"
-            android:src="@drawable/download_ic"
+            android:src="@drawable/ic_download"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"

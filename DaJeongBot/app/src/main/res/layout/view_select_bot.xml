@@ -23,28 +23,28 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_margin="10sp"
-                android:background="@drawable/chatbot_1" />
+                android:background="@drawable/chatbot_01" />
 
             <Button
                 android:id="@+id/img_chatbot_2"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_margin="10sp"
-                android:background="@drawable/chatbot_2" />
+                android:background="@drawable/chatbot_02" />
 
             <Button
                 android:id="@+id/img_chatbot_3"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_margin="10sp"
-                android:background="@drawable/chatbot_3" />
+                android:background="@drawable/chatbot_03" />
 
             <Button
                 android:id="@+id/img_chatbot_4"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_margin="10sp"
-                android:background="@drawable/chatbot_4" />
+                android:background="@drawable/chatbot_04" />
         </TableRow>
 
         <TableRow

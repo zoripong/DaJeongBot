@@ -122,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRvChatList.setAdapter(mChatAdapter);
 
+        if(mChatAdapter.getItemCount() < 5){
+            Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                    0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, -1.0f);
+            animation.setDuration(1500);
+            botName.setVisibility(View.GONE);
+            botName.setAnimation(animation);
+        }
+
         mRvChatList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -148,11 +156,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (dy > 0 && botName.getVisibility() != View.VISIBLE) {
 //                    Animation animation = new AlphaAnimation(0, 1); //이거는 사르륵 효과
 //                    animation.setDuration(500);
-                    Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                            0.0f, Animation.RELATIVE_TO_PARENT, -0.5f, Animation.RELATIVE_TO_PARENT, 0.0f);
-                    animation.setDuration(500);
-                    botName.setVisibility(View.VISIBLE);
-                    botName.setAnimation(animation);
+                    if(mChatAdapter.getItemCount() >= 5) {
+                        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                                0.0f, Animation.RELATIVE_TO_PARENT, -0.5f, Animation.RELATIVE_TO_PARENT, 0.0f);
+                        animation.setDuration(500);
+                        botName.setVisibility(View.VISIBLE);
+                        botName.setAnimation(animation);
+                    }
                 } else if (dy < 0 && botName.getVisibility() == View.VISIBLE) {
 //                    Animation animation = new AlphaAnimation(1, 0);
 //                    animation.setDuration(500);

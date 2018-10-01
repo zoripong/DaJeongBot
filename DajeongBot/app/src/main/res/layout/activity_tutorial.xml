@@ -14,7 +14,7 @@
         android:id="@+id/endTutoral"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/tutorial_bg"
+        android:background="@drawable/bg_tutorial"
         android:visibility="gone"
         android:orientation="vertical">
         <LinearLayout

@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.activity;
+package com.dajeong.chatbot.dajeongbot.activity.setting;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,7 +19,6 @@ import com.dajeong.chatbot.dajeongbot.R;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
-import com.google.api.client.json.Json;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;
@@ -28,7 +27,6 @@ import retrofit2.Response;
 public class ChangeNameActivity extends AppCompatActivity {
     private final String TAG = "ChangeNameActivity";
     EditText editName;
-    String getEditName;
     /*
     * {
       "account_id": 32,
@@ -48,15 +46,15 @@ public class ChangeNameActivity extends AppCompatActivity {
         editName = findViewById(R.id.editName);
         getUserName(Integer.parseInt(accountId));
 
-        findViewById(R.id.tvNameChange).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tvPasswordChange).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getEditName = editName.getText().toString();
+                String getEditName = editName.getText().toString().trim();
                 if(getEditName.length() <= 0){//빈값이 넘어올때의 처리
                     Toast.makeText(getApplicationContext(), "이름을 입력해주세요!", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    updateName();
+                    updateName(getEditName);
                 }
             }
         });
@@ -87,11 +85,10 @@ public class ChangeNameActivity extends AppCompatActivity {
             }
         });
     }
-    private void updateName() {
+    private void updateName(String getEditName) {
         String accountId = CustomSharedPreference
                 .getInstance(getApplicationContext(), "user_info")
                 .getStringPreferences("id");
-        Log.e(TAG,"accountId값 무엇일까,,,"+accountId);
         if (!(accountId == null && accountId.equals(""))) {
             final RequestUpdateName param = new RequestUpdateName(Integer.parseInt(accountId), getEditName);
             Call<JsonObject> res = NetRetrofit.getInstance(getApplicationContext()).getService().updateName(param);
@@ -146,8 +143,6 @@ public class ChangeNameActivity extends AppCompatActivity {
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChangeNameActivity.this, com.dajeong.chatbot.dajeongbot.activity.SettingActivity.class);
-                startActivity(intent);
                 finish();
             }
         });

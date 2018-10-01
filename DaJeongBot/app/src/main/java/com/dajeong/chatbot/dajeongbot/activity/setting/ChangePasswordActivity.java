@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.activity;
+package com.dajeong.chatbot.dajeongbot.activity.setting;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,47 +7,51 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dajeong.chatbot.dajeongbot.R;
+import com.dajeong.chatbot.dajeongbot.activity.SettingActivity;
+import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
+import com.dajeong.chatbot.dajeongbot.customize.PasswordDialog;
+import com.dajeong.chatbot.dajeongbot.customize.ResetDialog;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdatePassword;
+import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
+import com.google.gson.JsonObject;
 
-public class RequirementActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class ChangePasswordActivity extends AppCompatActivity {
+    private final String TAG = "ChangePasswordActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_requirement);
-
-        Glide.with(this).load("https://bit.ly/2zHj9ji").into((ImageView) findViewById(R.id.ivImage));
-
-        final EditText etContent = findViewById(R.id.etRequirement);
-
-        findViewById(R.id.btnRequirement).setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_change_password);
+        final EditText etPassword = findViewById(R.id.editPassword);
+        findViewById(R.id.tvPasswordChange).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(etContent.getText().toString().trim().length() > 0){
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("plain/text");
-                    // email setting 배열로 해놔서 복수 발송 가능
-                    String[] address = {"devuri404@gmail.com"};
-                    intent.putExtra(Intent.EXTRA_EMAIL, address);
-                    intent.putExtra(Intent.EXTRA_SUBJECT,"[다정봇] 다정봇에 문제가 생겼습니다!");
-                    intent.putExtra(Intent.EXTRA_TEXT, etContent.getText().toString());
-                    startActivity(intent);
-                }else {
-                    YoYo.with(Techniques.Shake).playOn(etContent);
+                if( etPassword.getText().toString().trim().length() > 0 ){
+                    PasswordDialog customDialog = new PasswordDialog(ChangePasswordActivity.this, etPassword.getText().toString().trim());
+                    customDialog.callFunction();
+                }else{
+                    YoYo.with(Techniques.Shake).playOn(etPassword);
                 }
+
             }
         });
     }
+
 
 
     @Override
@@ -70,13 +74,11 @@ public class RequirementActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffffff")));
 
         TextView mCurrentScreen = (TextView) findViewById(R.id.tvCurrentScreen);
-        mCurrentScreen.setText("오류사항 문의");
+        mCurrentScreen.setText("비밀번호 변경");
         // 이벤트 달기
         viewActionBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(ChangeBotActivity.this, SettingActivity.class);
-//                startActivity(intent);
                 finish();
             }
         });

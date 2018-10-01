@@ -5,6 +5,7 @@ import com.dajeong.chatbot.dajeongbot.model.request.RequestSendMessage;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestSignUp;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateBot;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
+import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdatePassword;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateTime;
 import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateToken;
 import com.google.gson.JsonObject;
@@ -71,6 +72,10 @@ public interface RetrofitService {
     // 사용자 닉네임 업데이트
     @PUT("me/names")
     Call<JsonObject> updateName(@Body RequestUpdateName params);
+
+    // 사용자 비밀번호 업데이트
+    @PUT("me/passwords")
+    Call<JsonObject> updatePassword(@Body RequestUpdatePassword params);
 
     // 챗봇 업데이트
     @PUT("me/bots")
