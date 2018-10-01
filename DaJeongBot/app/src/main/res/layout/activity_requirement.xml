@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dajeong.chatbot.dajeongbot.activity.RequirementActivity"
+    android:padding="20dp"
+    android:background="#ffffff">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:src="@drawable/ic_char1"/>
+        <TextView
+            android:id="@+id/tvText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="무엇이 문제인가요?"
+            android:gravity="center"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/ivImage"/>
+        <EditText
+            android:id="@+id/etRequirement"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:hint="문제 상황을 말씀해주세요 :)"
+            app:layout_constraintTop_toBottomOf="@+id/tvText" />
+        <Button
+            android:id="@+id/btnRequirement"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_ripple_effect"
+            android:text="메일 보내기"
+            android:textColor="#a239bc"
+            android:textSize="16.5sp"
+            app:layout_constraintTop_toBottomOf="@+id/etRequirement"/>
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

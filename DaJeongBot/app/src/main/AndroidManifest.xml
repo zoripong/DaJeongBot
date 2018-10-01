@@ -85,11 +85,12 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activity.TutorialActivity"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".activity.ChangeNameActivity" />
         <activity android:name=".activity.ChangeBotActivity" />
         <activity android:name=".activity.ChangeTimeActivity" />
-        <activity android:name=".activity.ImageDetailActivity"></activity>
+        <activity android:name=".activity.ImageDetailActivity" />
+        <activity android:name=".activity.RequirementActivity"></activity>
     </application>
 
 </manifest>

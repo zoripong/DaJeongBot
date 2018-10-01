@@ -84,6 +84,13 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
+
+        findViewById(R.id.LiRequirement).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, RequirementActivity.class));
+            }
+        });
     }
 
     @Override
