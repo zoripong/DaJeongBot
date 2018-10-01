@@ -26,7 +26,7 @@ public class RequirementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirement);
 
-        Glide.with(this).load(R.raw.chatbot_move_image_1).into((ImageView) findViewById(R.id.ivImage));
+        Glide.with(this).load("https://bit.ly/2zHj9ji").into((ImageView) findViewById(R.id.ivImage));
 
         final EditText etContent = findViewById(R.id.etRequirement);
 

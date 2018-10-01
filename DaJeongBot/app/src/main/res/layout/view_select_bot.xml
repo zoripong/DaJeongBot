@@ -115,7 +115,6 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/notosans_demilight"
             android:gravity="center"
-            android:text="@string/dajeong_1_info"
             app:layout_constraintTop_toBottomOf="@+id/img_title" />
 
         <android.support.constraint.ConstraintLayout

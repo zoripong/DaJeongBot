@@ -12,11 +12,19 @@
     <string name="btnBack"> 뒤로가기 </string>
     <string name="btnSelect"> 챗봇선택 </string>
     <string name="btnCheck"> 선택하기 </string>
-    <string name="dajeong_1_info">언제나 크고 두꺼운 책을 가지고 다니는\n자칭 지식 토끼 다정군!\n점잖은 이미지이고 싶어서 매일 정장을 입는답니다.</string>
-    <string name="dajeong_2_info">애교 만점 사회 초년생 다정냥!\n잠이 너무 많은 탓에 매번 꾸벅꾸벅 졸고는 하지만\n귀여운 말투 덕분에 모두에게 사랑받는 고양이랍니다.</string>
-    <string name="dajeong_3_info">정도 많고 말도 많은 이야기보따리 다정곰!\n누구에게나 친절하고 말을 많이 하지만\n그만큼 잘 들어주는 능력을 가진 곰돌이랍니다.</string>
-    <string name="dajeong_4_info">조금 엉뚱하고 천진난만하지만\n알고 보면 귀여운 매력을 가진 강아지 다정몽!\n가끔 맞춤법을 틀려서 친구들에게 꾸중을 듣는답니다.</string>
     <string name="schedule">아래 목록에서\n 궁금한 일정을 골라주세요.</string>
+    <string-array name="introduce_bot_gif">
+        <item>https://bit.ly/2zHj9ji</item>
+        <item>https://bit.ly/2Ovf6z3</item>
+        <item>https://bit.ly/2Qn7f3Q</item>
+        <item>https://bit.ly/2xPUjwx</item>
+    </string-array>
+    <string-array name="information_bot">
+        <item>언제나 크고 두꺼운 책을 가지고 다니는\n자칭 지식 토끼 다정군!\n점잖은 이미지이고 싶어서 매일 정장을 입는답니다.</item>
+        <item>애교 만점 사회 초년생 다정냥!\n잠이 너무 많은 탓에 매번 꾸벅꾸벅 졸고는 하지만\n귀여운 말투 덕분에 모두에게 사랑받는 고양이랍니다.</item>
+        <item>정도 많고 말도 많은 이야기보따리 다정곰!\n누구에게나 친절하고 말을 많이 하지만\n그만큼 잘 들어주는 능력을 가진 곰돌이랍니다.</item>
+        <item>조금 엉뚱하고 천진난만하지만\n알고 보면 귀여운 매력을 가진 강아지 다정몽!\n가끔 맞춤법을 틀려서 친구들에게 꾸중을 듣는답니다.</item>
+    </string-array>
     <string-array name="custom_weekdays">
         <item>SUN</item>
         <item>MON</item>

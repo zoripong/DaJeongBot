@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dajeong.chatbot.dajeongbot.activity.SignupActivity;
+import com.dajeong.chatbot.dajeongbot.adapter.ChatAdapter;
 import com.dajeong.chatbot.dajeongbot.alias.AccountType;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.activity.LoginActivity;
@@ -51,8 +52,9 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
     private int introduceHead[];
     private int introduceTitle[];
-    private int introduceString[];
-    private int introduceImage[];
+    private String introduceString[];
+    private String introduceImage[];
+
 
     private ImageView mIvBotHead, mIvBotTitle, mIvBotIntroduce;
     private TextView mTvBotString;
@@ -68,8 +70,8 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
 
         introduceHead = new int[]{R.drawable.chatbot_head_1, R.drawable.chatbot_head_2, R.drawable.chatbot_head_3, R.drawable.chatbot_head_4};
         introduceTitle = new int[]{R.drawable.chatbot_text_1, R.drawable.chatbot_text_2, R.drawable.chatbot_text_3, R.drawable.chatbot_text_4};
-        introduceString = new int[]{R.string.dajeong_1_info, R.string.dajeong_2_info, R.string.dajeong_3_info, R.string.dajeong_4_info};
-        introduceImage = new int[]{R.raw.chatbot_move_image_1, R.raw.chatbot_move_image_2, R.raw.chatbot_move_image_3, R.raw.chatbot_move_image_4};
+        introduceString = getResources().getStringArray(R.array.information_bot);
+        introduceImage = getResources().getStringArray(R.array.introduce_bot_gif);
 
         mIvBotHead = rootView.findViewById(R.id.img_head);
         mIvBotTitle = rootView.findViewById(R.id.img_title);
@@ -82,21 +84,18 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         btnSelectPrevious = rootView.findViewById(R.id.btn_select_previous);
         btnSelectNext = rootView.findViewById(R.id.btn_select_next);
 
-        Glide.with(this).load(R.raw.chatbot_move_image_1).into(mIvBotIntroduce);
+        mTvBotString.setText(introduceString[0]);
+        Glide.with(this).load(introduceImage[0]).into(mIvBotIntroduce);
         final ArrayList<Button> botHeads = new ArrayList<>();
         ArrayList<ImageView> botDots = new ArrayList<>();
         ArrayList<ImageView> botIntroduceHeads = new ArrayList<>();
         ArrayList<ImageView> botIntroduceTitles = new ArrayList<>();
-        ArrayList<String> botIntroduceStrings = new ArrayList<>();
-        ArrayList<ImageView> botIntroduceImages = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
             botHeads.add((Button) rootView.findViewById(R.id.img_chatbot_1 + i));
             botDots.add((ImageView) rootView.findViewById(R.id.img_select_dot_1 + i));
             botIntroduceHeads.add((ImageView) rootView.findViewById(R.drawable.chatbot_head_1 + i));
             botIntroduceTitles.add((ImageView) rootView.findViewById(R.drawable.chatbot_text_1 + i));
-            botIntroduceStrings.add(String.valueOf(R.string.dajeong_1_info + i));
-            botIntroduceImages.add((ImageView) rootView.findViewById(R.raw.chatbot_move_image_1 + i));
         }
 
         for (int i = 0; i < 4; i++) {
@@ -296,9 +295,10 @@ public class SelectCharacterFragment extends Fragment implements View.OnClickLis
         mIvBotHead.setImageResource(introduceHead[index]);
         mIvBotTitle.setImageResource(introduceTitle[index]);
         mTvBotString.setText(introduceString[index]);
-        mIvBotIntroduce.setImageResource(introduceImage[index]);
-        Glide.with(this).load(R.raw.chatbot_move_image_1+index).into(mIvBotIntroduce);
-
+        Glide.with(this)
+                .load(introduceImage[index])
+                .thumbnail(Glide.with(mIvBotIntroduce).load(R.raw.img_loading))
+                .into(mIvBotIntroduce);
     }
 
     private String concatDate(String year, String month, String date) {
