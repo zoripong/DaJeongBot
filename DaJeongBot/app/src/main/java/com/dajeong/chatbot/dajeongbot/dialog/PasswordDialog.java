@@ -1,4 +1,4 @@
-package com.dajeong.chatbot.dajeongbot.customize;
+package com.dajeong.chatbot.dajeongbot.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;

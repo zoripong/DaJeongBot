@@ -32,7 +32,7 @@ import com.dajeong.chatbot.dajeongbot.control.AWSMobileController;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.control.MessageReader;
 import com.dajeong.chatbot.dajeongbot.control.MessageReceiver;
-import com.dajeong.chatbot.dajeongbot.customize.AutoDialog;
+import com.dajeong.chatbot.dajeongbot.dialog.AutoDialog;
 import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseMessagingService;
 import com.dajeong.chatbot.dajeongbot.model.Character;
 import com.dajeong.chatbot.dajeongbot.model.Chat;

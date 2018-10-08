@@ -1,35 +1,21 @@
 package com.dajeong.chatbot.dajeongbot.activity.setting;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.dajeong.chatbot.dajeongbot.R;
-import com.dajeong.chatbot.dajeongbot.activity.SettingActivity;
-import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
-import com.dajeong.chatbot.dajeongbot.customize.PasswordDialog;
-import com.dajeong.chatbot.dajeongbot.customize.ResetDialog;
-import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdateName;
-import com.dajeong.chatbot.dajeongbot.model.request.RequestUpdatePassword;
-import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
-import com.google.gson.JsonObject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.dajeong.chatbot.dajeongbot.dialog.PasswordDialog;
 
 public class ChangePasswordActivity extends AppCompatActivity {
     private final String TAG = "ChangePasswordActivity";

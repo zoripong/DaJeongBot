@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.dajeong.chatbot.dajeongbot.activity.setting.ChangeBotActivity;
@@ -17,15 +18,16 @@ import com.dajeong.chatbot.dajeongbot.activity.setting.ChangeNameActivity;
 import com.dajeong.chatbot.dajeongbot.activity.setting.ChangePasswordActivity;
 import com.dajeong.chatbot.dajeongbot.activity.setting.ChangeTimeActivity;
 import com.dajeong.chatbot.dajeongbot.activity.setting.RequirementActivity;
-import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
-import com.dajeong.chatbot.dajeongbot.customize.LogoutDialog;
-import com.dajeong.chatbot.dajeongbot.customize.ResetDialog;
+import com.dajeong.chatbot.dajeongbot.dialog.LogoutDialog;
+import com.dajeong.chatbot.dajeongbot.dialog.ResetDialog;
 
 // setting activity ( 사용자 정보 수정 / 챗봇 선택 / 데이터 초기화 .. )
 public class SettingActivity extends AppCompatActivity {
     private final String TAG = "SettingActivity";
     private final String INTENT_UPDATE_BOT = "INTENT_UPDATE_BOT";
+
+    private ExpandableListView mExpandableList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,17 +113,8 @@ public class SettingActivity extends AppCompatActivity {
             }
         }
     }
-    /*
-     * 서버에 저장된 fcm 토큰을 삭제합니다.
-     * */
 
-    public void releaseUserInfo(){
-        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
-        Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         ActionBar actionBar = getSupportActionBar();

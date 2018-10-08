@@ -1,6 +1,5 @@
 package com.dajeong.chatbot.dajeongbot.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,16 +10,11 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
-import android.widget.Toast;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.AWSStartupHandler;
-import com.amazonaws.mobile.client.AWSStartupResult;
 import com.dajeong.chatbot.dajeongbot.control.CustomSharedPreference;
 import com.dajeong.chatbot.dajeongbot.R;
-import com.dajeong.chatbot.dajeongbot.fcm.MyFirebaseInstanceIDService;
 import com.dajeong.chatbot.dajeongbot.network.NetRetrofit;
-import com.dajeong.chatbot.dajeongbot.network.NetworkExceptionDialog;
+import com.dajeong.chatbot.dajeongbot.dialog.NetworkExceptionDialog;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 

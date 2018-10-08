@@ -1,5 +1,6 @@
-package com.dajeong.chatbot.dajeongbot.customize;
+package com.dajeong.chatbot.dajeongbot.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -49,8 +50,8 @@ public class LogoutDialog {
         dlg.setContentView(R.layout.dialog_logout);
 
         // 커스텀 다이얼로그를 노출한다.
-        DisplayMetrics dm = context.getResources().getDisplayMetrics(); //디바이스 화면크기를 구하기위해
-        int width = (int)(dm.widthPixels*0.8f); //디바이스 화면 너비
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();  //디바이스 화면크기를 구하기위해
+        int width = (int)(dm.widthPixels*0.8f);    //디바이스 화면 너비
         //int height = dm.heightPixels; //디바이스 화면 높이
 
         WindowManager.LayoutParams wm = dlg.getWindow().getAttributes();  //다이얼로그의 높이 너비 설정하기위해
@@ -98,7 +99,7 @@ public class LogoutDialog {
                     if(response.body().has("status")){
                         if(response.body().get("status").getAsString().equals("Success")){
                             Log.i(TAG, "토큰 해제 성공하였습니다."+ accountId);
-                            ((SettingActivity)context).releaseUserInfo();
+                            releaseUserInfo();
                         }else{
                             Log.e(TAG, "서버의 문제로 토큰 등록에 실패하였습니다.");
                             Toast.makeText(getApplicationContext(), "네트워크에 문제가 발생하여 로그아웃에 실패하였습니다.", Toast.LENGTH_LONG).show();
@@ -114,8 +115,16 @@ public class LogoutDialog {
                 }
             });
         }else{
-            ((SettingActivity)context).releaseUserInfo();
+            releaseUserInfo();
         }
 
+    }
+
+    private void releaseUserInfo(){
+        CustomSharedPreference.getInstance(getApplicationContext(), "user_info").removeAllPreferences();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+        ((Activity)context).finish();
     }
 }
