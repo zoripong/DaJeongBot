@@ -73,9 +73,9 @@
 
 ## Characters
 
-<center>
+
 <img src="https://bit.ly/2OI65m8" alt="일정등록" width="15%"/><img src="https://bit.ly/2zXBhWg" alt="일정등록" width="15%"/><img src="https://bit.ly/2zWBEjP" alt="일정등록" width="15%"/><img src="https://bit.ly/2QBdUan" alt="일정등록" width="15%"/>
-</center>
+
 
 * 다정군 : 토끼 캐릭터로 스윗한 말을 건내주곤 합니다. 하지만 다소 _오글거리는(?)_ 표현들이 존재합니다.
 * 다정냥 : 고양이 캐릭터로 발랄한 친구입니다. 때로는 귀여운 동생같은 친구랍니다.
@@ -83,15 +83,13 @@
 * 다정뭉 : 강아지 캐릭터로 천방지축한 친구입니다. 한 눈 파는 사이에 사고를 칠 것만 같은 친구지요!
 
 ## Video
-<center>
+
 [![Video Label](http://img.youtube.com/vi/IB5ciGW4e84/0.jpg)](https://youtu.be/IB5ciGW4e84?t=0s) 
-</center>
 
 ## Downloads
 
-<center>
 [<img src="https://play.google.com/intl/ko/badges/images/generic/ko_badge_web_generic.png" alt="플레이스토어" width="300px">](https://play.google.com/store/apps/details?id=com.dajeong.chatbot.dajeongbot)
-</center>
+
 
 ## Extras
 - **제작 중에 있어 프로그램이 다소 불안정한 부분이 존재합니다.**
