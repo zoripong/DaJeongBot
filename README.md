@@ -46,30 +46,29 @@
 
 - 다정봇은 4가지의 캐릭터를 만들어 사용자가 다양한 캐릭터와 함께 대화 할 수 있도록 하였습니다.
 - 캐릭터별 말투를 다르게 하였습니다.
-- 캐릭터에 대한 자세한 소개는 아래 [Chracters](#Characters)를 참고해주세요.
+- 캐릭터에 대한 자세한 소개는 아래 [Chracters](#characters)를 참고해주세요.
 
 
 
 ## Screenshots
 <img src="https://bit.ly/2OHTM9f" alt="스플래시" width="20%"/><img src="https://bit.ly/2y4ziOE" alt="로그인" width="20%"/><img src="https://bit.ly/2y4zsWg" alt="회원가입" width="20%"/><img src="https://bit.ly/2y4zxcw" alt="채팅" width="20%"/><img src="https://bit.ly/2OHxPap" alt="캘린더" width="20%"/>
 
-<center>_스플래시 / 로그인 / 회원가입 / 채팅 / 캘린더_</center>
+_스플래시 / 로그인 / 회원가입 / 채팅 / 캘린더_
 
 
 ### Detail Screenshots
 채팅에 대한 자세한 스크린샷 입니다.
 > 일정 등록 / 자동완성
 
-<img src="https://bit.ly/2OJ6kgR" alt="일정등록" width="40%"/>
-<img src="https://bit.ly/2NvY674" alt="자동완성" width="40%"/>
+<img src="https://bit.ly/2OJ6kgR" alt="일정등록" width="40%"/><img src="https://bit.ly/2NvY674" alt="자동완성" width="40%"/>
 
 > 일정 알림
 
-<img src="https://bit.ly/2Nu77gS" alt="일정알림" width="50%"/><img src="https://bit.ly/2E2Yryr" alt="FCM알림" width="50%"/>
+<img src="https://bit.ly/2Nu77gS" alt="일정알림" width="40%"/><img src="https://bit.ly/2E2Yryr" alt="FCM알림" width="40%"/>
 
 > 일정 질문 / 추억 회상
 
-<img src="https://bit.ly/2NsQzpx" alt="일정질문" width="50%"/><img src="https://bit.ly/2C1z4KW" alt="일정질문" width="50%"/>
+<img src="https://bit.ly/2NsQzpx" alt="일정질문" width="40%"/><img src="https://bit.ly/2C1z4KW" alt="일정질문" width="40%"/>
 
 ## Characters
 
