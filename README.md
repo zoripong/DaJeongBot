@@ -89,6 +89,9 @@ _스플래시 / 로그인 / 회원가입 / 채팅 / 캘린더_
 
 [<img src="https://play.google.com/intl/ko/badges/images/generic/ko_badge_web_generic.png" alt="플레이스토어" width="300px">](https://play.google.com/store/apps/details?id=com.dajeong.chatbot.dajeongbot)
 
+현재 누적 다운로드 수 **307 건**
+(2018.09.14. ~2018.10.14. 기준)
+
 
 ## Extras
 - **제작 중에 있어 프로그램이 다소 불안정한 부분이 존재합니다.**
