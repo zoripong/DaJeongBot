@@ -49,6 +49,20 @@
 - 캐릭터에 대한 자세한 소개는 아래 [Chracters](#characters)를 참고해주세요.
 
 
+## Characters
+
+
+<img src="https://bit.ly/2OI65m8" alt="일정등록" width="15%"/><img src="https://bit.ly/2zXBhWg" alt="일정등록" width="15%"/><img src="https://bit.ly/2zWBEjP" alt="일정등록" width="15%"/><img src="https://bit.ly/2QBdUan" alt="일정등록" width="15%"/>
+
+
+* 다정군 : 토끼 캐릭터로 스윗한 말을 건내주곤 합니다. 하지만 다소 _오글거리는(?)_ 표현들이 존재합니다.
+* 다정냥 : 고양이 캐릭터로 발랄한 친구입니다. 때로는 귀여운 동생같은 친구랍니다.
+* 다정곰 : 곰 캐릭터로 차분하고 포근한 친구입니다. 하지만 누군가는 그를 답답하게 느낄 수도 있답니다.
+* 다정뭉 : 강아지 캐릭터로 천방지축한 친구입니다. 한 눈 파는 사이에 사고를 칠 것만 같은 친구지요!
+
+## Video
+
+[![Video Label](http://img.youtube.com/vi/IB5ciGW4e84/0.jpg)](https://youtu.be/IB5ciGW4e84?t=0s) 
 
 ## Screenshots
 <img src="https://bit.ly/2OHTM9f" alt="스플래시" width="20%"/><img src="https://bit.ly/2y4ziOE" alt="로그인" width="20%"/><img src="https://bit.ly/2y4zsWg" alt="회원가입" width="20%"/><img src="https://bit.ly/2y4zxcw" alt="채팅" width="20%"/><img src="https://bit.ly/2OHxPap" alt="캘린더" width="20%"/>
@@ -70,20 +84,6 @@ _스플래시 / 로그인 / 회원가입 / 채팅 / 캘린더_
 
 <img src="https://bit.ly/2NsQzpx" alt="일정질문" width="40%"/><img src="https://bit.ly/2C1z4KW" alt="일정질문" width="40%"/>
 
-## Characters
-
-
-<img src="https://bit.ly/2OI65m8" alt="일정등록" width="15%"/><img src="https://bit.ly/2zXBhWg" alt="일정등록" width="15%"/><img src="https://bit.ly/2zWBEjP" alt="일정등록" width="15%"/><img src="https://bit.ly/2QBdUan" alt="일정등록" width="15%"/>
-
-
-* 다정군 : 토끼 캐릭터로 스윗한 말을 건내주곤 합니다. 하지만 다소 _오글거리는(?)_ 표현들이 존재합니다.
-* 다정냥 : 고양이 캐릭터로 발랄한 친구입니다. 때로는 귀여운 동생같은 친구랍니다.
-* 다정곰 : 곰 캐릭터로 차분하고 포근한 친구입니다. 하지만 누군가는 그를 답답하게 느낄 수도 있답니다.
-* 다정뭉 : 강아지 캐릭터로 천방지축한 친구입니다. 한 눈 파는 사이에 사고를 칠 것만 같은 친구지요!
-
-## Video
-
-[![Video Label](http://img.youtube.com/vi/IB5ciGW4e84/0.jpg)](https://youtu.be/IB5ciGW4e84?t=0s) 
 
 ## Downloads
 
