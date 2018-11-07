@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ebebeb">
-    <ExpandableListView
-        android:id="@+id/expandableListView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.5dp" />
-
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
