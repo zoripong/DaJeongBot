@@ -5,7 +5,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobile.auth.core.IdentityHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -86,7 +85,8 @@ public class AWSMobileController {
                         .build();
 
         final String path = "protected/" + String.valueOf(accountId)+"/"+file.getName();
-        final TransferObserver uploadObserver = transferUtility.upload(path, file);
+        Log.e(TAG, path);
+        final TransferObserver uploadObserver = transferUtility.upload(/*"dajeongbot-userfiles-mobilehub-1660315312",*/ path, file);
 
         // Attach a listener to the observer to get state update and progress notifications
         uploadObserver.setTransferListener(new TransferListener() {

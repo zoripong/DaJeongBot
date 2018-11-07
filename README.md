@@ -46,30 +46,8 @@
 
 - 다정봇은 4가지의 캐릭터를 만들어 사용자가 다양한 캐릭터와 함께 대화 할 수 있도록 하였습니다.
 - 캐릭터별 말투를 다르게 하였습니다.
-- 캐릭터에 대한 자세한 소개는 아래 [Chracters](#Characters)를 참고해주세요.
+- 캐릭터에 대한 자세한 소개는 아래 [Chracters](#characters)를 참고해주세요.
 
-
-
-## Screenshots
-<img src="https://bit.ly/2OHTM9f" alt="스플래시" width="20%"/><img src="https://bit.ly/2y4ziOE" alt="로그인" width="20%"/><img src="https://bit.ly/2y4zsWg" alt="회원가입" width="20%"/><img src="https://bit.ly/2y4zxcw" alt="채팅" width="20%"/><img src="https://bit.ly/2OHxPap" alt="캘린더" width="20%"/>
-
-<center>_스플래시 / 로그인 / 회원가입 / 채팅 / 캘린더_</center>
-
-
-### Detail Screenshots
-채팅에 대한 자세한 스크린샷 입니다.
-> 일정 등록 / 자동완성
-
-<img src="https://bit.ly/2OJ6kgR" alt="일정등록" width="40%"/>
-<img src="https://bit.ly/2NvY674" alt="자동완성" width="40%"/>
-
-> 일정 알림
-
-<img src="https://bit.ly/2Nu77gS" alt="일정알림" width="50%"/><img src="https://bit.ly/2E2Yryr" alt="FCM알림" width="50%"/>
-
-> 일정 질문 / 추억 회상
-
-<img src="https://bit.ly/2NsQzpx" alt="일정질문" width="50%"/><img src="https://bit.ly/2C1z4KW" alt="일정질문" width="50%"/>
 
 ## Characters
 
@@ -86,9 +64,33 @@
 
 [![Video Label](http://img.youtube.com/vi/IB5ciGW4e84/0.jpg)](https://youtu.be/IB5ciGW4e84?t=0s) 
 
+## Screenshots
+<img src="https://firebasestorage.googleapis.com/v0/b/dajeongbot-e3bda.appspot.com/o/screenshot%2Fdjbot%2F1.%20%EB%A1%9C%EB%94%A9%ED%99%94%EB%A9%B4.jpg?alt=media&token=35935cbd-e369-40a4-8deb-6761ee9d4975" alt="스플래시" width="20%"/><img src="https://firebasestorage.googleapis.com/v0/b/dajeongbot-e3bda.appspot.com/o/screenshot%2Fdjbot%2F2.%20%EB%A1%9C%EA%B7%B8%EC%9D%B8%20%ED%99%94%EB%A9%B4.jpg?alt=media&token=3f3fa72e-63e7-43b8-a971-9103aaef599b" alt="로그인" width="20%"/><img src="https://firebasestorage.googleapis.com/v0/b/dajeongbot-e3bda.appspot.com/o/screenshot%2Fdjbot%2F3.%20%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-1%20(%EC%9D%B4%EB%A6%84%20%EC%9E%85%EB%A0%A5).jpg?alt=media&token=7b189791-7a02-41f9-b170-9f58bb6c219b" alt="회원가입" width="20%"/><img src="https://firebasestorage.googleapis.com/v0/b/dajeongbot-e3bda.appspot.com/o/screenshot%2Fdjbot%2F9.%20%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4-1.jpg?alt=media&token=c1686d36-8368-444a-9f84-2b54dfcf9973" alt="채팅" width="20%"/><img src="https://firebasestorage.googleapis.com/v0/b/dajeongbot-e3bda.appspot.com/o/screenshot%2Fdjbot%2F%EC%BA%98%EB%A6%B0%EB%8D%94.jpg?alt=media&token=8369659a-a8c2-4c82-b924-21e17071e78c" alt="캘린더" width="20%"/>
+
+_스플래시 / 로그인 / 회원가입 / 채팅 / 캘린더_
+
+
+### Detail Screenshots
+채팅에 대한 자세한 스크린샷 입니다.
+> 일정 등록 / 자동완성
+
+<img src="https://bit.ly/2OJ6kgR" alt="일정등록" width="40%"/><img src="https://firebasestorage.googleapis.com/v0/b/dajeongbot-e3bda.appspot.com/o/screenshot%2Fdjbot%2F10.%20%EC%B1%84%ED%8C%85%ED%99%94%EB%A9%B4-2.jpg?alt=media&token=b3a204b3-d971-42b4-bad0-aff1d5314de0" alt="자동완성" width="40%"/>
+
+> 일정 알림
+
+<img src="https://bit.ly/2Nu77gS" alt="일정알림" width="40%"/><img src="https://bit.ly/2E2Yryr" alt="FCM알림" width="40%"/>
+
+> 일정 질문 / 추억 회상
+
+<img src="https://bit.ly/2NsQzpx" alt="일정질문" width="40%"/><img src="https://bit.ly/2C1z4KW" alt="일정질문" width="40%"/>
+
+
 ## Downloads
 
 [<img src="https://play.google.com/intl/ko/badges/images/generic/ko_badge_web_generic.png" alt="플레이스토어" width="300px">](https://play.google.com/store/apps/details?id=com.dajeong.chatbot.dajeongbot)
+
+현재 누적 다운로드 수 **307 건**
+(2018.09.14. ~2018.10.14. 기준)
 
 
 ## Extras
